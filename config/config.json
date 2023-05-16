@@ -1,0 +1,10 @@
+{
+  "token" : "",
+  "api_key" : "",
+  "ids" : {
+    "guild" : "",
+    "client" : "",
+    "channel" : "",
+    "role" : ""
+  }
+}
