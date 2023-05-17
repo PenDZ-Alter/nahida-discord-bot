@@ -16,7 +16,7 @@ module.exports = {
     const queue = client.player.nodes.get(interaction.guild);
     const page = interaction.options.getInteger("pageindex");
 
-    let index = page ? Number(page) : 0;
+    let index = page ? Number(page) - 1 : 0;
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
