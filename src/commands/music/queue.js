@@ -26,7 +26,7 @@ module.exports = {
     if (!queue) return interaction.reply({ content : "❌  |  Can't get player from your guild!", ephemeral : true });
     if (!queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing the song", ephemeral : true });
   
-    let firstNumIndex = index * 10;
+    let firstNumIndex = index-1 * 10;
     let endNumIndex = firstNumIndex + 10;
 
     let songSize = queue.getSize();
