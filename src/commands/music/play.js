@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-=======
-const { SlashCommandBuilder } = require("discord.js");
->>>>>>> 05c65fdf455789305ea8ade5808a41e08f723579
 const { QueryType } = require("discord-player");
 
 module.exports = {
@@ -64,15 +60,11 @@ module.exports = {
     
     if (!queue.node.isPlaying()) await queue.node.play();
 
-<<<<<<< HEAD
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
       .setDescription(`📝  |  **${title}** has been enqueued!\nℹ️  |  Source : ${track.source}`);
 
     await interaction.editReply({ embeds : [embed] });
-=======
-    await interaction.followUp(`📝  |  **${title}** has been enqueued!\nℹ️  |  Source : ${track.source}`);
->>>>>>> 05c65fdf455789305ea8ade5808a41e08f723579
   }
 }
