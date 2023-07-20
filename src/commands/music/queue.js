@@ -45,7 +45,7 @@ module.exports = {
       `\n\n**Queue**\n${queueStr} `)
       .setThumbnail(currentSong.thumbnail)
       .setColor("Blue")
-      .setFooter({ text : `Page ${index+1} of ${totalPage}` })
+      .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
       .setTimestamp(Date.now())
 
     await interaction.reply({

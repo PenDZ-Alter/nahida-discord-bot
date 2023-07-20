@@ -1,13 +1,15 @@
 {
   "name": "nahida-js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Music Bot with Nahida",
   "main": "index.js",
   "scripts": {
     "test": "node ."
   },
   "keywords": [
-    "music"
+    "music",
+    "discord-bot",
+    "music-discord-bot"
   ],
   "author": "ABX-Dev/PenDZ",
   "license": "ISC",

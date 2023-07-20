@@ -23,9 +23,15 @@ module.exports = (client) => {
     const guild_id = client.config.ids.guild;
     const rest = new REST({ version : 10 }).setToken(client.config.token);
     try {
-      await rest.put(Routes.applicationGuildCommands(client_id, guild_id), {
+      // Directed Server
+      // await rest.put(Routes.applicationGuildCommands(client_id, guild_id), {
+      //   body : client.commandsData
+      // });
+
+      // Global Server
+      await rest.put(Routes.applicationCommands(client_id), {
         body : client.commandsData
-      });
+      })
 
       console.log("BOT :: Reloaded Slash Commands Application!");
     } catch (err) {

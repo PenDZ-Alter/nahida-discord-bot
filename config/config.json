@@ -4,7 +4,7 @@
   "ids" : {
     "guild" : "",
     "client" : "",
-    "channel" : "",
-    "role" : ""
+    "channel_ai" : "",
+    "role_ai" : ""
   }
 }

@@ -19,18 +19,15 @@ module.exports = {
     if (!queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing the song", ephemeral : true });
   
     const currentSong = queue.currentTrack;
-    const nextSong = queue.tracks.toArray().slice(0, 1).map((song) => {
-      return `${song.title}`
-    });
+    const nextSong = queue.tracks.data[0];
 
     await queue.node.skip();
 
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
-      .setDescription(`✅ The song **${currentSong}** has been skipped!\n🎵 Now Playing **${nextSong}**`);
+      .setDescription(`✅ The song **${currentSong}** has been skipped!\n🎵 ${nextSong ? `Now Playing **${nextSong}**` : "The Player Has Stopped!"}`);
 
     await interaction.reply({ embeds : [embed], ephemeral : true });
-    
   }
 }

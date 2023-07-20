@@ -11,8 +11,8 @@ module.exports = {
     const openai = new OpenAIApi(config);
 
     if (message.author.bot) return;
-    if (message.channel.id !== client.config.ids.channel) return;
-    if (!message.member.roles.cache.has(client.config.ids.role)) return;
+    if (message.channel.id !== client.config.ids.channel_ai) return;
+    if (!message.member.roles.cache.has(client.config.ids.role_ai)) return;
     if (message.content.startsWith('!')) return;
 
     let conversationLog = [{ role : 'system', content : "You're friendly chat bot!" }];
@@ -39,18 +39,9 @@ module.exports = {
     });
 
     // in testing mode
-<<<<<<< HEAD
     let messageContent = result.data.choices[0].message
     let trimmedMsg = messageContent.substring(0, 2048);
 
     message.reply(trimmedMsg);
   }
 }
-=======
-    let messageContent = result.data.choices[0].message.content;
-    let trimmedMsg = messageContent.toString().substring(0, 1999);
-
-    message.reply(trimmedMsg);
-  }
-}
->>>>>>> 05c65fdf455789305ea8ade5808a41e08f723579

@@ -6,7 +6,7 @@ module.exports = {
     .setDescription("Skip to the preffered index")
     .addIntegerOption(opt => opt
         .setName("index")
-        .setDescription("Number of index")
+        .setDescription("Number of index, you can see in queue command!")
         .setRequired(true)
       ),
 
