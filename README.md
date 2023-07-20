@@ -26,10 +26,10 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
 
 
 ## How to run it?
-STEP 1 : Installing Packages
+STEP 1 : Installing Packages <br>
     Use command `npm i` and wait until done!
 
-STEP 2 : Run it :)
+STEP 2 : Run it :) <br>
     Use command `node .` and Done! :)
 
 NOTE! Remember to always direct directory into bot folder before you do the step!
