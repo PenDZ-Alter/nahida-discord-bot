@@ -22,6 +22,6 @@ module.exports = {
 
     await queue.node.pause();
 
-    await interaction.reply({ content : "✅  |  Paused the song!", ephemeral : true });
+    await interaction.reply({ content : "✅  |  Paused the song!", ephemeral : false });
   }
 }

@@ -6,9 +6,9 @@ module.exports = {
     .setDescription('Replies with pong'),
 
   async execute(client, interaction) {
-    const message = await interaction.deferReply({ fetchReply : true, ephemeral : true });
+    const message_init = await interaction.deferReply({ fetchReply : true, ephemeral : true });
 
-    const newMessage = `API Latency : ${client.ws.ping}ms\nClient Ping : ${message.createdTimestamp - interaction.createdTimestamp}ms`;
-    await interaction.editReply({ content : newMessage });
+    const message = `API Latency : ${client.ws.ping}ms\nClient Ping : ${message_init.createdTimestamp - interaction.createdTimestamp}ms`;
+    await interaction.editReply({ content : message });
   }
 }

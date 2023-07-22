@@ -22,6 +22,6 @@ module.exports = {
 
     await queue.node.resume();
 
-    await interaction.reply({ content : "✅  |  Resumed the song!", ephemeral : true });
+    await interaction.reply({ content : "✅  |  Resumed the song!", ephemeral : false });
   }
 }

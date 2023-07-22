@@ -6,7 +6,7 @@ module.exports = {
     .setDescription("Seeking into specified duration")
     .addIntegerOption(opt => 
       opt.setName("sec")
-        .setDescription("Number of duration in seconds (required as minimum to seek)")
+        .setDescription("Number of duration in seconds (set 0 if you dont need it!)")
         .setRequired(true)
     )
     .addIntegerOption(opt => 
@@ -55,6 +55,6 @@ module.exports = {
 
     queue.node.seek(durationTime);
 
-    await interaction.reply({ content : `✅  |  Seeked to ${durationTime}ms!`, ephemeral : true });
+    await interaction.reply({ content : `✅  |  Seeked to ${!hrs ? "0" : hrs}:${!min ? "0" : min}:${sec === 0 ? "0" : sec}!`, ephemeral : true });
   }
 }

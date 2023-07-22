@@ -44,6 +44,7 @@ module.exports = {
       .setTimestamp(Date.now())
       .setFooter({ text : `Invoked by ${interaction.user.tag}` });
 
-    await interaction.reply({ embeds : [embed], ephemeral : true });
+    // await interaction.reply({ embeds : [embed], ephemeral : true });
+    await interaction.reply({ content : "Sorry, but this command won't work! Please wait until it fixed :)", ephemeral : true });
   }
 }

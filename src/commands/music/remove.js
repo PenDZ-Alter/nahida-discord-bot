@@ -29,6 +29,6 @@ module.exports = {
 
     await queue.node.remove(index-1);
 
-    await interaction.reply({ content : `✅  |  Removed song from index ${index}!`, ephemeral : true });
+    await interaction.reply({ content : `✅  |  Removed song from index ${index}!`, ephemeral : false });
   }
 }

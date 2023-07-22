@@ -74,7 +74,7 @@ module.exports = {
 
     status = type;
 
-    await interaction.reply({ content : `✅  |  Toggled repeat mode to ${loopText}!`, ephemeral : true });
+    await interaction.reply({ content : `✅  |  Toggled repeat mode to ${loopText}!`, ephemeral : false });
   },
 
   repeatStatus : () => {

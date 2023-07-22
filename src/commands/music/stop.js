@@ -20,6 +20,6 @@ module.exports = {
 
     queue.delete();
 
-    await interaction.reply({ content : "✅  |  Stopped the player!", ephemeral : true });
+    await interaction.reply({ content : "✅  |  Stopped the player!", ephemeral : false });
   }
 }

@@ -21,6 +21,8 @@ module.exports = {
     let bar = queue.node.createProgressBar({ timecodes : true });
     let currentSong = queue.currentTrack;
 
+    let nextSong = queue.tracks.data[0];
+
     let isRepeat = queue.repeatMode;
 
     let embed = new EmbedBuilder()
@@ -29,7 +31,10 @@ module.exports = {
       .setAuthor({ name : interaction.user.tag, iconURL : interaction.user.displayAvatarURL()})
       .setThumbnail(currentSong.thumbnail)
       .setFooter({ text : `Requested by ${currentSong.requestedBy.tag}` })
-      .setDescription(`**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None"))
+      .setDescription(
+        `**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None") + 
+        `**Next Song**\n` + (!nextSong ? "There's no song after this track!" : nextSong)
+        )
       .addFields([
         {
           name : 'Pause',

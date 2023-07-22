@@ -36,6 +36,6 @@ module.exports = {
       .setColor("Blue")
       .setDescription(`✅ Skipped to **${nextSong}**!`)
 
-    await interaction.reply({ embeds : [embed], ephemeral : true });
+    await interaction.reply({ embeds : [embed], ephemeral : false });
   }
 }

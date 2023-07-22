@@ -28,6 +28,6 @@ module.exports = {
       .setColor("Blue")
       .setDescription(`✅ The song **${currentSong}** has been skipped!\n🎵 ${nextSong ? `Now Playing **${nextSong}**` : "The Player Has Stopped!"}`);
 
-    await interaction.reply({ embeds : [embed], ephemeral : true });
+    await interaction.reply({ embeds : [embed], ephemeral : false });
   }
 }

@@ -58,12 +58,18 @@ module.exports = {
       title = track.title;
     }
     
-    if (!queue.node.isPlaying()) await queue.node.play();
+    if (!queue.node.isPlaying()) 
+      await queue.node.play();
+
+    let songIndex = queue.getSize();
 
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
-      .setDescription(`📝  |  **${title}** has been enqueued!\nℹ️  |  Source : ${track.source}`);
+      .setDescription(
+        `📝  |  **${title}** has been enqueued!\n
+        ℹ️  |  Source : ${track.source}\n
+        ℹ️  |  Indexed in ${songIndex}`);
 
     await interaction.editReply({ embeds : [embed] });
   }

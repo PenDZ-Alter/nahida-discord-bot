@@ -1,6 +1,7 @@
 {
   "token" : "",
   "api_key" : "",
+  "global_embed_color" : "",
   "ids" : {
     "guild" : "",
     "client" : "",
