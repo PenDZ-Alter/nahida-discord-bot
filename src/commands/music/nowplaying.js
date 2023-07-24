@@ -33,7 +33,7 @@ module.exports = {
       .setFooter({ text : `Requested by ${currentSong.requestedBy.tag}` })
       .setDescription(
         `**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None") + 
-        `**Next Song**\n` + (!nextSong ? "There's no song after this track!" : nextSong)
+        `\n**Next Song**\n` + (!nextSong ? "There's no song after this track!" : nextSong)
         )
       .addFields([
         {
