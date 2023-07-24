@@ -12,7 +12,7 @@ module.exports = {
 
   async execute(client, interaction) {
     const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply('❌  |  You are not connected to a voice channel!');
+    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const queue = client.player.nodes.get(interaction.guild);
     const page = interaction.options.getInteger("pageindex");
 
@@ -33,7 +33,7 @@ module.exports = {
     let totalPage = Math.ceil(songSize / 10);
 
     const queueStr = queue.tracks.toArray().slice(firstNumIndex, endNumIndex).map((song, i) => {
-      return `${i+1}) \`[${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
+      return `${(i+1) + (index * 10)}) \`[${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
     }).join('\n');
 
     const currentSong = queue.currentTrack;

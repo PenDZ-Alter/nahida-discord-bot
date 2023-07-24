@@ -13,7 +13,7 @@ module.exports = {
 
   async execute(client, interaction) {
     const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply('❌  |  You are not connected to a voice channel!');
+    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const queue = client.player.nodes.get(interaction.guild);
     const title = interaction.options.getString("title");
 
