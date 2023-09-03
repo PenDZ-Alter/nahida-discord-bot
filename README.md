@@ -33,3 +33,7 @@ STEP 2 : Run it :) <br>
     Use command `node .` and Done! :)
 
 NOTE! Remember to always direct directory into bot folder before you do the step!
+
+## Notes about the AI from OpenAI Platform
+You can changes the model from his official website
+https://platform.openai.com/account/rate-limits
