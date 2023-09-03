@@ -39,7 +39,7 @@ module.exports = {
     });
 
     // in testing mode
-    let messageContent = result.data.choices[0].message
+    let messageContent = result.data.choices[0].message.content;
     let trimmedMsg = messageContent.substring(0, 2048);
 
     message.reply(trimmedMsg);
