@@ -1,11 +1,12 @@
 {
-  "token" : "",
-  "api_key" : "",
-  "global_embed_color" : "",
+  "token" : "MTA1NDYxNDc0NjI3NzYyNTk4Ng.GcdeN2.ICoH4egkDcjeJHf4T8N9XEpSB88YL2V4kFdI3o",
+  "api_key" : "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",
   "ids" : {
-    "guild" : "",
-    "client" : "",
-    "channel_ai" : "",
-    "role_ai" : ""
+    "ai_config" : {
+      "channel" : "1107322562104545310",
+      "role" : "1107327711220875304"
+    },
+    "guild" : "1010220415769124944",
+    "client" : "1054614746277625986"
   }
 }

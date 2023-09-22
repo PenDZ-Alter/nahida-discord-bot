@@ -1,18 +1,16 @@
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 
 module.exports = {
   name : 'messageCreate',
 
   async execute(client, message) {
-    const config = new Configuration({
+    const openai = new OpenAI({
       apiKey : client.config.api_key
     }); 
 
-    const openai = new OpenAIApi(config);
-
     if (message.author.bot) return;
-    if (message.channel.id !== client.config.ids.channel_ai) return;
-    if (!message.member.roles.cache.has(client.config.ids.role_ai)) return;
+    if (message.channel.id !== client.config.ids.ai_config.channel) return;
+    if (!message.member.roles.cache.has(client.config.ids.ai_config.role)) return;
     if (message.content.startsWith('!')) return;
 
     let conversationLog = [{ role : 'system', content : "You're friendly chat bot!" }];
@@ -33,13 +31,13 @@ module.exports = {
       });
     });
     
-    const result = await openai.createChatCompletion({
-      model : 'gpt-3.5-turbo',
+    const result = await openai.chat.completions.create({
+      model : 'gpt-4-0613',
       messages : conversationLog
     });
 
     // in testing mode
-    let messageContent = result.data.choices[0].message.content;
+    let messageContent = result.choices[0].message.content;
     let trimmedMsg = messageContent.substring(0, 2048);
 
     message.reply(trimmedMsg);
