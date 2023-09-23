@@ -31,9 +31,10 @@ module.exports = {
       .setAuthor({ name : interaction.user.tag, iconURL : interaction.user.displayAvatarURL()})
       .setThumbnail(currentSong.thumbnail)
       .setFooter({ text : `Requested by ${currentSong.requestedBy.tag}` })
+      .setTimestamp(Date.now())
       .setDescription(
         `**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None") + 
-        `\n**Next Song**\n` + (!nextSong ? "There's no song after this track!" : nextSong)
+        `\n\n**Next Song**\n` + (!nextSong ? "There's no song after this track!" : nextSong)
         )
       .addFields([
         {

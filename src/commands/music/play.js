@@ -9,12 +9,25 @@ module.exports = {
       opt.setName("query")
         .setDescription("Title or url of the song")
         .setRequired(true)
+    )
+    .addStringOption(opt => opt
+      .setName("type")
+      .setDescription("Select platform of stream")
+      .setRequired(false)
+      .addChoices(
+        {name : "youtube", value : "yt"},
+        {name : "spotify", value : "sp"},
+        {name : "soundclound", value : "sc"},
+        {name : "playlist", value : "pl"},
+        {name : "auto", value : "auto"}
+      )
     ),
 
   async execute(client, interaction) {
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const query = interaction.options.getString('query', true);
+    const type = interaction.options.getString('type');
     await client.player.extractors.loadDefault();
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
@@ -30,18 +43,58 @@ module.exports = {
       }
     });
 
+    let result;
+    switch (type) {
+      case "yt" :
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.YOUTUBE_SEARCH
+        });
+        break;
+
+      case "sp" :
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.SPOTIFY_SEARCH
+        });
+        break;
+
+      case "sc" :
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.SOUNDCLOUD_SEARCH
+        });
+        break;
+
+      case "pl" :
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.AUTO
+        });
+        break;
+
+      case "auto" :
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.AUTO
+        });
+        break;
+
+      default : 
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.AUTO
+        });
+        break;
+    }
+
     await interaction.deferReply({ ephemeral : true });
 
     try {
       if (!queue.connection) await queue.connect(channel);
     } catch (e) {
       return interaction.followUp(`❌  |  Something went wrong: ${e}`);
-    }
-
-    const result = await client.player.search(query, {
-      requestedBy : interaction.user,
-      searchEngine : QueryType.AUTO
-    });
+    }    
 
     if (!result.hasTracks()) {
       return interaction.followUp("❌  |  Can't find the song! Try more specificly");

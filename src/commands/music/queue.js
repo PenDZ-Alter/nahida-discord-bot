@@ -46,10 +46,10 @@ module.exports = {
       .setThumbnail(currentSong.thumbnail)
       .setColor("Blue")
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
-      .setTimestamp(Date.now())
+      .setTimestamp(Date.now());
 
     await interaction.reply({
       embeds : [embed]
-    })
+    });
   }
 }
