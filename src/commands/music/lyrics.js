@@ -12,18 +12,15 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
-    const channel = interaction.member.voice.channel;
-    // if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const queue = client.player.nodes.get(interaction.guild);
     const title = interaction.options.getString("title");
 
-    // if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
-    // if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-    //   return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
-    // }
+    if (!title && !queue) {
+      return interaction.reply({ content : "❌  |  No title specified!", ephemeral : true });
+    }
 
     const lyricsFinder = new gen_lyrics.Client();
-    const search = await lyricsFinder.songs.search((title ? title : queue.currentTrack.title)); // title ? title : queue.currentTrack.title
+    const search = await lyricsFinder.songs.search((title ? title : queue.currentTrack.title)).catch(() => {});
     if (search.length === 0) {
       return interaction.reply({ content: "❌  |  Can't find lyrics! Try a more specific search term.", ephemeral: true });
     }

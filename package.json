@@ -1,6 +1,6 @@
 {
   "name": "nahida-js",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
@@ -17,21 +17,25 @@
   "dependencies": {
     "@discord-player/downloader": "^3.0.2",
     "@discord-player/equalizer": "^0.2.3",
-    "@discord-player/extractor": "^4.4.4",
+    "@discord-player/extractor": "^4.4.5",
     "@discord-player/utils": "^0.2.2",
     "@discordjs/opus": "^0.9.0",
-    "@discordjs/rest": "^2.0.1",
-    "@discordjs/voice": "^0.16.0",
-    "@distube/ytdl-core": "^4.13.0",
+    "@discordjs/rest": "^2.1.0",
+    "@discordjs/voice": "^0.16.1",
+    "@distube/ytdl-core": "^4.13.3",
+    "axios": "^1.5.1",
     "chalk": "^5.3.0",
-    "discord-api-types": "^0.37.57",
-    "discord-player": "^6.6.4",
-    "discord.js": "^14.13.0",
+    "discord-api-types": "^0.37.63",
+    "discord-player": "^6.6.6",
+    "discord.js": "^14.14.1",
     "ffmpeg-static": "^5.2.0",
+    "gelbooru-api": "^1.0.1",
     "genius-lyrics": "^4.4.6",
     "lyrics-searcher": "^1.0.58",
-    "openai": "^4.10.0",
-    "play-dl": "^1.9.6",
+    "openai": "^4.19.0",
+    "play-dl": "^1.9.7",
+    "request": "^2.88.2",
+    "youtube-ext": "^1.1.16",
     "ytdl-core": "^4.11.5"
   }
 }

@@ -26,6 +26,7 @@ module.exports = {
   async execute(client, interaction) {
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
+    
     const query = interaction.options.getString('query', true);
     const type = interaction.options.getString('type');
     await client.player.extractors.loadDefault();
@@ -83,7 +84,7 @@ module.exports = {
       default : 
         result = await client.player.search(query, {
           requestedBy : interaction.user,
-          searchEngine : QueryType.AUTO
+          searchEngine : QueryType.YOUTUBE_SEARCH
         });
         break;
     }
@@ -122,7 +123,7 @@ module.exports = {
       .setDescription(
         `📝  |  **${title}** has been enqueued!
         ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-        ℹ️  |  ${!result.playlist ? `Indexed in position ${songIndex}` : `Indexed song with total ${songIndex}`}`);
+        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Indexed in position ${songIndex}`}` : `Total song indexed : ${songIndex}`}`);
 
     await interaction.editReply({ embeds : [embed] });
   }

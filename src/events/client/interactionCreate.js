@@ -1,5 +1,7 @@
+const { Events } = require("discord.js");
+
 module.exports = {
-  name : 'interactionCreate',
+  name : Events.InteractionCreate,
 
   async execute(client, interaction) {
     // isCommand() is not deprecated but we recommend you to use isChatInputCommand() function

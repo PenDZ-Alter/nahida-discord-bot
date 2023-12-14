@@ -1,7 +1,8 @@
+const { Events } = require("discord.js");
 const { OpenAI } = require("openai");
 
 module.exports = {
-  name : 'messageCreate',
+  name : Events.MessageCreate,
 
   async execute(client, message) {
     const openai = new OpenAI({
