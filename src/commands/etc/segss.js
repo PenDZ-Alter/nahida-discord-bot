@@ -7,34 +7,44 @@ module.exports = {
     .setDescription("UOOOOOOOOOOGHHHHHHHHH")
     .addStringOption(
       opt => opt
-        .setName("tag")
+        .setName("tags")
         .setDescription("Tags of segss")
         .setRequired(true)
     ),
 
   async execute(client, interaction) {
     try {
-      const tags = interaction.options.getString("tag");
-      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags}&limit=1&json=1`);
+      const tags = interaction.options.getString("tags");
 
-      if (response.data.length > 0) {
-        // Get the URL of the first image
-        const imageUrl = response.data[0].file_url;
+      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags}&limit=50&json=1`);
 
-        // Send the image URL as a message
-        let embed = new EmbedBuilder()
-          .setTitle("Result Images")
-          .setDescription(imageUrl)
-          .setColor("Blue")
-          .setTimestamp(Date.now());
+      let imageUrl
+      let j = 0;
+      while (response.data.post[j].rating !== "explicit") {
+        j = Math.floor(Math.random() * 50);
 
-        interaction.reply({ embeds: [embed], ephemeral: true });
-      } else {
-        // If no images were found, send an error message
-        interaction.reply({ content: 'No images found with the given tags.', ephemeral: true });
+        if (response.data.post[j].rating == "explicit") {
+          imageUrl = response.data.post[j].file_url;
+          break;
+        }
       }
+
+      // Send the image URL as a message
+      let embed = new EmbedBuilder()
+        .setTitle("Result Images")
+        .setImage(imageUrl)
+        .setColor("Blue")
+        .setTimestamp(Date.now());
+
+      await interaction.reply({ embeds: [embed], ephemeral: true });
     } catch (err) {
       console.error(err);
     }
   }
 }
+
+/**
+ * Notes!
+ * If you have error when running this, it's because axios can't get ssl certificate
+ * To fix it, you need to use VPN!
+ */

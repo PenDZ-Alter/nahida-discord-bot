@@ -1,6 +1,6 @@
 {
   "name": "nahida-js",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
@@ -31,10 +31,8 @@
     "ffmpeg-static": "^5.2.0",
     "gelbooru-api": "^1.0.1",
     "genius-lyrics": "^4.4.6",
-    "lyrics-searcher": "^1.0.58",
     "openai": "^4.19.0",
     "play-dl": "^1.9.7",
-    "request": "^2.88.2",
     "youtube-ext": "^1.1.16",
     "ytdl-core": "^4.11.5"
   }

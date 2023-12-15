@@ -2,7 +2,7 @@ const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js"
 const { Player } = require("discord-player");
 const fs = require("fs");
 
-const client = new Client(clientObjectSettings());
+const client = new Client(clientSettings());
 
 client.config = require("./config/config.json");
 
@@ -28,7 +28,7 @@ client.handleEvents();
 
 client.login(client.config.token);
 
-function clientObjectSettings() {
+function clientSettings() {
   return {
     shards : 'auto',
     failIfNotExists : false,
