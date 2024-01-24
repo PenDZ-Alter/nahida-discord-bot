@@ -1,12 +1,12 @@
 {
-  "token" : "",
-  "api_key" : "",
+  "token" : "MTA1NDYxNDc0NjI3NzYyNTk4Ng.Gf_kQe.6G1vVSwOCvWKOt9PEzjrnOzL0lTM_e8BWXwlbk",
+  "api_key" : "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",
   "ids" : {
     "ai_config" : {
-      "channel" : "",
-      "role" : ""
+      "channel" : "1107322562104545310",
+      "role" : "1107327711220875304"
     },
     "guild" : "",
-    "client" : ""
+    "client" : "1054614746277625986"
   }
 }

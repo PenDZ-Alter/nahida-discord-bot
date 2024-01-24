@@ -24,7 +24,6 @@ module.exports = {
     if (search.length === 0) {
       return interaction.reply({ content: "❌  |  Can't find lyrics! Try a more specific search term.", ephemeral: true });
     }
-    console.log(search);
     const song = search[0];
 
     try {
