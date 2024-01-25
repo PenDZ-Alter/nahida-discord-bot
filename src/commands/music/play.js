@@ -17,7 +17,7 @@ module.exports = {
       .addChoices(
         {name : "youtube", value : "yt"},
         {name : "spotify", value : "sp"},
-        {name : "soundclound", value : "sc"},
+        {name : "soundcloud", value : "sc"},
         {name : "playlist", value : "pl"},
         {name : "auto", value : "auto"}
       )

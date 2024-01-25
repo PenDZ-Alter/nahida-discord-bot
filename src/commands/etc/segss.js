@@ -32,7 +32,7 @@ module.exports = {
 
       let imageUrl
       let j = 0;
-      while (response.data.post[j].rating !== cat) {
+      while (true) {
         j = Math.floor(Math.random() * 100);
 
         if (response.data.post[j].rating === cat) {
@@ -44,7 +44,7 @@ module.exports = {
       // Send the image URL as a message
       let embed = new EmbedBuilder()
         .setTitle("Result Images")
-        .setImage(imageUrl ? imageUrl : "Can't Find the image!")
+        .setImage(imageUrl)
         .setColor("Blue")
         .setTimestamp(Date.now());
 
