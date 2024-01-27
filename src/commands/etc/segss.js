@@ -27,6 +27,21 @@ module.exports = {
     try {
       const tags = interaction.options.getString("tags");
       const cat = interaction.options.getString("category");
+      const memberRoles = interaction.member.roles;
+      const roles = client.config.explicit.roles.id;
+
+      let access = false, i = 0;
+      while (i < roles.length) {
+        if (memberRoles.cache.has(roles[i])) {
+          access = true;
+          break;
+        }
+        i++;
+      }
+
+      if (!access) { 
+        return interaction.reply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
+      }
       
       const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags}&json=1`);
 

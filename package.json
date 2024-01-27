@@ -1,6 +1,6 @@
 {
   "name": "nahida-js",
-  "version": "0.3.5-r2",
+  "version": "0.3.6",
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
