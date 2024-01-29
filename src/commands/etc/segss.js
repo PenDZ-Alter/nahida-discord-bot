@@ -30,6 +30,8 @@ module.exports = {
       const memberRoles = interaction.member.roles;
       const roles = client.config.explicit.roles.id;
 
+      const tag = tags.replace(/ /g, "_");
+
       let access = false, i = 0;
       while (i < roles.length) {
         if (memberRoles.cache.has(roles[i])) {
@@ -43,17 +45,22 @@ module.exports = {
         return interaction.reply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
       }
       
-      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tags}&json=1`);
+      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tag}&json=1`);
 
-      let imageUrl
+      let imageUrl;
+      let limit = Number(response.data['@attributes'].limit);
       let j = 0;
       while (true) {
-        j = Math.floor(Math.random() * 100);
+        j = Math.floor(Math.random() * limit);
 
         if (response.data.post[j].rating === cat) {
           imageUrl = response.data.post[j].file_url;
           break;
         }
+      }
+
+      if (!imageUrl) {
+        return interaction.reply({ content: "❌  |  Cant find the image, try another way!", ephemeral: true });
       }
 
       // Send the image URL as a message
