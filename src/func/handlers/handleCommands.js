@@ -21,18 +21,20 @@ module.exports = (client) => {
 
     const client_id = client.config.ids.client;
     const guild_id = client.config.ids.guild;
-    const rest = new REST({ version : 10 }).setToken(client.config.token);
+    const rest = new REST({ version: 10 }).setToken(client.config.token);
     try {
-      // Directed Server
-      // await rest.put(Routes.applicationGuildCommands(client_id, guild_id), {
-      //   body : client.commandsData
-      // });
-
-      // Global Server
-      await rest.put(Routes.applicationCommands(client_id), {
-        body : client.commandsData
-      })
-
+      if (!guild_id) {
+        // Global Server
+        await rest.put(Routes.applicationCommands(client_id), {
+          body : client.commandsData
+        })
+      } else {
+        // Directed Server
+        await rest.put(Routes.applicationGuildCommands(client_id, guild_id), {
+          body : client.commandsData
+        });
+      }
+      
       console.log("BOT :: Reloaded Slash Commands Application!");
     } catch (err) {
       console.log("BOT :: Error Founded!");

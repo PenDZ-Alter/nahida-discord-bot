@@ -14,7 +14,7 @@ module.exports = {
     if (!message.member.roles.cache.has(client.config.ids.ai_config.role)) return;
     if (message.content.startsWith('!')) return;
 
-    let conversationLog = [{ role : 'system', content : "You're friendly chat bot!" }];
+    let log = [{ role : 'system', content : "You're friendly chat bot!" }];
 
     await message.channel.sendTyping();
 
@@ -26,7 +26,7 @@ module.exports = {
       if (msg.author.id !== client.user.id && message.author.bot) return;
       if (msg.author.id !== message.author.id) return;
 
-      conversationLog.push({
+      log.push({
         role : 'user',
         content : msg.content
       });
@@ -34,13 +34,13 @@ module.exports = {
     
     const result = await openai.chat.completions.create({
       model : 'gpt-4-0613',
-      messages : conversationLog
+      messages : log
     });
 
     // in testing mode
     let messageContent = result.choices[0].message.content;
-    let trimmedMsg = messageContent.substring(0, 2048);
+    let content = messageContent.substring(0, 2048);
 
-    message.reply(trimmedMsg);
+    message.reply(content);
   }
 }
