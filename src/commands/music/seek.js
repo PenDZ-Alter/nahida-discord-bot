@@ -44,6 +44,14 @@ module.exports = {
 
     let durationTime = (sec + (min * 60) + (hrs * 3600)) * 1000;
 
+    let fmin;
+    if (min < 10) fmin = "0" + min
+    else fmin = min;
+
+    let fsec;
+    if (sec < 10) fsec = "0" + sec
+    else fsec = sec;
+
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
@@ -55,6 +63,6 @@ module.exports = {
 
     queue.node.seek(durationTime);
 
-    await interaction.reply({ content : `✅  |  Seeked to ${!hrs ? "0" : hrs}:${!min ? "0" : min}:${sec === 0 ? "0" : sec}!`, ephemeral : true });
+    await interaction.reply({ content : `✅  |  Seeked to ${!hrs ? "0" : hrs}:${!min ? "00" : fmin}:${sec === 0 ? "00" : fsec}!`, ephemeral : true });
   }
 }
