@@ -63,7 +63,17 @@ module.exports = {
 
       let imageUrl;
       let limit = Number(response.data['@attributes'].limit);
+      let offset = Number(response.data['@attributes'].offset);
+      let total = Number(response.data['@attributes'].count);
       let count = 0;
+
+      if (total - offset < limit) {
+        limit = total - offset;
+      }
+
+      if (limit === 0) {
+        return interaction.editReply({ content: "❌  |  The content has reached the limit!" });
+      }
 
       for (let i = 0; i < limit; i++) {
         if (response.data.post[i].rating === cat) count++;
