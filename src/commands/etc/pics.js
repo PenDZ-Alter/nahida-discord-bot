@@ -28,17 +28,23 @@ module.exports = {
         .setName("pid")
         .setDescription("Page of data")
         .setRequired(false)
+    )
+    .addBooleanOption(
+      opt => opt
+        .setName("private")
+        .setDescription("Set into private")
     ),
 
   async execute(client, interaction) {
     try {
       const tags = interaction.options.getString("tags");
       const cat = interaction.options.getString("category");
+      const private = interaction.options.getBoolean("private");
       const pid = !interaction.options.getInteger("pid") ? 0 : interaction.options.getInteger("pid");
       const memberRoles = interaction.member.roles;
       const roles = client.config.explicit.roles.id;
 
-      await interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply({ ephemeral: private });
 
       const tag = tags.replace(/ /g, "_");
 
@@ -61,10 +67,12 @@ module.exports = {
         return interaction.editReply({ content: "❌  |  Failed went fetching data! Try another tags and make sure you dont add some spesial characters except '_'!" });
       }
 
-      let imageUrl;
-      let limit = Number(response.data['@attributes'].limit);
-      let offset = Number(response.data['@attributes'].offset);
-      let total = Number(response.data['@attributes'].count);
+      const attrib = response.data['@attributes'];
+
+      let imageUrl, data;
+      let limit = Number(attrib.limit);
+      let offset = Number(attrib.offset);
+      let total = Number(attrib.count);
       let count = 0;
 
       if (total - offset < limit) {
@@ -88,9 +96,16 @@ module.exports = {
         j = Math.floor(Math.random() * limit);
 
         if (response.data.post[j].rating === cat) {
-          imageUrl = response.data.post[j].file_url;
+          data = response.data.post[j];
+          imageUrl = data.file_url;
           break;
         }
+      }
+
+      // Video handler
+      let vids = data.tags.includes("video");
+      if (vids) {
+        return interaction.editReply({ content: `Result Videos\n${imageUrl}` });
       }
 
       // Send the image URL as a message

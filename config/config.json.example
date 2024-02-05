@@ -1,0 +1,20 @@
+{
+  "token" : "",
+  "api_key" : "",
+  "ids" : {
+    "ai_config" : {
+      "channel" : "",
+      "role" : ""
+    },
+    "guild" : "",
+    "client" : ""
+  },
+  "explicit": {
+    "roles": {
+      "id" : [
+        "",
+        ""
+      ]
+    }
+  }
+}
