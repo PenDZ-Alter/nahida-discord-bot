@@ -38,6 +38,20 @@ module.exports = {
         )
       .addFields([
         {
+          name : "Source",
+          value : currentSong.source,
+          inline : true
+        },
+        {
+          name : "Artist/Channel",
+          value : currentSong.author,
+          inline : true
+        },
+        {
+          name : "\n",
+          value : "\n"
+        },
+        {
           name : 'Pause',
           value : (queue.node.isPaused() ? "✅" : "❌"),
           inline : true
@@ -45,11 +59,6 @@ module.exports = {
         {
           name : 'Loop',
           value : `${(isRepeat ? "✅" : "❌")}${(!repeatStatus() ? "" : repeatStatus())}`,
-          inline : true
-        },
-        {
-          name : "Source",
-          value : currentSong.source,
           inline : true
         },
         {

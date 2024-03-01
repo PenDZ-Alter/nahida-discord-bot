@@ -4,7 +4,7 @@
   "ids" : {
     "ai_config" : {
       "channel" : "",
-      "role" : "1"
+      "role" : ""
     },
     "guild" : "",
     "client" : "1054614746277625986"
