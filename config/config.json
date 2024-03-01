@@ -1,5 +1,5 @@
 {
-  "token" : "MTA1NDYxNDc0NjI3NzYyNTk4Ng.Gf_kQe.6G1vVSwOCvWKOt9PEzjrnOzL0lTM_e8BWXwlbk",
+  "token" : "",
   "api_key" : "",
   "ids" : {
     "ai_config" : {
@@ -7,14 +7,11 @@
       "role" : ""
     },
     "guild" : "",
-    "client" : "1054614746277625986"
+    "client" : ""
   },
   "explicit": {
     "roles": {
-      "id" : [
-        "1107327711220875304",
-        "1011251355601600532"
-      ]
+      "id" : []
     }
   }
 }
