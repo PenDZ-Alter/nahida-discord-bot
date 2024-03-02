@@ -1,24 +1,17 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
-
-let index;
+const { EmbedBuilder } = require("discord.js");
+const { getPage, setPage } = require("../../commands/music/queue.js");
 
 module.exports = {
-  data : new SlashCommandBuilder()
-    .setName("queue")
-    .setDescription("Show the 10 song in queue")
-    .addIntegerOption(opt =>
-      opt.setName("page")
-        .setDescription("Number of pages")
-        .setRequired(false)  
-    ),
+  data : { name : "next-page" },
 
   async execute(client, interaction) {
-    const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const queue = client.player.nodes.get(interaction.guild);
-    const page = interaction.options.getInteger("page");
-
-    index = page ? Number(page) - 1 : 0;
+    let indexPage = getPage();
+    let songSize = queue.getSize();
+    let totalPage = Math.ceil(songSize / 10);
+    let index = indexPage + 1;
+    if (index > totalPage - 1) index = totalPage - 1;
+    setPage(index);
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
@@ -31,8 +24,6 @@ module.exports = {
     let firstNumIndex = index * 10;
     let endNumIndex = firstNumIndex + 10;
 
-    let songSize = queue.getSize();
-    let totalPage = Math.ceil(songSize / 10);
 
     const queueStr = queue.tracks.toArray().slice(firstNumIndex, endNumIndex).map((song, i) => {
       return `${(i+1) + (index * 10)}) \`[${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
@@ -40,19 +31,7 @@ module.exports = {
 
     const currentSong = queue.currentTrack;
 
-    const prevButton = new ButtonBuilder()
-      .setCustomId("prev-page")
-      .setLabel("Prev")
-      .setStyle(ButtonStyle.Secondary)
-
-    const nextButton = new ButtonBuilder()
-      .setCustomId("next-page")
-      .setLabel("Next")
-      .setStyle(ButtonStyle.Primary)
-
-    const actionRow = new ActionRowBuilder().addComponents(prevButton, nextButton);
-
-    let embed = new EmbedBuilder()
+    let updatedEmbed = new EmbedBuilder()
       .setTitle("Query Results")
       .setDescription(`**Currently Playing**\n` + 
       (currentSong ? `\`[${currentSong.duration}]\` ${currentSong.title} - <@${currentSong.requestedBy.id}>` : "None") +
@@ -62,17 +41,8 @@ module.exports = {
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
       .setTimestamp(Date.now());
 
-    await interaction.reply({
-      embeds : [embed],
-      components : [actionRow]
+    await interaction.update({
+      embeds : [updatedEmbed]
     });
-  },
-
-  getPage : () => {
-    return index;
-  }, 
-  
-  setPage : (a) => {
-    return index = a;
   }
 }

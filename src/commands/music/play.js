@@ -1,5 +1,7 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require("discord.js");
 const { QueryType } = require("discord-player");
+
+let songIndex;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -115,8 +117,14 @@ module.exports = {
     if (!queue.node.isPlaying()) 
       await queue.node.play();
 
-    let songIndex = queue.getSize();
+    const button = new ButtonBuilder()
+      .setCustomId('cancel-add')
+      .setLabel("Cancel")
+      .setStyle(ButtonStyle.Danger)
+      .setDisabled(false)
 
+    songIndex = queue.getSize();
+    
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
@@ -125,6 +133,20 @@ module.exports = {
         ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
         ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Indexed in position ${songIndex}`}` : `Total song indexed : ${songIndex}`}`);
 
-    await interaction.editReply({ embeds : [embed] });
+    if (songIndex === 0) {
+      await interaction.editReply({ embeds : [embed] });
+    } else {
+      const actionRow = new ActionRowBuilder().addComponents(button)
+      await interaction.editReply({ embeds : [embed], components : [actionRow] });
+
+      setTimeout(() => {
+        button.setDisabled(true);
+        interaction.editReply({ components : [actionRow] });
+      }, 3000);
+    }
+  },
+
+  getAddedIndex : () => {
+    return songIndex;
   }
 }

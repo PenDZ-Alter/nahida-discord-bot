@@ -7,6 +7,7 @@ const client = new Client(clientSettings());
 client.config = require("./config/config.json");
 
 client.commands = new Collection();
+client.buttons = new Collection();
 client.commandsData = [];
 
 client.player = new Player(client);
@@ -25,6 +26,7 @@ for (const folders of funcFold) {
 // Executing handlers
 client.handleCommands();
 client.handleEvents();
+client.handleComponents();
 
 client.login(client.config.token);
 
