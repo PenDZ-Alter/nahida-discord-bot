@@ -1,16 +1,21 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
 
-let songIndex, isPlaylist, sizePlaylist;
+let songIndex, isPlaylist, sizePlaylist, isInsert, getIndex;
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("Playing a song")
+    .setName("insert")
+    .setDescription("Add song with specified index")
     .addStringOption(opt =>
       opt.setName("query")
         .setDescription("Title or url of the song")
         .setRequired(true)
+    )
+    .addIntegerOption(opt => opt
+      .setName("number")
+      .setDescription("Number of queue to insert")
+      .setRequired(true)
     )
     .addStringOption(opt => opt
       .setName("type")
@@ -31,12 +36,18 @@ module.exports = {
     
     const query = interaction.options.getString('query', true);
     const type = interaction.options.getString('type');
+    const index = interaction.options.getInteger('number');
+    getIndex = index;
     await client.player.extractors.loadDefault();
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
     }
+
+    if (index < 1) {
+      return interaction.reply({ content: "❌  |  You can't insert number below 1!!", ephemeral: true });
+    } 
 
     const queue = client.player.nodes.create(interaction.guild, {
       volume : 90,
@@ -45,6 +56,7 @@ module.exports = {
         client : interaction.guild.members.me
       }
     });
+    isInsert = true;
 
     let result;
     switch (type) {
@@ -105,14 +117,14 @@ module.exports = {
 
     let title, track;
     if (result.playlist) {
-      queue.addTrack(result.tracks);
+      queue.insertTrack(result.tracks, index-1);
       title = result.playlist.title;
       isPlaylist = true;
       sizePlaylist = result.tracks.length;
     } else {
       track = result.tracks[0];
 
-      queue.addTrack(track);
+      queue.insertTrack(track, index-1);
       title = track.title;
       isPlaylist = false;
     }
@@ -134,7 +146,7 @@ module.exports = {
       .setDescription(
         `📝  |  **${title}** has been enqueued!
         ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Indexed in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
+        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Indexed in position ${index}`}` : `Total song indexed : ${sizePlaylist}`}`);
 
     if (songIndex === 0) {
       await interaction.editReply({ embeds : [embed] });
@@ -159,5 +171,16 @@ module.exports = {
 
   getSizePlaylist : () => {
     return sizePlaylist;
+  }, 
+
+  getIsInsert : () => {
+    return isInsert;
+  },
+
+  getIndex : () => {
+    return getIndex;
   }
 }
+
+// Tasks!
+// There's a bug when cancelling add music

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { repeatStatus } = require("./repeat");
 
 let index;
 
@@ -56,7 +57,7 @@ module.exports = {
       .setTitle("Query Results")
       .setDescription(`**Currently Playing**\n` + 
       (currentSong ? `\`[${currentSong.duration}]\` ${currentSong.title} - <@${currentSong.requestedBy.id}>` : "None") +
-      `\n\n**Queue**\n${queueStr} `)
+      `${repeatStatus() === "Track" ? "\n\n**⚠️  |  Loop Track Detected!**\nThe queue may be not used, unless you turning off the track loop!" : ""}\n\n**Queue**\n${queueStr} `)
       .setThumbnail(currentSong.thumbnail)
       .setColor("Blue")
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })

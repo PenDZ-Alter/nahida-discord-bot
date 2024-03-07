@@ -9,6 +9,8 @@ module.exports = {
     let indexPage = getPage();
     let songSize = queue.getSize();
     let totalPage = Math.ceil(songSize / 10);
+
+    if (!interaction.user.id) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
     let index = indexPage + 1;
     if (index > totalPage - 1) index = totalPage - 1;
     setPage(index);

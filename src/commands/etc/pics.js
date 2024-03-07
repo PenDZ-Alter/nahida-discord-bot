@@ -1,8 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const axios = require("axios");
 
-let index;
-let imageData;
+let index, imageData, userid;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -69,6 +68,8 @@ module.exports = {
       if (!access) {
         return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles" });
       }
+
+      userid = interaction.user.id;
 
       const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tag}&pid=${pid}&json=1`);
 
@@ -173,6 +174,10 @@ module.exports = {
     return index = a;
   },
 
+  getID : () => {
+    return userid;
+  },
+  
   getData : () => {
     return imageData;
   }
@@ -185,4 +190,11 @@ module.exports = {
  * 
  * max limit in gelbooru is 100
  * pid is set the offset of page count per limit
+ */
+
+/** 
+ * BUGS!!
+ * 
+ * There's something problem when requesting data and data changed after another user
+ * and some user click the button but the same data as the new request before!
  */

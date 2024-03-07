@@ -7,6 +7,8 @@ module.exports = {
   async execute(client, interaction) {
     const queue = client.player.nodes.get(interaction.guild);
     let indexPage = getPage();
+
+    if (!interaction.user.id) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
     let index = indexPage - 1;
     if (index < 0) index = 0;
     setPage(index);

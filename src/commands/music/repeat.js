@@ -12,9 +12,9 @@ module.exports = {
       .setDescription("Toggle the repeat mode")
       .setRequired(true)
       .addChoices(
-        { name : "track", value : "TRACK" },
-        { name : "queue", value : "QUEUE" },
-        { name : "autoplay", value : "AUTO" },
+        { name : "track", value : "Track" },
+        { name : "queue", value : "Queue" },
+        { name : "autoplay", value : "Auto" },
         { name : "off", value : "OFF" },
       )
     ),
@@ -34,7 +34,7 @@ module.exports = {
     if (!queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing the song", ephemeral : true });
 
     let loopText = type;
-    if (type === "TRACK") {
+    if (type === "Track") {
       try {
         await queue.setRepeatMode(QueueRepeatMode.TRACK);
       } catch {
@@ -43,7 +43,7 @@ module.exports = {
           ephemeral : true
         });
       }
-    } else if (type === "QUEUE") {
+    } else if (type === "Queue") {
       try {
         await queue.setRepeatMode(QueueRepeatMode.QUEUE);
       } catch {
@@ -52,7 +52,7 @@ module.exports = {
           ephemeral : true
         });
       }
-    } else if (type === "AUTO") {
+    } else if (type === "Auto") {
       try {
         await queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
       } catch {
