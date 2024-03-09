@@ -1,15 +1,17 @@
 const { EmbedBuilder } = require("discord.js");
-const { getIndex, setIndex, getData, getID } = require("../../commands/etc/pics");
+const { getIndex, setIndex, getData, getPrivateData, isPrivate } = require("../../commands/etc/pics");
 
 module.exports = {
   data : { name: "prev-pics" },
 
   async execute(client, interaction) {
-    let imageData = getData();
-    let indexSetup = getIndex();
+    // if (interaction.user.id !== getID()) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
+    let imageData = isPrivate() ? getPrivateData() : getData()[interaction.user.id];
+    if (!imageData) return interaction.reply({ content : "❌  |  You're not eligible to use this button!", ephemeral : true });
 
-    if (interaction.user.id !== getID()) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
-    index = indexSetup - 1;
+    let indexInit = getIndex();
+
+    index = indexInit - 1;
     if (index < 0) index = imageData.length - 1;
     setIndex(index);
 

@@ -1,7 +1,24 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const axios = require("axios");
+const fs = require("fs");
 
-let index, imageData, userid;
+const filePath = './data/db.json'
+let jsonDb;
+
+fs.readFile(filePath, 'utf8', (err, data) => {
+  if (err) {
+    console.error('Error reading file:', err);
+  }
+
+  // Parse the JSON data
+  try {
+    jsonDb = JSON.parse(data);
+  } catch (error) {
+    console.error('Error parsing JSON data:', error);
+  }
+});
+
+let index, imageData, userid, private;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -46,11 +63,11 @@ module.exports = {
     try {
       const tags = interaction.options.getString("tags");
       const cat = interaction.options.getString("category");
-      const private = interaction.options.getBoolean("private");
       const pid = !interaction.options.getInteger("pid") ? 0 : interaction.options.getInteger("pid");
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
       const roles = client.config.explicit.roles.id;
+      private = interaction.options.getBoolean("private");
 
       await interaction.deferReply({ ephemeral: private });
 
@@ -113,7 +130,7 @@ module.exports = {
       }
 
       if (pack) {
-        imageData = [];
+        imageData = []
         const prevButton = new ButtonBuilder()
           .setCustomId("prev-pics")
           .setLabel("Prev")
@@ -129,22 +146,50 @@ module.exports = {
         let datas;
         index = 0;
 
-        for (let i = 0; i < limit; i++) {
-          if (response.data.post[i].rating === cat) {
-            datas = response.data.post[i];
-            imageData.push(datas);
-          }
+        if (!jsonDb.id.hasOwnProperty(userid)) {
+          jsonDb.id[userid] = [];
+        } else {
+          jsonDb.id[userid] = [];
         }
+        
+        let imageShow;
+        if (private) {
+          for (let i = 0; i < limit; i++) {
+            if (response.data.post[i].rating === cat) {
+              datas = response.data.post[i];
+              imageData.push(datas);
+            }
+          }
+
+          imageShow = imageData[index].file_url;
+        } else {
+          for (let i = 0; i < limit; i++) {
+            if (response.data.post[i].rating === cat) {
+              datas = response.data.post[i];
+              jsonDb.id[userid].push(datas);
+            }
+          }
+
+          imageShow = jsonDb.id[userid][index].file_url
+        }
+        
+        fs.writeFile("./data/db.json", JSON.stringify(jsonDb, null, 2), 'utf8', (err) => {
+          if (err) {
+            console.log("Failed to add data!");
+            console.error(err);
+          }
+        });
 
         let embed = new EmbedBuilder()
           .setTitle("Result Images")
-          .setDescription(imageData[index].file_url)
-          .setImage(imageData[index].file_url)
+          .setDescription(imageShow)
+          .setImage(imageShow)
           .setColor("Blue")
-          .setFooter({ text : `Page ${index + 1} of ${imageData.length}` })
+          .setFooter({ text : `Page ${index + 1} of ${imageShow.length}` })
           .setTimestamp(Date.now())
 
         await interaction.editReply({ embeds: [embed], components: [row] });
+        // await interaction.editReply({ content: "❌  |  This command is under maintenance!", ephemeral : true });
       } else {
         // Video handler
         let vids = data.tags.includes("video");
@@ -179,7 +224,15 @@ module.exports = {
   },
   
   getData : () => {
+    return jsonDb.id;
+  },
+
+  getPrivateData : () => {
     return imageData;
+  },
+
+  isPrivate : () => {
+    return private;
   }
 }
 
