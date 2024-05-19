@@ -65,13 +65,15 @@ module.exports = {
         i++;
       }
 
+      // return interaction.editReply({ content : "❌  |  This command was disabled!" });
+
       if (!access) {
         return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles" });
       }
 
       userid = interaction.user.id;
 
-      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&tags=${tag}&pid=${pid}&json=1`);
+      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&&api_key=anonymous&user_id=9455&tags=${tag}&pid=${pid}&json=1`);
 
       if (!response.data.post || !response.data) {
         return interaction.editReply({ content: "❌  |  Failed went fetching data! Try another tags and make sure you dont add some spesial characters except '_'!" });

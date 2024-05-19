@@ -107,6 +107,7 @@ module.exports = {
     if (result.playlist) {
       queue.addTrack(result.tracks);
       title = result.playlist.title;
+      
       isPlaylist = true;
       sizePlaylist = result.tracks.length;
     } else {

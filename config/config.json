@@ -3,8 +3,8 @@
   "api_key" : "",
   "ids" : {
     "ai_config" : {
-      "channel" : "",
-      "role" : ""
+      "channel" : [],
+      "roles" : []
     },
     "guild" : "",
     "client" : ""

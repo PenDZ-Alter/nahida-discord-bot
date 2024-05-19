@@ -7,10 +7,12 @@ module.exports = {
   async execute(client, interaction) {
     const queue = client.player.nodes.get(interaction.guild);
     let indexPage = getPage();
+    let songSize = queue.getSize();
+    let totalPage = Math.ceil(songSize / 10);
 
     if (!interaction.user.id) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
     let index = indexPage - 1;
-    if (index < 0) index = 0;
+    if (index < 0) index = totalPage - 1;
     setPage(index);
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
@@ -23,9 +25,6 @@ module.exports = {
   
     let firstNumIndex = index * 10;
     let endNumIndex = firstNumIndex + 10;
-
-    let songSize = queue.getSize();
-    let totalPage = Math.ceil(songSize / 10);
 
     const queueStr = queue.tracks.toArray().slice(firstNumIndex, endNumIndex).map((song, i) => {
       return `${(i+1) + (index * 10)}) \`[${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
