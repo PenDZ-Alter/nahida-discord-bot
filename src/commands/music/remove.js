@@ -43,12 +43,12 @@ module.exports = {
       }
 
       let i = endIndex - 1;
-      while (i >=  index - 1) {
+      while (i >= index - 1) {
         await queue.node.remove(i);
         i--; // Decrement end because the queue shrinks after each removal
       }
 
-      ctx = `✅  |  Removed ${index}-${endIndex} track from queue!`;
+      ctx = `✅  |  Removed ${index}-${endIndex} tracks from queue!`;
     } else {
       await queue.node.remove(index-1);
       ctx = `✅  |  Removed track ${index} from queue!`;

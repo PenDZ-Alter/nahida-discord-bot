@@ -1,6 +1,6 @@
 {
   "name": "nahida-js",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
@@ -31,5 +31,8 @@
     "genius-lyrics": "^4.4.6",
     "openai": "^4.47.1",
     "ytdl-core": "^4.11.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }

@@ -19,4 +19,6 @@ module.exports = (client) => {
       }
     }
   }
+
+  client.handleComponents();
 }

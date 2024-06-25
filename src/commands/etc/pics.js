@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const axios = require("axios");
 
-let index, imageData, userid;
+let index, imageData, userid, _pid;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -87,6 +87,9 @@ module.exports = {
       let total = Number(attrib.count);
       let count = 0;
 
+      // Global Variables
+      _pid = pid;
+
       if (total - offset < limit) {
         limit = total - offset;
       }
@@ -143,7 +146,7 @@ module.exports = {
           .setDescription(imageData[index].file_url)
           .setImage(imageData[index].file_url)
           .setColor("Blue")
-          .setFooter({ text : `Page ${index + 1} of ${imageData.length}` })
+          .setFooter({ text : `Page ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}` })
           .setTimestamp(Date.now())
 
         await interaction.editReply({ embeds: [embed], components: [row] });
@@ -182,6 +185,10 @@ module.exports = {
   
   getData : () => {
     return imageData;
+  },
+
+  getPID : () => {
+    return _pid;
   }
 }
 

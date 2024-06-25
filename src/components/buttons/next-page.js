@@ -26,7 +26,6 @@ module.exports = {
     let firstNumIndex = index * 10;
     let endNumIndex = firstNumIndex + 10;
 
-
     const queueStr = queue.tracks.toArray().slice(firstNumIndex, endNumIndex).map((song, i) => {
       return `${(i+1) + (index * 10)}) \`[${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
     }).join('\n');

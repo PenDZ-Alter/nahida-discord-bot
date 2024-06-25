@@ -1,8 +1,9 @@
-const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
+const { Client, Collection, Partials } = require("discord.js");
 const { Player } = require("discord-player");
+const ClientSettings = require("./config/client.json");
 const fs = require("fs");
 
-const client = new Client(clientSettings());
+const client = new Client(ClientSettings);
 
 client.config = require("./config/config.json");
 
@@ -23,34 +24,4 @@ for (const folders of funcFold) {
   }
 }
 
-// Executing handlers
-client.handleCommands();
-client.handleEvents();
-client.handleComponents();
-
 client.login(client.config.token);
-
-function clientSettings() {
-  return {
-    shards : 'auto',
-    failIfNotExists : false,
-    intents : [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildInvites,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.GuildPresences,
-      GatewayIntentBits.GuildVoiceStates,
-      GatewayIntentBits.MessageContent
-    ],
-    partials : [
-      Partials.Message,
-      Partials.Reaction,
-      Partials.User
-    ],
-    allowedMentions : {
-      parse : [ 'roles', 'users' ],
-      repliedUser : false
-    }
-  }
-}

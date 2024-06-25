@@ -35,7 +35,7 @@ module.exports = {
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
     }
 
     const queue = client.player.nodes.create(interaction.guild, {
@@ -140,7 +140,7 @@ module.exports = {
     if (songIndex === 0) {
       await interaction.editReply({ embeds : [embed] });
     } else {
-      const actionRow = new ActionRowBuilder().addComponents(button)
+      const actionRow = new ActionRowBuilder().addComponents(button);
       await interaction.editReply({ embeds : [embed], components : [actionRow] });
 
       setTimeout(() => {

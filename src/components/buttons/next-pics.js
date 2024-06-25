@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { getIndex, setIndex, getData, getID } = require("../../commands/etc/pics");
+const { getIndex, setIndex, getData, getID, getPID } = require("../../commands/etc/pics");
 
 module.exports = {
   data : { name: "next-pics" },
@@ -18,7 +18,7 @@ module.exports = {
       .setDescription(imageData[index].file_url)
       .setImage(imageData[index].file_url)
       .setColor("Blue")
-      .setFooter({ text : `Page ${index + 1} of ${imageData.length}` })
+      .setFooter({ text : `Page ${index + 1} of ${imageData.length}${getPID() != 0 ? ` • PID : ${getPID()}` : ``}` })
       .setTimestamp(Date.now())
 
     await interaction.update({ embeds: [embed] });

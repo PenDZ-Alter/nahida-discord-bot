@@ -31,4 +31,6 @@ module.exports = (client) => {
       }
     }
   }
+
+  client.handleEvents();
 }

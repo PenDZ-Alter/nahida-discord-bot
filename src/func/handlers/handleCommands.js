@@ -41,4 +41,6 @@ module.exports = (client) => {
       console.error(err);
     }
   }
+
+  client.handleCommands();
 }

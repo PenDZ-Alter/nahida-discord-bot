@@ -14,8 +14,8 @@ Nahida is just my discord bot's name :)
 2. (OPTIONAL) Configure OpenAI Key
 
    - Copy your API Key from openai and copy to `api_key` inside file `config.json`
-   - For more secure, Copy your Role ID into `role_ai` inside file `config.json`
-   - To make this AI Works, you need Channel ID into `channel_ai` inside file `config.json`
+   - For more secure, Copy your Role ID into `ai_config` -> `role` inside file `config.json`
+   - To make this AI Works, you need Channel ID into `ai_config` -> `channel` inside file `config.json`
 
 NOTE! Make sure you have subscription in OpenAI Platform. Otherwise, this will not be work for you!
 

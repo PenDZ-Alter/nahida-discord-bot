@@ -1,0 +1,10 @@
+{
+  "shards" : "auto",
+  "failIfNotExists" : false,
+  "intents" : 33731,
+  "partials" : [ "message", "reaction", "user" ],
+  "allowedMentions" : {
+    "parse" : [ "roles", "users"],
+    "repliedUser" : false
+  }
+}
