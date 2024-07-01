@@ -1,11 +1,11 @@
-const { Client, Collection, Partials } = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const { Player } = require("discord-player");
 const ClientSettings = require("./config/client.json");
 const fs = require("fs");
 
 const client = new Client(ClientSettings);
 
-client.config = require("./config/config.json");
+client.config = require("./config/config.debug.json");
 
 client.commands = new Collection();
 client.buttons = new Collection();

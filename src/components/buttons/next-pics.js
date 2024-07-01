@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { getIndex, setIndex, getData, getID, getPID } = require("../../commands/etc/pics");
+const { getIndex, setIndex, getData, getID, getPID, getVidsPack } = require("../../commands/etc/pics");
 
 module.exports = {
   data : { name: "next-pics" },
@@ -13,14 +13,19 @@ module.exports = {
     if (index > imageData.length - 1) index = 0;
     setIndex(index);
 
-    let embed = new EmbedBuilder()
-      .setTitle("Result Images")
-      .setDescription(imageData[index].file_url)
-      .setImage(imageData[index].file_url)
-      .setColor("Blue")
-      .setFooter({ text : `Page ${index + 1} of ${imageData.length}${getPID() != 0 ? ` • PID : ${getPID()}` : ``}` })
-      .setTimestamp(Date.now())
+    if (getVidsPack()) {
+      await interaction.update({ embeds: [], content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${getPID() != 0 ? ` • PID : ${getPID()}` : ``}`});
+    } else {
+      let embed = new EmbedBuilder()
+        .setTitle("Result Images")
+        .setDescription(imageData[index].file_url)
+        .setImage(imageData[index].file_url)
+        .setColor("Blue")
+        .setFooter({ text : `Page ${index + 1} of ${imageData.length}${getPID() != 0 ? ` • PID : ${getPID()}` : ``}` })
+        .setTimestamp(Date.now())
+  
+      await interaction.update({ embeds: [embed], content: "" });
+    }
 
-    await interaction.update({ embeds: [embed] });
   }
 }

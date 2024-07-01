@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const axios = require("axios");
 
-let index, imageData, userid, _pid;
+let index, imageData, userid, _pid, _vidsPack;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -141,6 +141,12 @@ module.exports = {
           }
         }
 
+        let vidsPack = imageData[index].tags.includes("video");
+
+        if (vidsPack) {
+          return interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
+        }
+
         let embed = new EmbedBuilder()
           .setTitle("Result Images")
           .setDescription(imageData[index].file_url)
@@ -189,6 +195,10 @@ module.exports = {
 
   getPID : () => {
     return _pid;
+  },
+
+  getVidsPack : () => {
+    return imageData[index].tags.includes("video");
   }
 }
 
