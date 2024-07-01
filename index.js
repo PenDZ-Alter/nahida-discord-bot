@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const client = new Client(ClientSettings);
 
-client.config = require("./config/config.debug.json");
+client.config = require("./config/config.json");
 
 client.commands = new Collection();
 client.buttons = new Collection();
