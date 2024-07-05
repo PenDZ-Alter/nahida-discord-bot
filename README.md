@@ -11,7 +11,7 @@ Nahida is just my discord bot's name :)
     - don't forget to rename the file from `.env.example` to `.env` .
 
 2. (OPTIONAL) Configure OpenAI Key
-    - Copy your API Key from openai and copy to `api_key` inside file `config.json`
+    - Copy your API Key from openai and copy to `api_key` inside file `.env` (the token, guild, and client that you set in number 1)
     - For more secure, Copy your Role ID into `ai_config` -> `role` inside file `config.json`
     - To make this AI Works, you need Channel ID into `ai_config` -> `channel` inside file `config.json`
 
