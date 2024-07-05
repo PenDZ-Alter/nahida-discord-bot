@@ -8,7 +8,7 @@ Nahida is just my discord bot's name :)
     - The token, you can get from discord developer website in this link `https://discord.com/developers/docs/intro`, go to application and go to your bot get your token there.
     - The Client ID, you can get it from discord server and copy the ID from your bot.
     - The Guild ID, you can get it from discord server and copy the ID from your server ID. This is optional, if you want to make the bot can used globally, simply don't add it.
-    - don't forget to rename the file from `.env.example` to `.env` .
+    - Don't forget to rename the file from `.env.example` to `.env` .
 
 2. (OPTIONAL) Configure OpenAI Key
     - Copy your API Key from openai and copy to `api_key` inside file `.env` (the token, guild, and client that you set in number 1)
