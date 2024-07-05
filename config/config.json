@@ -1,13 +1,9 @@
 {
-  "token" : "",
-  "api_key" : "",
   "ids" : {
     "ai_config" : {
       "channel" : [],
       "roles" : []
-    },
-    "guild" : "",
-    "client" : ""
+    }
   },
   "explicit": {
     "roles": {

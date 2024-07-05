@@ -19,9 +19,9 @@ module.exports = (client) => {
       }
     }
 
-    const client_id = client.config.ids.client;
-    const guild_id = client.config.ids.guild;
-    const rest = new REST({ version: 10 }).setToken(client.config.token);
+    const client_id = process.env.CLIENT_ID;
+    const guild_id = process.env.GUILD_ID;
+    const rest = new REST({ version: 10 }).setToken(process.env.TOKEN);
     try {
       if (!guild_id) {
         // Global Server

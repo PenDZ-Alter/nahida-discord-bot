@@ -2,10 +2,11 @@ const { Client, Collection } = require("discord.js");
 const { Player } = require("discord-player");
 const ClientSettings = require("./config/client.json");
 const fs = require("fs");
+require("dotenv").config({ path : "./config/.env" });
 
 const client = new Client(ClientSettings);
 
-client.config = require("./config/config.debug.json");
+client.config = require("./config/config.json");
 
 client.commands = new Collection();
 client.buttons = new Collection();
@@ -24,4 +25,4 @@ for (const folders of funcFold) {
   }
 }
 
-client.login(client.config.token);
+client.login(process.env.TOKEN);

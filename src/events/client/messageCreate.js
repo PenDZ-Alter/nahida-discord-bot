@@ -6,12 +6,16 @@ module.exports = {
 
   async execute(client, message) {
     const openai = new OpenAI({
-      apiKey : client.config.api_key
+      apiKey : process.env.OPENAI_API_KEY
     }); 
 
     /* Error Handling */
     if (message.author.bot) return;
     if (message.content.startsWith('!')) return;
+
+    // Single ids
+    // if (!message.member.roles.cache.has(client.config.ids.ai_config.roles)) return;
+    // if (message.channel.id !== client.config.ids.ai_config.channel) return;
 
     // Getting access from array -> Multiple ids
     const roles = client.config.ids.ai_config.roles;
@@ -33,16 +37,10 @@ module.exports = {
       }
     }
 
-    // Single ids
-    // if (!message.member.roles.cache.has(client.config.ids.ai_config.roles)) return;
-    // if (message.channel.id !== client.config.ids.ai_config.channel) return;
-    
-    // Multiple ids
     if (!access) return;
     if (!getChannel) return;
     
     let log = [];
-
     await message.channel.sendTyping();
 
     let prevMsg = await message.channel.messages.fetch({ limit : 10 });
@@ -61,26 +59,15 @@ module.exports = {
     
     const result = await openai.chat.completions.create({
       model : 'gpt-4o-2024-05-13',
-      // model : 'gpt-4',
       messages : log
     });
 
     // in testing mode
     let messageContent = result.choices[0].message.content;
-    let content = messageContent.substring(0, 2000);
-    let secContent = messageContent.substring(2000, 4000);
-    let thrdContent = messageContent.substring(4000, 6000);
-    let forthContent = messageContent.substring(6000, 8000);
+    let chunkSize = 2000;
 
-    message.reply(content);
-    if (secContent) {
-      message.reply(secContent);
-    }
-    if (thrdContent) {
-      message.reply(thrdContent);
-    }
-    if (forthContent) {
-      message.reply(forthContent);
+    for (let i = 0; i < messageContent.length; i += chunkSize) {
+      message.reply(messageContent.substring(i, i + chunkSize));
     }
   }
 }
