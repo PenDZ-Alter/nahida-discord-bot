@@ -1,5 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
+const { YoutubeiExtractor, createYoutubeiStream } = require("discord-player-youtubei");
+const { SpotifyExtractor } = require("@discord-player/extractor");
 
 let songIndex, isPlaylist, sizePlaylist;
 
@@ -31,9 +33,13 @@ module.exports = {
     
     const query = interaction.options.getString('query', true);
     const type = interaction.options.getString('type');
-    await client.player.extractors.loadDefault();
+    await client.player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
 
-    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
+    await client.player.extractors.register(YoutubeiExtractor, {});
+    await client.player.extractors.register(SpotifyExtractor, {
+      createStream : createYoutubeiStream
+    });
+
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
     }
@@ -117,9 +123,16 @@ module.exports = {
       title = track.title;
       isPlaylist = false;
     }
-    
-    if (!queue.node.isPlaying()) 
-      await queue.node.play();
+
+    try {
+      if (!queue.node.isPlaying()) {
+        await queue.node.play();
+      } else {
+        console.log('Queue is already playing.');
+      }
+    } catch (err) {
+      console.error('Failed to start playback:', err);
+    }
 
     const button = new ButtonBuilder()
       .setCustomId('cancel-add')
