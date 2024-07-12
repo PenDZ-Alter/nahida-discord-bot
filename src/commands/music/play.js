@@ -33,9 +33,17 @@ module.exports = {
     
     const query = interaction.options.getString('query', true);
     const type = interaction.options.getString('type');
-    await client.player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
+    await client.player.extractors.loadDefault((ext) => !['YouTubeExtractor', 'SpotifyExtractor'].includes(ext));
 
-    await client.player.extractors.register(YoutubeiExtractor, {});
+    await client.player.extractors.register(YoutubeiExtractor, {
+      authentication: {
+        access_token: process.env.YOUTUBE_ACCESS_TOKEN || '',
+        refresh_token: process.env.YOUTUBE_REFRESH_TOKEN || '',
+        scope: 'https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube-paid-content',
+        token_type: 'Bearer',
+        expiry_date: client.config.yt_exp
+      }
+    });
     await client.player.extractors.register(SpotifyExtractor, {
       createStream : createYoutubeiStream
     });

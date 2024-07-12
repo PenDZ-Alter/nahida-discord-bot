@@ -29,12 +29,19 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
     Use command `npm i` and wait until done! <br>
     if there's something error, just ignore it :)
 
-2. Run it :) <br>
-    Use command `node .` and Done! :)
+2. Get the auth token for youtube <br>
+    WARNING! When getting the auth token from youtube, please don't use your main account. Because is too risky, and the biggest disaster is your account will get permanently ban. <br>
+    You can see the documentation and reason about in :  <br> https://github.com/retrouser955/discord-player-youtubei/blob/master/LEGAL.md <br> <br>
+    Use command `node getAuth.js`
+
+    Copy the `access_token` and `refresh_token` into .env, and Copy the `expiry_date` into config.json named `yt_exp`
+
+3. Run the bot :) <br>
+    Use command `node .`
+    Done! :)
 
 NOTE! Remember to always direct directory into bot folder before you do the step!
 
-
-## Notes about the AI from OpenAI Platform
+## Notes about OpenAI Platform
 You can changes the model from his official website <br>
 https://platform.openai.com/account/rate-limits
