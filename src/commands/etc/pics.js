@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const axios = require("axios");
 
+// Global Variables
 let index, imageData, userid, _pid, _vidsPack;
 
 module.exports = {
@@ -87,7 +88,6 @@ module.exports = {
       let total = Number(attrib.count);
       let count = 0;
 
-      // Global Variables
       _pid = pid;
 
       if (total - offset < limit) {
@@ -141,9 +141,9 @@ module.exports = {
           }
         }
 
-        let vidsPack = imageData[index].tags.includes("video");
+        _vidsPack = imageData[index].tags.includes("video");
 
-        if (vidsPack) {
+        if (_vidsPack) {
           return interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
         }
 

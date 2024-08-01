@@ -6,13 +6,17 @@ require("dotenv").config({ path : "./config/.env" });
 
 const client = new Client(ClientSettings);
 
-client.config = require("./config/config.json");
+client.config = require("./config/config.test.json");
 
 client.commands = new Collection();
 client.buttons = new Collection();
 client.commandsData = [];
 
 client.player = new Player(client);
+
+if (client.config.debug) {
+  console.log("BOT :: Debug level = " + client.config.debug);
+}
 
 // File Listeners
 const funcFold = fs.readdirSync('./src/func');

@@ -6,6 +6,5 @@ const { generateOauthTokens } = require("discord-player-youtubei");
 
   await generateOauthTokens();
 })().then(() => {
-  console.log("\nPut the access_token and refresh_token into .env");
-  console.log("And, put the expiry_date into config.json named yt_exp");
+  console.log("\nPut the access_token, refresh_token, and expiry_date into .env");
 })

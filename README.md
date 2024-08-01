@@ -33,8 +33,9 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
     WARNING! When getting the auth token from youtube, please don't use your main account. Because is too risky, and the biggest disaster is your account will get permanently ban. <br>
     You can see the documentation and reason about in :  <br> https://github.com/retrouser955/discord-player-youtubei/blob/master/LEGAL.md <br> <br>
     Use command `node getAuth.js`
+    or you can use `npx --no discord-player-youtubei`
 
-    Copy the `access_token` and `refresh_token` into .env, and Copy the `expiry_date` into config.json named `yt_exp`
+    Copy the `access_token`, `refresh_token`, and `expiry_date` into .env file.
 
 3. Run the bot :) <br>
     Use command `node .`
