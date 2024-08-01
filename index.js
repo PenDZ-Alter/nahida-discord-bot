@@ -6,7 +6,7 @@ require("dotenv").config({ path : "./config/.env" });
 
 const client = new Client(ClientSettings);
 
-client.config = require("./config/config.test.json");
+client.config = require("./config/config.json");
 
 client.commands = new Collection();
 client.buttons = new Collection();
