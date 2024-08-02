@@ -77,7 +77,7 @@ module.exports = {
       const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&&api_key=anonymous&user_id=9455&tags=${tag}&pid=${pid}&json=1`);
 
       if (!response.data.post || !response.data) {
-        return interaction.editReply({ content: "❌  |  Failed went fetching data! Try another tags and make sure you dont add some spesial characters except '_'!" });
+        return interaction.editReply({ content: "❌  |  Failed went fetching data! Try another tags and make sure you dont add some spesial characters except '+'!" });
       }
 
       const attrib = response.data['@attributes'];
