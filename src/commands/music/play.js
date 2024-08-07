@@ -17,11 +17,12 @@ module.exports = {
       .setDescription("Select platform of stream")
       .setRequired(false)
       .addChoices(
-        {name : "youtube", value : "yt"},
-        {name : "spotify", value : "sp"},
-        {name : "soundcloud", value : "sc"},
-        {name : "playlist", value : "pl"},
-        {name : "auto", value : "auto"}
+        {name : "youtube", value : QueryType.YOUTUBE_SEARCH},
+        {name : "spotify", value : QueryType.SPOTIFY_SEARCH},
+        {name : "soundcloud", value : QueryType.SOUNDCLOUD_SEARCH},
+        {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
+        {name : "playlist", value : QueryType.AUTO},
+        {name : "auto", value : QueryType.AUTO}
       )
     ),
 
@@ -29,12 +30,12 @@ module.exports = {
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     
-    const query = interaction.options.getString('query', true);
-    const type = interaction.options.getString('type');
-
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
     }
+
+    const query = interaction.options.getString('query', true);
+    const type = interaction.options.getString('type');
 
     const queue = client.player.nodes.create(interaction.guild, {
       volume : 90,
@@ -45,48 +46,16 @@ module.exports = {
     });
 
     let result;
-    switch (type) {
-      case "yt" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.YOUTUBE_SEARCH
-        });
-        break;
-
-      case "sp" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.SPOTIFY_SEARCH
-        });
-        break;
-
-      case "sc" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.SOUNDCLOUD_SEARCH
-        });
-        break;
-
-      case "pl" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.AUTO
-        });
-        break;
-
-      case "auto" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.AUTO
-        });
-        break;
-
-      default : 
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.YOUTUBE_SEARCH
-        });
-        break;
+    if (type) {
+      result = await client.player.search(query, {
+        requestedBy : interaction.user,
+        searchEngine : type
+      });
+    } else {
+      result = await client.player.search(query, {
+        requestedBy : interaction.user,
+        searchEngine : QueryType.YOUTUBE_SEARCH
+      });
     }
 
     await interaction.deferReply({ ephemeral : true });

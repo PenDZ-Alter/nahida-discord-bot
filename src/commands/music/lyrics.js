@@ -42,6 +42,5 @@ module.exports = {
       .setFooter({ text : `Artist by ${song.artist.name}` });
 
     await interaction.reply({ embeds : [embed], ephemeral : true });
-    // await interaction.reply({ content : "Sorry, but this command won't work! Please wait until it fixed :)", ephemeral : true });
   }
 }
