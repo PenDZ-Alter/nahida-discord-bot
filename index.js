@@ -1,10 +1,9 @@
-const { Client, Collection } = require("discord.js");
+const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
 const { Player } = require("discord-player");
-const ClientSettings = require("./config/client.json");
 const fs = require("fs");
-require("dotenv").config({ path : "./config/.env" });
+require("dotenv").config({ path: "./config/.env" });
 
-const client = new Client(ClientSettings);
+const client = new Client(clientSettings());
 
 client.config = require("./config/config.json");
 
@@ -30,3 +29,27 @@ for (const folders of funcFold) {
 }
 
 client.login(process.env.TOKEN);
+
+function clientSettings() {
+  return {
+    shards: "auto",
+    failIfNotExists: false,
+    intents: [ 
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.MessageContent,
+    ],
+    partials: [
+      Partials.Message,
+      Partials.Reaction,
+      Partials.User
+    ],
+    allowedMentions: {
+      parse: [ "roles", "users" ],
+      repliedUser: false
+    }
+  }
+}
