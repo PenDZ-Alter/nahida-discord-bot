@@ -66,8 +66,6 @@ module.exports = {
         i++;
       }
 
-      // return interaction.editReply({ content : "❌  |  This command was disabled!" });
-
       if (!access) {
         return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles" });
       }
