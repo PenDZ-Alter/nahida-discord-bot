@@ -67,7 +67,7 @@ module.exports = {
       }
 
       if (!access) {
-        return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles" });
+        return interaction.reply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
       }
 
       userid = interaction.user.id;
