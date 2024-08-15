@@ -15,8 +15,7 @@ module.exports = {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
     }
 
-    if (!queue) return interaction.reply({ content : "❌  |  Can't get player from your guild!", ephemeral : true });
-    if (!queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing the song", ephemeral : true });
+    if (!queue || !queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
 
     queue.delete();
 

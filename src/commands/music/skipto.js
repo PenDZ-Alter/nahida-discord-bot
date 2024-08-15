@@ -21,13 +21,12 @@ module.exports = {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
     }
 
-    if (!queue) return interaction.reply({ content : "❌  |  Can't get player from your guild!", ephemeral : true });
-    if (!queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing the song", ephemeral : true });
+    if (!queue || !queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
 
     const nextSong = queue.tracks.toArray().slice(index-1, index).map((song) => { return `${song.title}` });
 
     if (index > queue.tracks.length)
-      return interaction.reply({ content : "❌  |  Invalid Index", ephemeral : true });
+      return interaction.reply({ content : "❌  |  Invalid Index!", ephemeral : true });
 
     await queue.node.skipTo(index-1);
 

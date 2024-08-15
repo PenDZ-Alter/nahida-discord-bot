@@ -7,10 +7,10 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("insert")
     .setDescription("Add song with specified index")
-    .addStringOption(opt =>
-      opt.setName("query")
-        .setDescription("Title or url of the song")
-        .setRequired(true)
+    .addStringOption(opt =>opt
+      .setName("query")
+      .setDescription("Title or url of the song")
+      .setRequired(true)
     )
     .addIntegerOption(opt => opt
       .setName("number")
@@ -22,11 +22,12 @@ module.exports = {
       .setDescription("Select platform of stream")
       .setRequired(false)
       .addChoices(
-        {name : "youtube", value : "yt"},
-        {name : "spotify", value : "sp"},
-        {name : "soundcloud", value : "sc"},
-        {name : "playlist", value : "pl"},
-        {name : "auto", value : "auto"}
+        {name : "youtube", value : QueryType.YOUTUBE_SEARCH},
+        {name : "spotify", value : QueryType.SPOTIFY_SEARCH},
+        {name : "soundcloud", value : QueryType.SOUNDCLOUD_SEARCH},
+        {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
+        {name : "playlist", value : QueryType.AUTO},
+        {name : "auto", value : QueryType.AUTO}
       )
     ),
 
@@ -38,7 +39,6 @@ module.exports = {
     const type = interaction.options.getString('type');
     const index = interaction.options.getInteger('number');
     getIndex = index;
-    await client.player.extractors.loadDefault();
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
@@ -59,48 +59,16 @@ module.exports = {
     isInsert = true;
 
     let result;
-    switch (type) {
-      case "yt" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.YOUTUBE_SEARCH
-        });
-        break;
-
-      case "sp" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.SPOTIFY_SEARCH
-        });
-        break;
-
-      case "sc" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.SOUNDCLOUD_SEARCH
-        });
-        break;
-
-      case "pl" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.AUTO
-        });
-        break;
-
-      case "auto" :
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.AUTO
-        });
-        break;
-
-      default : 
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.YOUTUBE_SEARCH
-        });
-        break;
+    if (type) {
+      result = await client.player.search(query, {
+        requestedBy : interaction.user,
+        searchEngine : type
+      });
+    } else {
+      result = await client.player.search(query, {
+        requestedBy : interaction.user,
+        searchEngine : QueryType.YOUTUBE_SEARCH
+      });
     }
 
     await interaction.deferReply({ ephemeral : true });
@@ -181,6 +149,3 @@ module.exports = {
     return getIndex;
   }
 }
-
-// Tasks!
-// There's a bug when cancelling add music

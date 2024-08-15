@@ -16,7 +16,7 @@ module.exports = {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
     }
 
-    if (!queue) return interaction.reply({ content : "❌  |  Can't get player from your guild!", ephemeral : true });
+    if (!queue || !queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
 
     let bar = queue.node.createProgressBar({ timecodes : true });
     let currentSong = queue.currentTrack;
@@ -28,14 +28,12 @@ module.exports = {
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
-      .setAuthor({ name : interaction.user.tag, iconURL : interaction.user.displayAvatarURL()})
       .setThumbnail(currentSong.thumbnail)
       .setFooter({ text : `Requested by ${currentSong.requestedBy.tag}` })
       .setTimestamp(Date.now())
       .setDescription(
-        `**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None") + 
-        `\n\n**Next Song**\n` + (!nextSong ? "There's no song after this track!" : nextSong)
-        )
+        `**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None") + (nextSong ? `\n\n**Next Song**\n ${nextSong}\n` : "\n")
+      )
       .addFields([
         {
           name : "Source",
