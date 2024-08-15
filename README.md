@@ -35,7 +35,7 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
     Use command `node getAuth.js`
     or you can use `npx --no discord-player-youtubei`
 
-    Copy the `access_token`, `refresh_token`, and `expiry_date` into .env file.
+    Copy all cookies data into `.env` file, inside `YT_CREDENTIAL_USER`.
 
 3. Run the bot :) <br>
     Use command `node .`
