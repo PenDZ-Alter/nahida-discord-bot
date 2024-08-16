@@ -22,6 +22,7 @@ module.exports = {
         {name : "soundcloud", value : QueryType.SOUNDCLOUD_SEARCH},
         {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
         {name : "playlist", value : QueryType.AUTO},
+        {name : "soundcloud_playlist", value : QueryType.SOUNDCLOUD_PLAYLIST},
         {name : "auto", value : QueryType.AUTO}
       )
     ),
