@@ -14,7 +14,12 @@ client.commandsData = [];
 client.player = new Player(client);
 
 if (client.config.debug) {
-  console.log("BOT :: Debug level = " + client.config.debug);
+  if (client.config.debug === "player" || client.config.debug === "client" || client.config.debug === "all") {
+    console.log("BOT :: Debug level = " + client.config.debug);
+  }
+  else {
+    console.log("BOT :: Debug level = N/A");
+  }
 }
 
 // File Listeners
