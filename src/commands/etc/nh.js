@@ -11,6 +11,11 @@ module.exports = {
       .setName("query")
       .setDescription("Number codes or title of book")
       .setRequired(true)
+    )
+    .addBooleanOption(opt => opt
+      .setName("private")
+      .setDescription("Set this command into private!")
+      .setRequired(false)
     ),
 
   async execute(client, interaction) {
@@ -20,8 +25,9 @@ module.exports = {
 
     const memberRoles = interaction.member.roles;
     const roles = client.config.explicit.roles.id;
+    const private = interaction.options.getBoolean("private");
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: private });
 
     const query = interaction.options.getString("query");
     const api = new API();
@@ -46,7 +52,7 @@ module.exports = {
     await api.getBook(query).then((book) => {
       imageData = book.pages;
     }).catch(() => {
-      return interaction.reply({ content: "❌  |  Book not found!", ephemeral: true });
+      return interaction.editReply({ content: "❌  |  Book not found!" });
     });
 
     const nextButton = new ButtonBuilder()
