@@ -12,6 +12,10 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.lyrics === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const queue = client.player.nodes.get(interaction.guild);
     const title = interaction.options.getString("title");
 

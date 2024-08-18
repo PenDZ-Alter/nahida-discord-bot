@@ -6,6 +6,10 @@ module.exports = {
     .setDescription('Replies with pong'),
 
   async execute(client, interaction) {
+    if (client.config.commands.etc.ping === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const message_init = await interaction.deferReply({ fetchReply : true, ephemeral : true });
 
     const message = `API Latency : ${client.ws.ping}ms\nClient Ping : ${message_init.createdTimestamp - interaction.createdTimestamp}ms`;

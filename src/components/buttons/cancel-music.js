@@ -1,5 +1,5 @@
-const { getIsInsert, getIndex } = require("../../commands/music/insert.js");
-const { getAddedIndex, getIsPlaylist, getSizePlaylist } = require("../../commands/music/play.js");
+const { getIndex } = require("../../commands/music/insert.js");
+const { getAddedIndex, getIsPlaylist, getSizePlaylist, getIsInsert } = require("../../commands/music/play.js");
 
 module.exports = {
   data: {
@@ -14,7 +14,7 @@ module.exports = {
         await queue.node.remove(i);
       }
     } else if (getIsInsert()) {
-      await queue.node.remove(getIndex());
+      await queue.node.remove(getIndex()-1);
     } else if (getIsInsert() && getIsPlaylist()) {
       for (let i = getSizePlaylist() - getIndex(); i >= 0; i--) {
         await queue.node.remove(i);

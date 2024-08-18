@@ -1,7 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
+const { setIsPlaylist, setIsInsert } = require("../music/play.js");
 
-let songIndex, isPlaylist, sizePlaylist, isInsert, getIndex;
+let songIndex, isPlaylist, sizePlaylist, getIndex;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -32,6 +33,10 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.insert === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     
@@ -56,7 +61,6 @@ module.exports = {
         client : interaction.guild.members.me
       }
     });
-    isInsert = true;
 
     let result;
     if (type) {
@@ -89,12 +93,14 @@ module.exports = {
       title = result.playlist.title;
       isPlaylist = true;
       sizePlaylist = result.tracks.length;
+      setIsPlaylist(true)
     } else {
       track = result.tracks[0];
 
       queue.insertTrack(track, index-1);
       title = track.title;
       isPlaylist = false;
+      setIsPlaylist(false)
     }
     
     if (!queue.node.isPlaying()) 
@@ -107,6 +113,8 @@ module.exports = {
       .setDisabled(false)
 
     songIndex = queue.getSize();
+
+    setIsInsert(true);
     
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
@@ -140,10 +148,6 @@ module.exports = {
   getSizePlaylist : () => {
     return sizePlaylist;
   }, 
-
-  getIsInsert : () => {
-    return isInsert;
-  },
 
   getIndex : () => {
     return getIndex;

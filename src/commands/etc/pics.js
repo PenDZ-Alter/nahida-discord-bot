@@ -44,6 +44,10 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
+    if (client.config.commands.etc.pics === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     try {
       const tags = interaction.options.getString("tags");
       const cat = interaction.options.getString("category");

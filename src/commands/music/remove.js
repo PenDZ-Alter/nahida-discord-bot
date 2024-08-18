@@ -3,11 +3,11 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
   data : new SlashCommandBuilder()
     .setName("remove")
-    .setDescription("Remove song from index")
+    .setDescription("Remove song from queue")
     .addIntegerOption(
       opt => opt
-        .setName("index")
-        .setDescription("Number of index")
+        .setName("number")
+        .setDescription("Number of queue")
         .setRequired(true)  
     )
     .addIntegerOption(
@@ -18,11 +18,15 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.remove === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const queue = client.player.nodes.get(interaction.guild);
 
-    const index = Number(interaction.options.getInteger("index"));
+    const index = Number(interaction.options.getInteger("number"));
     const endIndex = Number(interaction.options.getInteger("end"));
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
@@ -49,8 +53,10 @@ module.exports = {
 
       ctx = `✅  |  Removed ${index}-${endIndex} tracks from queue!`;
     } else {
+      let songTitleRemoval = queue.tracks.data[index-1].title;
+
       await queue.node.remove(index-1);
-      ctx = `✅  |  Removed track ${index} from queue!`;
+      ctx = `✅  |  Removed track **${songTitleRemoval}** from queue!`;
     }
 
     await interaction.reply({ content : ctx, ephemeral : false });

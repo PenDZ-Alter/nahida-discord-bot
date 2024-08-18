@@ -6,6 +6,10 @@ module.exports = {
     .setDescription("Stopping the player and delete queue"),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.stop === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
     const queue = client.player.nodes.get(interaction.guild);
