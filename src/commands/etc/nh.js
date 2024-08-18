@@ -49,11 +49,13 @@ module.exports = {
 
     index = 0;
 
-    await api.getBook(query).then((book) => {
-      imageData = book.pages;
-    }).catch(() => {
+    try {
+      await api.getBook(query).then((book) => {
+        imageData = book.pages;
+      })
+    } catch {
       return interaction.editReply({ content: "❌  |  Book not found!" });
-    });
+    }
 
     const nextButton = new ButtonBuilder()
       .setCustomId("next-book")
