@@ -1,5 +1,5 @@
 # discord-bot
-Basic discord bot with music and AI inside of it <br>
+A Basic discord bot with music and AI inside of it <br>
 Nahida is just my discord bot's name :) 
 
 
@@ -26,19 +26,32 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
 
 ## How to run it?
 1. Installing Packages <br>
-    Use command `npm i` and wait until done! <br>
+    Use command 
+    ```bash
+    npm i
+    ```
+    and wait until done! <br>
     if there's something error, just ignore it :)
 
 2. Get the auth token for youtube <br>
     WARNING! When getting the auth token from youtube, please don't use your main account. Because is too risky, and the biggest disaster is your account will get permanently ban. <br>
     You can see the documentation and reason about in :  <br> https://github.com/retrouser955/discord-player-youtubei/blob/master/LEGAL.md <br> <br>
-    Use command `node getAuth.js`
-    or you can use `npx --no discord-player-youtubei`
+    Use command 
+    ```bash
+    node getAuth.js
+    ```
+    or you can use 
+    ```bash
+    npx --no discord-player-youtubei
+    ```
 
     Copy all cookies data into `.env` file, inside `YT_CREDENTIAL_USER`.
 
 3. Run the bot :) <br>
-    Use command `node .`
+    Use command 
+    ```bash
+    node .
+    ```
     Done! :)
 
 NOTE! Remember to always direct directory into bot folder before you do the step!
