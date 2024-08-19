@@ -22,6 +22,10 @@ module.exports = (client) => {
           case "player" : 
             client.player.events.on(event.name, (...args) => event.execute(client, ...args));
             break;
+
+          case "process" : 
+            process.on(event.name, (...args) => event.execute(...args));
+            break;
           
           default : 
             console.log("INFO :: Can't read events!");
