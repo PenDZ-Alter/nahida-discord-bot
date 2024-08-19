@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const { API } = require("nhentai-api");
-const { getIndex, getData, setIndex, getUserID } = require("../../commands/etc/nh");
+const { getIndex, getData, setIndex, getUserID, getID } = require("../../commands/etc/nh");
 
 module.exports = {
   data: { name: "prev-book" },
@@ -21,7 +21,7 @@ module.exports = {
       .setDescription(api.getImageURL(imageData[index]))
       .setImage(api.getImageURL(imageData[index]))
       .setColor("Blue")
-      .setFooter({ text: `Page ${index + 1} of ${imageData.length}` })
+      .setFooter({ text: `Page ${index + 1} of ${imageData.length} • ID : ${getID()}` })
       .setTimestamp(Date.now())
 
     await interaction.update({ embeds: [embed], content: "" });

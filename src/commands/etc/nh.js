@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { API } = require("nhentai-api");
 
-let index, imageData, userid;
+let index, imageData, userid, id;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -30,6 +30,17 @@ module.exports = {
     await interaction.deferReply({ ephemeral: private });
 
     const query = interaction.options.getString("query");
+    
+    let q, updateQuery;
+    // Check if query is fully numeric
+    if (/^\d+$/.test(query)) {
+      // Convert to number
+      q = Number(query);
+    } else {
+      // updateQuery = query.replace(/ /g, "_");
+      updateQuery = query;
+    }
+
     const api = new API();
 
     let access = false, i = 0;
@@ -49,12 +60,24 @@ module.exports = {
 
     index = 0;
 
-    try {
-      await api.getBook(query).then((book) => {
-        imageData = book.pages;
-      })
-    } catch {
-      return interaction.editReply({ content: "❌  |  Book not found!" });
+    if (q != null) {
+      try {
+        await api.getBook(query).then((book) => {
+          id = book.id;
+          imageData = book.pages;
+        })
+      } catch {
+        return interaction.editReply({ content: "❌  |  Book not found!" });
+      }
+    } else {
+      try {
+        await api.search(updateQuery).then(async search => {
+          id = search.books[0].id;
+          imageData = search.books[0].pages;
+        });
+      } catch {
+        return interaction.editReply({ content: "❌  |  Books not found!" });
+      }
     }
 
     const nextButton = new ButtonBuilder()
@@ -74,7 +97,7 @@ module.exports = {
       .setDescription(api.getImageURL(imageData[0]))
       .setImage(api.getImageURL(imageData[0]))
       .setColor("Blue")
-      .setFooter({ text: `Page ${index + 1} of ${imageData.length}` })
+      .setFooter({ text: `Page ${index + 1} of ${imageData.length} • ID : ${id}` })
       .setTimestamp(Date.now())
 
     await interaction.editReply({ embeds: [embed], components: [button] });
@@ -86,6 +109,10 @@ module.exports = {
 
   getUserID: () => {
     return userid;
+  },
+
+  getID: () => {
+    return id;
   },
 
   getIndex: () => {
