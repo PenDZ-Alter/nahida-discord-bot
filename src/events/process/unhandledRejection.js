@@ -1,5 +1,5 @@
 module.exports = {
-  data: { name: "unhandledRejection" },
+  name: "unhandledRejection",
 
   async execute(err) {
     // Reject the promise with the error

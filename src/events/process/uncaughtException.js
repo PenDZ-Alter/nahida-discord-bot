@@ -1,5 +1,5 @@
 module.exports = {
-  data: { name: "uncaughtException" },
+  name: "uncaughtException",
 
   async execute(err) {
     // Reject the promise with the error
