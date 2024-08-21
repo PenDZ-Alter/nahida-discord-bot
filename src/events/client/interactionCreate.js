@@ -23,6 +23,15 @@ module.exports = {
       } catch (err) {
         console.error(err);
       }
+    } else if (interaction.isStringSelectMenu()) {
+      const selection = client.selectMenus.get(interaction.customId);
+      if (!selection) return new Error("There's no action to this selection!");
+
+      try {
+        await selection.execute(client, interaction);
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 }

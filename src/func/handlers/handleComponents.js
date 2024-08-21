@@ -13,6 +13,13 @@ module.exports = (client) => {
             client.buttons.set(button.data.name, button);
           }
           break;
+
+        case "selections":
+          for (const file of componentFiles) {
+            const selection = require(`../../components/${folder}/${file}`);
+            client.selectMenus.set(selection.data.name, selection);
+          }
+          break;
       
         default:
           break;
