@@ -95,7 +95,7 @@ module.exports = {
       isPlaylist = false
       let data = [];
 
-      for (let i = 0; i < result.tracks.length; i++) {
+      for (let i = 0; i < (result.tracks.length >= 25 ? 25 : result.tracks.length); i++) {
         let dict = {
           label: result.tracks[i].title,
           description: result.tracks[i].author,
