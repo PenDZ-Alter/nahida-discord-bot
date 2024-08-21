@@ -9,6 +9,7 @@ client.config = require("./config/config.json");
 
 client.commands = new Collection();
 client.buttons = new Collection();
+client.selectMenus = new Collection();
 client.commandsData = [];
 
 client.player = new Player(client);
