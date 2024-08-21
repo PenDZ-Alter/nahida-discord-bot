@@ -1,8 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
-const { setIsPlaylist, setIsInsert } = require("../music/play.js");
-
-let songIndex, isPlaylist, sizePlaylist, getIndex;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -28,7 +25,8 @@ module.exports = {
         {name : "soundcloud", value : QueryType.SOUNDCLOUD_SEARCH},
         {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
         {name : "playlist", value : QueryType.AUTO},
-        {name : "auto", value : QueryType.AUTO}
+        {name : "soundcloud_playlist", value : QueryType.SOUNDCLOUD_PLAYLIST},
+        {name : "auto", value : QueryType.AUTO_SEARCH}
       )
     ),
 
@@ -43,7 +41,6 @@ module.exports = {
     const query = interaction.options.getString('query', true);
     const type = interaction.options.getString('type');
     const index = interaction.options.getInteger('number');
-    getIndex = index;
 
     if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
@@ -51,7 +48,7 @@ module.exports = {
     }
 
     if (index < 1) {
-      return interaction.reply({ content: "❌  |  You can't insert number below 1!!", ephemeral: true });
+      return interaction.reply({ content: "❌  |  You can't insert music below 1!!", ephemeral: true });
     } 
 
     const queue = client.player.nodes.create(interaction.guild, {
@@ -87,34 +84,24 @@ module.exports = {
       return interaction.followUp("❌  |  Can't find the song! Try more specificly");
     };
 
-    let title, track;
+    let title, track, isPlaylist, sizePlaylist;
     if (result.playlist) {
       queue.insertTrack(result.tracks, index-1);
       title = result.playlist.title;
       isPlaylist = true;
       sizePlaylist = result.tracks.length;
-      setIsPlaylist(true)
     } else {
       track = result.tracks[0];
 
       queue.insertTrack(track, index-1);
       title = track.title;
       isPlaylist = false;
-      setIsPlaylist(false)
     }
     
     if (!queue.node.isPlaying()) 
       await queue.node.play();
 
-    const button = new ButtonBuilder()
-      .setCustomId('cancel-add')
-      .setLabel("Cancel")
-      .setStyle(ButtonStyle.Danger)
-      .setDisabled(false)
-
-    songIndex = queue.getSize();
-
-    setIsInsert(true);
+    let songIndex = queue.getSize();
     
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
@@ -122,34 +109,8 @@ module.exports = {
       .setDescription(
         `📝  |  **${title}** has been enqueued!
         ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Indexed in position ${index}`}` : `Total song indexed : ${sizePlaylist}`}`);
+        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${index}`}` : `Total song indexed : ${sizePlaylist}`}`);
 
-    if (songIndex === 0) {
-      await interaction.editReply({ embeds : [embed] });
-    } else {
-      const actionRow = new ActionRowBuilder().addComponents(button)
-      await interaction.editReply({ embeds : [embed], components : [actionRow] });
-
-      setTimeout(() => {
-        button.setDisabled(true);
-        interaction.editReply({ components : [actionRow] });
-      }, 3000);
-    }
-  },
-
-  getAddedIndex : () => {
-    return songIndex;
-  },
-
-  getIsPlaylist : () => {
-    return isPlaylist;
-  },
-
-  getSizePlaylist : () => {
-    return sizePlaylist;
-  }, 
-
-  getIndex : () => {
-    return getIndex;
+    await interaction.editReply({ embeds : [embed] });
   }
 }
