@@ -1,7 +1,10 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { API } = require("nhentai-api");
+const fs = require("fs");
+const path = require("path");
 
-let index, imageData, userid, id;
+const cacheFolder = path.join(__dirname, "../../../cache");
+const cacheFile = path.join(cacheFolder, "nh.json");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -30,15 +33,18 @@ module.exports = {
     await interaction.deferReply({ ephemeral: private });
 
     const query = interaction.options.getString("query");
+
+    const interactionID = interaction.id;
     
+    let bookData;
     let q, updateQuery;
     // Check if query is fully numeric
     if (/^\d+$/.test(query)) {
       // Convert to number
       q = Number(query);
     } else {
-      // updateQuery = query.replace(/ /g, "_");
-      updateQuery = query;
+      updateQuery = query.replace(/ /g, "_");
+      // updateQuery = query;
     }
 
     const api = new API();
@@ -53,7 +59,7 @@ module.exports = {
     }
 
     if (!access) {
-      return interaction.reply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
+      return interaction.reply({ content: "❌  |  You dont have permissions to run this commands", ephemeral: true });
     }
 
     userid = interaction.user.id;
@@ -62,23 +68,39 @@ module.exports = {
 
     if (q != null) {
       try {
-        await api.getBook(query).then((book) => {
-          id = book.id;
-          imageData = book.pages;
-        })
+        bookData = await api.getBook(query)
       } catch {
         return interaction.editReply({ content: "❌  |  Book not found!" });
       }
     } else {
       try {
         await api.search(updateQuery).then(async search => {
-          id = search.books[0].id;
-          imageData = search.books[0].pages;
+          bookData = search.books[0]
         });
       } catch {
         return interaction.editReply({ content: "❌  |  Books not found!" });
       }
     }
+
+    const extractedData = {
+      id: bookData.id,
+      title: bookData.title,
+      pages: bookData.pages.map(page => api.getImageURL(page)), // Extract URLs of pages
+      userid: interaction.user.id
+    };
+
+    // Ensure the "cache" folder exists, create it if it doesn't
+    if (!fs.existsSync(cacheFolder)) {
+      fs.mkdirSync(cacheFolder, { recursive: true });
+    }
+
+    // Store data in JSON file
+    let interactionData = {};
+    if (fs.existsSync(cacheFile)) {
+      interactionData = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    }
+    interactionData[interactionID] = { index: 0, ...extractedData };
+    fs.writeFileSync(cacheFile, JSON.stringify(interactionData, null, 2));
 
     const nextButton = new ButtonBuilder()
       .setCustomId("next-book")
@@ -94,32 +116,12 @@ module.exports = {
 
     let embed = new EmbedBuilder()
       .setTitle("Book Results")
-      .setDescription(api.getImageURL(imageData[0]))
-      .setImage(api.getImageURL(imageData[0]))
+      .setDescription(`${extractedData.title.english}\n` + extractedData.pages[0])
+      .setImage(extractedData.pages[0])
       .setColor("Blue")
-      .setFooter({ text: `Page ${index + 1} of ${imageData.length} • ID : ${id}` })
+      .setFooter({ text: `Page ${index + 1} of ${extractedData.pages.length} • ID : ${extractedData.id}` })
       .setTimestamp(Date.now())
 
     await interaction.editReply({ embeds: [embed], components: [button] });
-  },
-
-  getData: () => {
-    return imageData;
-  },
-
-  getUserID: () => {
-    return userid;
-  },
-
-  getID: () => {
-    return id;
-  },
-
-  getIndex: () => {
-    return index;
-  },
-
-  setIndex: (i) => {
-    index = i;
   }
 }

@@ -4,5 +4,7 @@ package-lock.json
 config/config.test.json
 config/.env
 
+cache
+
 TODO.md
 .dpy
