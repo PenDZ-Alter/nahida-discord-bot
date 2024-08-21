@@ -1,7 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
-
-let songIndex, isPlaylist, sizePlaylist, isInsert;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,7 +21,7 @@ module.exports = {
         {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
         {name : "playlist", value : QueryType.AUTO},
         {name : "soundcloud_playlist", value : QueryType.SOUNDCLOUD_PLAYLIST},
-        {name : "auto", value : QueryType.AUTO}
+        {name : "auto", value : QueryType.AUTO_SEARCH}
       )
     ),
 
@@ -75,7 +73,7 @@ module.exports = {
       return interaction.followUp("❌  |  Can't find the song! Try more specificly");
     };
 
-    let title, track;
+    let title, track, isPlaylist, sizePlaylist;
     if (result.playlist) {
       queue.addTrack(result.tracks);
       title = result.playlist.title;
@@ -98,58 +96,18 @@ module.exports = {
       console.error('Failed to start playback:', err);
     }
 
-    const button = new ButtonBuilder()
-      .setCustomId('cancel-add')
-      .setLabel("Cancel")
-      .setStyle(ButtonStyle.Danger)
-      .setDisabled(false)
+    let songIndex = queue.getSize();
 
-    songIndex = queue.getSize();
-
-    isInsert = false;
-    
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
       .setDescription(
         `📝  |  **${title}** has been enqueued!
         ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Indexed in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
+        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
 
-    if (songIndex === 0) {
-      await interaction.editReply({ embeds : [embed] });
-    } else {
-      const actionRow = new ActionRowBuilder().addComponents(button);
-      await interaction.editReply({ embeds : [embed], components : [actionRow] });
 
-      setTimeout(() => {
-        button.setDisabled(true);
-        interaction.editReply({ components : [actionRow] });
-      }, 3000);
-    }
-  },
-
-  getAddedIndex : () => {
-    return songIndex;
-  },
-
-  getIsPlaylist : () => {
-    return isPlaylist;
-  },
-
-  setIsPlaylist : (bool) => {
-    isPlaylist = bool;
-  },
-
-  getIsInsert : () => {
-    return isInsert;
-  },
-
-  setIsInsert : (bool) => {
-    isInsert = bool;
-  },
-
-  getSizePlaylist : () => {
-    return sizePlaylist;
+    await interaction.editReply({ embeds : [embed] });
+    
   }
 }
