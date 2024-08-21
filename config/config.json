@@ -25,7 +25,8 @@
       "info" : 1,
       "skip" : 1,
       "skipto" : 1,
-      "seek" : 1
+      "seek" : 1,
+      "search" : 1
     }, 
     "etc" : {
       "ping" : 1,
