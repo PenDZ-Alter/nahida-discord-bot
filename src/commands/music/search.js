@@ -81,6 +81,16 @@ module.exports = {
       
       isPlaylist = true;
       sizePlaylist = result.tracks.length;
+
+      let embed = new EmbedBuilder()
+        .setTitle("Playback Information")
+        .setColor("Blue")
+        .setDescription(
+          `📝  |  **${title}** has been enqueued!
+          ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
+          ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
+
+      return interaction.editReply({ embeds: [embed] });
     } else {
       isPlaylist = false
       let data = [];
