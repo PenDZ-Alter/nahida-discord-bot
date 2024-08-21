@@ -21,8 +21,6 @@ module.exports = {
         {name : "spotify", value : QueryType.SPOTIFY_SEARCH},
         {name : "soundcloud", value : QueryType.SOUNDCLOUD_SEARCH},
         {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
-        {name : "playlist", value : QueryType.AUTO},
-        {name : "soundcloud_playlist", value : QueryType.SOUNDCLOUD_PLAYLIST},
         {name : "auto", value : QueryType.AUTO_SEARCH}
       )
     ),
@@ -74,29 +72,13 @@ module.exports = {
       return interaction.followUp("❌  |  Can't find the song! Try more specificly");
     };
 
-    let title, isPlaylist, sizePlaylist, selectMenu;
+    let isPlaylist, selectMenu;
     if (result.playlist) {
-      queue.addTrack(result.tracks);
-      title = result.playlist.title;
-      
       isPlaylist = true;
-      sizePlaylist = result.tracks.length;
-
-      try {
-        if (!queue.node.isPlaying()) {
-          await queue.node.play();
-        }
-      } catch (err) {
-        console.error('Failed to start playback:', err);
-      }
-
       let embed = new EmbedBuilder()
         .setTitle("Playback Information")
         .setColor("Blue")
-        .setDescription(
-          `📝  |  **${title}** has been enqueued!
-          ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-          ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
+        .setDescription("❌  |  Use \`/play\` commands to add playlist song!!");
 
       return interaction.editReply({ embeds: [embed] });
     } else {

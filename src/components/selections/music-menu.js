@@ -2,12 +2,12 @@ const { EmbedBuilder } = require("discord.js");
 const { getResultData } = require("../../commands/music/search");
 
 module.exports = {
-  data : { name : "music-menu" },
+  data: { name: "music-menu" },
 
   async execute(client, interaction) {
     const queue = client.player.nodes.get(interaction.guild);
     const result = getResultData();
-    
+
     let value = Number(interaction.values[0]);
 
     let track = result.tracks[value];
@@ -30,9 +30,9 @@ module.exports = {
       .setColor("Blue")
       .setDescription(
         `📝  |  **${title}** has been enqueued!
-        ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
+        ℹ️  |  Source : ${track.source}
+        ℹ️  |  ${`Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}`}`);
 
-    await interaction.update({ content: "", embeds : [embed], components: [] });
+    await interaction.update({ content: "", embeds: [embed], components: [] });
   }
 }
