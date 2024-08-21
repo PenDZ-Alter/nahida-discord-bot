@@ -7,9 +7,11 @@ const client = new Client(clientSettings());
 
 client.config = require("./config/config.json");
 
+// Properties of data
 client.commands = new Collection();
 client.buttons = new Collection();
 client.selectMenus = new Collection();
+
 client.commandsData = [];
 
 client.player = new Player(client);
