@@ -1,27 +1,40 @@
 const { EmbedBuilder } = require("discord.js");
-const { API } = require("nhentai-api");
-const { getIndex, getData, setIndex, getUserID, getID } = require("../../commands/etc/nh");
+const fs = require("fs");
+const path = require("path");
+
+const cacheFolder = path.join(__dirname, "../../../cache");
+const cacheFile = path.join(cacheFolder, "nh.json");
 
 module.exports = {
   data: { name: "next-book" },
 
   async execute(client, interaction) {
-    const api = new API();
+    const interactionID = interaction.message.interaction.id; // Get the interaction ID from the message
 
-    let imageData = getData();
-    let i = getIndex();
+    // Load data from JSON file
+    let interactionData = {};
+    if (fs.existsSync(cacheFile)) {
+      interactionData = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    }
 
-    if (interaction.user.id !== getUserID()) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
-    let index = i + 1;
-    if (index > imageData.length - 1) index = 0;
-    setIndex(index);
+    const data = interactionData[interactionID];
+    if (!data) return interaction.reply({ content: "❌  |  No data found for this interaction.", ephemeral: true });
+
+    let { index, title, pages, userid, id } = data;
+
+    if (interaction.user.id !== userid) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
+    index = index + 1;
+    if (index > pages.length - 1) index = 0;
+    
+    interactionData[interactionID].index = index;
+    fs.writeFileSync(cacheFile, JSON.stringify(interactionData, null, 2));
 
     let embed = new EmbedBuilder()
       .setTitle("Book Results")
-      .setDescription(api.getImageURL(imageData[index]))
-      .setImage(api.getImageURL(imageData[index]))
+      .setDescription(`${title.english}\n` + pages[index])
+      .setImage(pages[index])
       .setColor("Blue")
-      .setFooter({ text: `Page ${index + 1} of ${imageData.length} • ID : ${getID()}` })
+      .setFooter({ text: `Page ${index + 1} of ${pages.length} • ID : ${id}` })
       .setTimestamp(Date.now())
 
     await interaction.update({ embeds: [embed], content: "" });
