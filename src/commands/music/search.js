@@ -82,6 +82,14 @@ module.exports = {
       isPlaylist = true;
       sizePlaylist = result.tracks.length;
 
+      try {
+        if (!queue.node.isPlaying()) {
+          await queue.node.play();
+        }
+      } catch (err) {
+        console.error('Failed to start playback:', err);
+      }
+
       let embed = new EmbedBuilder()
         .setTitle("Playback Information")
         .setColor("Blue")
