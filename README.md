@@ -61,7 +61,8 @@ You can changes the model from his official website <br>
 https://platform.openai.com/account/rate-limits
 
 ## Notes this branch
-WARNING! This branch contain explicit content. Please use this branch wisely
+WARNING! This branch contain explicit content. Please use this branch wisely <br>
+Or, if you don't want it, just disable or set to 0 the `nh` and `pics` command in `config.json`  
 
 Have problem to connect API's? <br>
 Check this [link](docs/HOSTS.md), maybe help you to solve the problem :)
