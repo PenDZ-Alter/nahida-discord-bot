@@ -9,8 +9,9 @@ Here's the steps to fix the blocked API of nhen**, gelbooru and lyrics : <br>
       185.23.214.98   i.nhentai.net
       104.18.23.208   genius.com
     ```
-    And, if this doesn't work for you or is extra laggy, check the [IP Tracker](https://www.ip-tracker.org/) replace the address based from your ip tracker. Remember before you do this, backup your hosts file.
+    Or, if this doesn't work for you or extra laggy, check the [IP Tracker](https://www.ip-tracker.org/) replace the address based from your ip tracker. Remember before you do this, backup your hosts file.
 
-Location to put the hosts : <br>
+Location hosts file based on your system : 
 - Windows : C:/Windows/System32/drivers/etc/hosts
 - Linux   : /etc/hosts
+- Mac     : /private/etc/hosts
