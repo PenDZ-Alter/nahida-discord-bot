@@ -59,3 +59,9 @@ NOTE! Remember to always direct directory into bot folder before you do the step
 ## Notes about OpenAI Platform
 You can changes the model from his official website <br>
 https://platform.openai.com/account/rate-limits
+
+## Notes this branch
+WARNING! This branch contain explicit content. Please use this branch wisely
+
+Have problem to connect API's? <br>
+Check this [link](docs/HOSTS.md), maybe help you to solve the problem :)
