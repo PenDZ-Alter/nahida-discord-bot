@@ -85,16 +85,15 @@ module.exports = {
     const extractedData = {
       id: bookData.id,
       title: bookData.title,
-      pages: bookData.pages.map(page => api.getImageURL(page)), // Extract URLs of pages
-      userid: interaction.user.id
+      pages: bookData.pages.map(page => api.getImageURL(page)),
+      userid: interaction.user.id,
+      timestamp: Date.now()
     };
 
-    // Ensure the "cache" folder exists, create it if it doesn't
     if (!fs.existsSync(cacheFolder)) {
       fs.mkdirSync(cacheFolder, { recursive: true });
     }
 
-    // Store data in JSON file
     let interactionData = {};
     if (fs.existsSync(cacheFile)) {
       interactionData = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));

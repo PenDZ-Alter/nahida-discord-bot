@@ -1,5 +1,10 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
+
+const cacheFolder = path.join(__dirname, "../../cache");
+const cacheFile = path.join(cacheFolder, "pics.json");
 
 // Global Variables
 let index, imageData, userid, _pid, _vidsPack;
@@ -18,7 +23,7 @@ module.exports = {
       opt => opt
         .setName("category")
         .setDescription("Type of image")
-        .setRequired(true)
+        .setRequired(false)
         .addChoices(
           { name: "General", value: "general" },
           { name: "Questionable", value: "questionable" },
@@ -51,8 +56,8 @@ module.exports = {
     try {
       const tags = interaction.options.getString("tags");
       const cat = interaction.options.getString("category");
-      const private = interaction.options.getBoolean("private");
-      const pid = !interaction.options.getInteger("pid") ? 0 : interaction.options.getInteger("pid");
+      const private = interaction.options.getBoolean("private") || "all";
+      const pid = interaction.options.getInteger("pid") || 0;
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
       const roles = client.config.explicit.roles.id;
@@ -90,6 +95,8 @@ module.exports = {
       let total = Number(attrib.count);
       let count = 0;
 
+      console.log(response.data);
+
       _pid = pid;
 
       if (total - offset < limit) {
@@ -101,7 +108,11 @@ module.exports = {
       }
 
       for (let i = 0; i < limit; i++) {
-        if (response.data.post[i].rating === cat) count++;
+        if (response.data.post[i].rating === cat && cat !== "all") count++;
+        else {
+          count = limit;
+          break;
+        }
       }
 
       if (count === 0) {
@@ -110,12 +121,16 @@ module.exports = {
 
       let j = 0;
       while (true) {
-        j = Math.floor(Math.random() * limit);
+        j = Math.floor(Math.random() * count);
 
-        if (response.data.post[j].rating === cat) {
+        if (response.data.post[j].rating === cat && cat !== "all") {
           data = response.data.post[j];
           imageUrl = data.file_url;
           break;
+        } else {
+          data = response.data.post[j];
+          imageUrl = data.file_url;
+          break
         }
       }
 
