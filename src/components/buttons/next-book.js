@@ -20,7 +20,7 @@ module.exports = {
     const data = interactionData[interactionID];
     if (!data) return interaction.reply({ content: "❌  |  No data found for this interaction.", ephemeral: true });
 
-    let { index, title, pages, userid, id } = data;
+    let { index, title, pages, userid, id, tags } = data;
 
     if (interaction.user.id !== userid) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
     index = index + 1;
@@ -31,7 +31,7 @@ module.exports = {
 
     let embed = new EmbedBuilder()
       .setTitle("Book Results")
-      .setDescription(`${title.english}\n` + pages[index])
+      .setDescription(`${title.english}\n` + `${tags}\n` + pages[index])
       .setImage(pages[index])
       .setColor("Blue")
       .setFooter({ text: `Page ${index + 1} of ${pages.length} • ID : ${id}` })

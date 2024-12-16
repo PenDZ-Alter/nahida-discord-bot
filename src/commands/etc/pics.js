@@ -55,8 +55,8 @@ module.exports = {
 
     try {
       const tags = interaction.options.getString("tags");
-      const cat = interaction.options.getString("category");
-      const private = interaction.options.getBoolean("private") || "all";
+      const cat = interaction.options.getString("category") || "all";
+      const private = interaction.options.getBoolean("private");
       const pid = interaction.options.getInteger("pid") || 0;
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
@@ -95,8 +95,6 @@ module.exports = {
       let total = Number(attrib.count);
       let count = 0;
 
-      console.log(response.data);
-
       _pid = pid;
 
       if (total - offset < limit) {
@@ -105,33 +103,6 @@ module.exports = {
 
       if (limit === 0) {
         return interaction.editReply({ content: "❌  |  The content has reached the limit!" });
-      }
-
-      for (let i = 0; i < limit; i++) {
-        if (response.data.post[i].rating === cat && cat !== "all") count++;
-        else {
-          count = limit;
-          break;
-        }
-      }
-
-      if (count === 0) {
-        return interaction.editReply({ content: "❌  |  Cant find the image, try another way!" });
-      }
-
-      let j = 0;
-      while (true) {
-        j = Math.floor(Math.random() * count);
-
-        if (response.data.post[j].rating === cat && cat !== "all") {
-          data = response.data.post[j];
-          imageUrl = data.file_url;
-          break;
-        } else {
-          data = response.data.post[j];
-          imageUrl = data.file_url;
-          break
-        }
       }
 
       if (pack) {
@@ -152,7 +123,10 @@ module.exports = {
         index = 0;
 
         for (let i = 0; i < limit; i++) {
-          if (response.data.post[i].rating === cat) {
+          if (response.data.post[i].rating === cat && cat !== 'all') {
+            datas = response.data.post[i];
+            imageData.push(datas);
+          } else {
             datas = response.data.post[i];
             imageData.push(datas);
           }
@@ -174,6 +148,33 @@ module.exports = {
 
         await interaction.editReply({ embeds: [embed], components: [row] });
       } else {
+        for (let i = 0; i < limit; i++) {
+          if (response.data.post[i].rating === cat && cat !== "all") count++;
+          else {
+            count = limit;
+            break;
+          }
+        }
+  
+        if (count === 0) {
+          return interaction.editReply({ content: "❌  |  Cant find the image, try another way!" });
+        }
+  
+        let j = 0;
+        while (true) {
+          j = Math.floor(Math.random() * count);
+  
+          if (response.data.post[j].rating === cat && cat !== "all") {
+            data = response.data.post[j];
+            imageUrl = data.file_url;
+            break;
+          } else {
+            data = response.data.post[j];
+            imageUrl = data.file_url;
+            break
+          }
+        }
+
         // Video handler
         let vids = data.tags.includes("video");
         if (vids) {

@@ -68,7 +68,7 @@ module.exports = {
 
     if (q != null) {
       try {
-        bookData = await api.getBook(query)
+        bookData = await api.getBook(query);
       } catch {
         return interaction.editReply({ content: "❌  |  Book not found!" });
       }
@@ -85,6 +85,7 @@ module.exports = {
     const extractedData = {
       id: bookData.id,
       title: bookData.title,
+      tags: bookData.tags.map(tag => tag.name).toString(),
       pages: bookData.pages.map(page => api.getImageURL(page)),
       userid: interaction.user.id,
       timestamp: Date.now()
@@ -115,7 +116,7 @@ module.exports = {
 
     let embed = new EmbedBuilder()
       .setTitle("Book Results")
-      .setDescription(`${extractedData.title.english}\n` + extractedData.pages[0])
+      .setDescription(`${extractedData.title.english}\n` + `${extractedData.tags}\n` + extractedData.pages[0])
       .setImage(extractedData.pages[0])
       .setColor("Blue")
       .setFooter({ text: `Page ${index + 1} of ${extractedData.pages.length} • ID : ${extractedData.id}` })
