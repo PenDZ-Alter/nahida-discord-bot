@@ -34,7 +34,7 @@
     "genius-lyrics": "^4.4.6",
     "jsdom": "^25.0.1",
     "nhentai-api": "^3.4.3",
-    "openai": "^4.47.1",
+    "openai": "^4.76.3",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
