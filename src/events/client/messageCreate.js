@@ -53,7 +53,7 @@ module.exports = {
     });
 
     const result = await openai.chat.completions.create({
-      model: 'gpt-4o-2024-05-13',
+      model: 'o1-mini',
       messages: log
     });
 
