@@ -6,7 +6,10 @@ module.exports = (client) => {
     await client.player.extractors.loadDefault((ext) => !['YouTubeExtractor', 'SpotifyExtractor'].includes(ext));
     
     await client.player.extractors.register(YoutubeiExtractor, {
-      // authentication: process.env.YT_CREDENTIAL_USER,
+      // authentication: process.env.YT_CREDENTIAL_USER
+      // streamOptions : {
+      //   useClient: 'IOS'
+      // }
       // signOutOnDeactive: false
     });
 

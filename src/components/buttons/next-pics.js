@@ -1,31 +1,46 @@
 const { EmbedBuilder } = require("discord.js");
 const { getIndex, setIndex, getData, getID, getPID, getVidsPack } = require("../../commands/etc/pics");
+const fs = require("fs");
+const path = require("path");
+
+const cacheFolder = path.join(__dirname, "../../../cache");
+const cacheFile = path.join(cacheFolder, "pics.json");
 
 module.exports = {
   data : { name: "next-pics" },
 
   async execute(client, interaction) {
-    let imageData = getData();
-    let indexSetup = getIndex();
+    const interactionID = interaction.message.interaction.id;
 
-    if (interaction.user.id !== getID()) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
-    index = indexSetup + 1;
-    if (index > imageData.length - 1) index = 0;
-    setIndex(index);
+    let interactionData = {};
+    if (fs.existsSync(cacheFile)) {
+      interactionData = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    }
 
-    if (getVidsPack()) {
-      await interaction.update({ embeds: [], content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${getPID() != 0 ? ` • PID : ${getPID()}` : ``}`});
+    const dataRaw = interactionData[interactionID];
+    if (!dataRaw) return interaction.reply({ content: "❌  |  No data found for this interaction.", ephemeral: true })
+
+    let { index, user, data, PID, timestamp } = dataRaw;
+
+    if (interaction.user.id !== user) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
+    index += 1;
+    if (index > data.length - 1) index = 0;
+
+    interactionData[interactionID].index = index;
+    fs.writeFileSync(cacheFile, JSON.stringify(interactionData, null, 2));
+
+    if (data[index].tags.includes("video")) {
+      await interaction.update({ embeds: [], content: `Result Videos\n${data[index].file_url}\nPage ${index + 1} of ${data.length}${PID != 0 ? ` • PID : ${PID}` : ``}`});
     } else {
       let embed = new EmbedBuilder()
         .setTitle("Result Images")
-        .setDescription(imageData[index].file_url)
-        .setImage(imageData[index].file_url)
+        .setDescription(data[index].file_url)
+        .setImage(data[index].file_url)
         .setColor("Blue")
-        .setFooter({ text : `Page ${index + 1} of ${imageData.length}${getPID() != 0 ? ` • PID : ${getPID()}` : ``}` })
+        .setFooter({ text : `Page ${index + 1} of ${data.length}${PID != 0 ? ` • PID : ${PID}` : ``}` })
         .setTimestamp(Date.now())
   
       await interaction.update({ embeds: [embed], content: "" });
     }
-
   }
 }
