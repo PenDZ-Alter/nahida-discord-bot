@@ -9,6 +9,11 @@ module.exports = {
       .setName("title")
       .setDescription("Title of the song")
       .setRequired(false)
+    )
+    .addBooleanOption(opt => opt
+      .setName("private")
+      .setDescription("Showing the lyrics privately")
+      .setRequired(false)
     ),
 
   async execute(client, interaction) {
@@ -18,6 +23,7 @@ module.exports = {
 
     const queue = client.player.nodes.get(interaction.guild);
     const title = interaction.options.getString("title");
+    const private = interaction.options.getBoolean("private");
 
     if (!title && !queue) {
       return interaction.reply({ content : "❌  |  No title specified!", ephemeral : true });
@@ -45,6 +51,6 @@ module.exports = {
       .setTimestamp(Date.now())
       .setFooter({ text : `Artist by ${song.artist.name}` });
 
-    await interaction.reply({ embeds : [embed], ephemeral : true });
+    await interaction.reply({ embeds : [embed], ephemeral : private });
   }
 }
