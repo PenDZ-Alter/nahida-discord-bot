@@ -6,11 +6,6 @@
       "roles" : []
     }
   },
-  "explicit": {
-    "roles": {
-      "id" : []
-    }
-  },
   "commands" : {
     "music" : {
       "play" : 1,
