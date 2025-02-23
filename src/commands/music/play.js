@@ -93,7 +93,7 @@ module.exports = {
         await queue.node.play();
       }
     } catch (err) {
-      console.error('Failed to start playback:', err);
+      console.error('BOT :: Failed to start playback:', err);
     }
 
     let songIndex = queue.getSize();

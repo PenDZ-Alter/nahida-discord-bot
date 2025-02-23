@@ -3,7 +3,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const cacheFolder = path.join(__dirname, "../../cache");
+const cacheFolder = path.join(__dirname, "../../../cache");
 const cacheFile = path.join(cacheFolder, "pics.json");
 
 // Global Variables
@@ -55,8 +55,8 @@ module.exports = {
 
     try {
       const tags = interaction.options.getString("tags");
-      const cat = interaction.options.getString("category");
-      const private = interaction.options.getBoolean("private") || "all";
+      const cat = interaction.options.getString("category") || "all";
+      const private = interaction.options.getBoolean("private");
       const pid = interaction.options.getInteger("pid") || 0;
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
@@ -66,17 +66,10 @@ module.exports = {
 
       const tag = tags.replace(/ /g, "_");
 
-      let access = false, i = 0;
-      while (i < roles.length) {
-        if (memberRoles.cache.has(roles[i])) {
-          access = true;
-          break;
-        }
-        i++;
-      }
+      const access = roles.some(role => memberRoles.cache.has(role));
 
       if (!access) {
-        return interaction.reply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
+        return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
       }
 
       userid = interaction.user.id;
@@ -95,8 +88,6 @@ module.exports = {
       let total = Number(attrib.count);
       let count = 0;
 
-      console.log(response.data);
-
       _pid = pid;
 
       if (total - offset < limit) {
@@ -105,33 +96,6 @@ module.exports = {
 
       if (limit === 0) {
         return interaction.editReply({ content: "❌  |  The content has reached the limit!" });
-      }
-
-      for (let i = 0; i < limit; i++) {
-        if (response.data.post[i].rating === cat && cat !== "all") count++;
-        else {
-          count = limit;
-          break;
-        }
-      }
-
-      if (count === 0) {
-        return interaction.editReply({ content: "❌  |  Cant find the image, try another way!" });
-      }
-
-      let j = 0;
-      while (true) {
-        j = Math.floor(Math.random() * count);
-
-        if (response.data.post[j].rating === cat && cat !== "all") {
-          data = response.data.post[j];
-          imageUrl = data.file_url;
-          break;
-        } else {
-          data = response.data.post[j];
-          imageUrl = data.file_url;
-          break
-        }
       }
 
       if (pack) {
@@ -155,6 +119,9 @@ module.exports = {
           if (response.data.post[i].rating === cat) {
             datas = response.data.post[i];
             imageData.push(datas);
+          } else if (cat === "all") {
+            datas = response.data.post[i];
+            imageData.push(datas);
           }
         }
 
@@ -164,16 +131,61 @@ module.exports = {
           return interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
         }
 
+        const extractedData = {
+          user: interaction.user.id,
+          data: imageData,
+          PID: pid,
+          timestamp: Date.now()
+        }
+
+        if (!fs.existsSync(cacheFolder)) {
+          fs.mkdirSync(cacheFolder, { recursive: true });
+        }
+
+        let interactionData = {};
+        if (fs.existsSync(cacheFile)) {
+          interactionData = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+        }
+        interactionData[interaction.id] = { index: 0, ...extractedData };
+        fs.writeFileSync(cacheFile, JSON.stringify(interactionData, null, 2));
+
         let embed = new EmbedBuilder()
           .setTitle("Result Images")
           .setDescription(imageData[index].file_url)
           .setImage(imageData[index].file_url)
           .setColor("Blue")
-          .setFooter({ text : `Page ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}` })
+          .setFooter({ text: `Page ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}` })
           .setTimestamp(Date.now())
 
         await interaction.editReply({ embeds: [embed], components: [row] });
       } else {
+        for (let i = 0; i < limit; i++) {
+          if (response.data.post[i].rating === cat && cat !== "all") count++;
+          else {
+            count = limit;
+            break;
+          }
+        }
+
+        if (count === 0) {
+          return interaction.editReply({ content: "❌  |  Cant find the image, try another way!" });
+        }
+
+        let j = 0;
+        while (true) {
+          j = Math.floor(Math.random() * count);
+
+          if (response.data.post[j].rating === cat && cat !== "all") {
+            data = response.data.post[j];
+            imageUrl = data.file_url;
+            break;
+          } else {
+            data = response.data.post[j];
+            imageUrl = data.file_url;
+            break
+          }
+        }
+
         // Video handler
         let vids = data.tags.includes("video");
         if (vids) {
@@ -194,27 +206,27 @@ module.exports = {
     }
   },
 
-  getIndex : () => {
+  getIndex: () => {
     return index;
   },
 
-  setIndex : (a) => {
+  setIndex: (a) => {
     return index = a;
   },
 
-  getID : () => {
+  getID: () => {
     return userid;
   },
-  
-  getData : () => {
+
+  getData: () => {
     return imageData;
   },
 
-  getPID : () => {
+  getPID: () => {
     return _pid;
   },
 
-  getVidsPack : () => {
+  getVidsPack: () => {
     return imageData[index].tags.includes("video");
   }
 }

@@ -33,7 +33,7 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
     and wait until done! <br>
     if there's something error, just ignore it :)
 
-2. Get the auth token for youtube <br>
+2. (DEPRECATED!! Please don't use this for a while) Get the auth token for youtube <br>
     **WARNING!** When getting the auth token from youtube, please don't use your main account. Because is too risky, and the biggest disaster is your account will get permanently ban. <br>
     You can see the documentation and reason about in :  <br> https://github.com/retrouser955/discord-player-youtubei/blob/master/LEGAL.md <br> <br>
     Use command 
@@ -58,7 +58,11 @@ NOTE! Remember to always direct directory into bot folder before you do the step
 
 ## Notes this branch
 WARNING! This branch contain explicit content. Please use this branch wisely <br>
-Or, if you don't want it, just disable or set to 0 the `nh` and `pics` command in `config.json`  
+Or, if you don't want it, you can try the safe dev using branch `dev-safe`.
+Run this command : 
+```bash
+git checkout dev-safe
+```
 
 Having problem to connect API's? <br>
 Check this [link](docs/HOSTS.md), maybe help you to solve the problem :)
