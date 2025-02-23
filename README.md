@@ -57,12 +57,8 @@ Actually, guild ID isn't necessary to adding it. This just make to load slash co
 NOTE! Remember to always direct directory into bot folder before you do the step!
 
 ## Notes this branch
-WARNING! This branch contain explicit content. Please use this branch wisely <br>
-Or, if you don't want it, you can try the safe dev using branch `dev-safe`.
-Run this command : 
-```bash
-git checkout dev-safe
-```
+This branch is free from explicit content :)
+If you want to try explicit content, please using `dev-main` branch.
 
 Having problem to connect API's? <br>
 Check this [link](docs/HOSTS.md), maybe help you to solve the problem :)

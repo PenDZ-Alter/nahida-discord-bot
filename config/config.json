@@ -29,9 +29,7 @@
       "search" : 1
     }, 
     "etc" : {
-      "ping" : 1,
-      "pics" : 1,
-      "nh" : 0
+      "ping" : 1
     }
   }
 }
