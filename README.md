@@ -1,68 +1,84 @@
-# discord-bot
-A Basic discord bot with music and AI inside of it <br>
-Nahida is just my discord bot's name :) 
-
+# Nahida Discord Bot
+A basic Discord bot with music and AI capabilities.
 
 ## Getting Started
-1. Open file named `.env.example` (located in `config` directory), copy your bot token, client_id, guild_id.
-    - The token, you can get from discord developer website in this [link](https://discord.com/developers/docs/intro), go to application and go to your bot get your token there.
-    - The Client ID, you can get it from discord server and copy the ID from your bot.
-    - The Guild ID, you can get it from discord server and copy the ID from your server ID. This is optional, if you want to make the bot can used globally, simply don't add it.
-    - Don't forget to rename the file from `.env.example` to `.env` .
 
-2. (OPTIONAL) Configure OpenAI Key
-    - Copy your API Key from openai and copy to `api_key` inside file `.env` (the token, guild, and client that you set in number 1)
-    - For more secure, Copy your Role ID into `ai_config` -> `role` inside file `config.json`
-    - To make this AI Works, you need Channel ID into `ai_config` -> `channel` inside file `config.json`
+### 1. Configure Your Environment
+Before running the bot, you need to set up your environment variables.
 
-NOTE! Make sure you have subscription/billing in OpenAI Platform. Otherwise, this will not work for you! if you want to change the model, see this documentation : <br>
-https://platform.openai.com/account/rate-limits
+- Open the `.env.example` file (located in the `config` directory) and add the following:
+  - **Bot Token:** Obtain it from the [Discord Developer Portal](https://discord.com/developers/docs/intro). Go to "Applications," select your bot, and copy the token.
+  - **Client ID:** Get it from your bot's Discord profile.
+  - **Guild ID (Optional):** This is your server ID. If you want the bot to be available globally, leave it empty.
+- Rename `.env.example` to `.env`.
 
-## How it Works?
-I'm using `discord.js`, `discord-player`, and `openai` packages from npm and running it using node. <br>
-The token it'll needed to authenticate your bot into discord API. Also, client ID and guild ID is the identity of your bot user and server user. <br>
-Actually, guild ID isn't necessary to adding it. This just make to load slash commands into directed server! But, you really need client ID
+### 2. (Optional) Configure OpenAI API
+If you want to enable AI functionality:
 
+- Copy your OpenAI API key and add it to `api_key` inside the `.env` file.
+- For additional security, add your role ID inside `config.json` under `ai_config` -> `role`.
+- Specify the Channel ID under `ai_config` -> `channel` in `config.json`.
+- **Note:** You must have an active OpenAI subscription. Refer to [OpenAI Rate Limits](https://platform.openai.com/account/rate-limits) for more details.
 
-## How to run it?
-1. Installing Packages <br>
-    Use command 
-    ```bash
-    npm i
-    ```
-    and wait until done! <br>
-    if there's something error, just ignore it :)
+---
 
-2. (DEPRECATED!! Please don't use this for a while) Get the auth token for youtube <br>
-    **WARNING!** When getting the auth token from youtube, please don't use your main account. Because is too risky, and the biggest disaster is your account will get permanently ban. <br>
-    You can see the documentation and reason about in :  <br> https://github.com/retrouser955/discord-player-youtubei/blob/master/LEGAL.md <br> <br>
-    Use command 
-    ```bash
-    node getAuth.js
-    ```
-    or you can use 
-    ```bash
-    npx --no discord-player-youtubei
-    ```
+## How It Works?
 
-    Copy all cookies data into `.env` file, inside `YT_CREDENTIAL_USER`.
+Nahida is built using `discord.js`, `discord-player`, and `openai`.
+- The **bot token** is required for authentication.
+- The **client ID** identifies the bot.
+- The **guild ID** (optional) ensures slash commands are registered only in a specific server.
 
-3. Run the bot :) <br>
-    Use command 
-    ```bash
-    node .
-    ```
-    Done! :)
+---
 
-NOTE! Remember to always direct directory into bot folder before you do the step!
+## Installation & Setup
 
-## Notes this branch
-WARNING! This branch contain explicit content. Please use this branch wisely <br>
-Or, if you don't want it, you can try the safe dev using branch `dev-safe`.
-Run this command : 
+### 1. Install Dependencies
+Run the following command to install required packages:
+```bash
+npm install
+```
+If you encounter warnings, you can safely ignore them.
+
+### 2. (Optional) Authenticate with YouTube
+> **Warning:** This feature is currently not in use.  
+> Avoid using your main YouTube account, as it may be permanently banned.  
+> Refer to [this documentation](https://github.com/retrouser955/discord-player-youtubei/blob/master/LEGAL.md) for more details.  
+
+To retrieve an authentication token, run:  
+```bash
+node getAuth.js
+```
+
+or
+
+```bash
+npm --no discord-player-youtubei
+```
+Copy the cookies data into the `.env` file under `YT_CREDENTIAL_USER`.
+
+### 3. Run the bot
+To start the bot, run : 
+```bash
+node .
+```
+Ensure you are in the bot's directory before executing the command.
+
+---
+
+## Branch Information
+**Warning:** This branch contains explicit content. Use it responsibly.
+
+For a safer version, switch to the dev-safe branch:
 ```bash
 git checkout dev-safe
 ```
 
-Having problem to connect API's? <br>
-Check this [link](docs/HOSTS.md), maybe help you to solve the problem :)
+---
+
+## Troubleshooting
+Having trouble connecting to APIs? Check the [HOSTS.md](docs/HOSTS.md) file for possible solutions.
+
+---
+
+Enjoy using Nahida! 🎵🤖

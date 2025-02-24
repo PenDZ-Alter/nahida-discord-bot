@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require("discord.js");
-const { getIndex, setIndex, getData, getID, getPID, getVidsPack } = require("../../commands/etc/pics");
 const fs = require("fs");
 const path = require("path");
 
@@ -20,7 +19,7 @@ module.exports = {
     const dataRaw = interactionData[interactionID];
     if (!dataRaw) return interaction.reply({ content: "❌  |  No data found for this interaction.", ephemeral: true })
 
-    let { index, user, data, PID, timestamp } = dataRaw;
+    let { index, user, data, PID } = dataRaw;
 
     if (interaction.user.id !== user) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
     index += 1;

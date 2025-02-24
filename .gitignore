@@ -3,6 +3,7 @@ package-lock.json
 
 config/config.test.json
 config/.env
+config/config.def.json
 
 cache
 
