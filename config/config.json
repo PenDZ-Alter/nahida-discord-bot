@@ -1,37 +1,37 @@
 {
-  "debug" : "",
-  "ids" : {
-    "ai_config" : {
-      "channel" : [],
-      "roles" : []
+  "debug": "",
+  "ids": {
+    "ai_config": {
+      "channel": [],
+      "roles": []
     }
   },
   "explicit": {
     "roles": {
-      "id" : []
+      "id": []
     }
   },
-  "commands" : {
-    "music" : {
-      "play" : 1,
-      "pause" : 1,
-      "stop" : 1,
-      "queue" : 1,
-      "remove" : 1,
-      "repeat" : 1,
-      "resume" : 1,
-      "insert" : 1,
-      "lyrics" : 1,
-      "info" : 1,
-      "skip" : 1,
-      "skipto" : 1,
-      "seek" : 1,
-      "search" : 1
-    }, 
-    "etc" : {
-      "ping" : 1,
-      "pics" : 1,
-      "nh" : 0
+  "commands": {
+    "music": {
+      "play": 1,
+      "pause": 1,
+      "stop": 1,
+      "queue": 1,
+      "remove": 1,
+      "repeat": 1,
+      "resume": 1,
+      "insert": 1,
+      "lyrics": 1,
+      "info": 1,
+      "skip": 1,
+      "skipto": 1,
+      "seek": 1,
+      "search": 1
+    },
+    "etc": {
+      "ping": 1,
+      "pics": 1,
+      "nh": 0
     }
   }
 }

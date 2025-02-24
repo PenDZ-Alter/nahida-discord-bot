@@ -6,9 +6,6 @@ const path = require("path");
 const cacheFolder = path.join(__dirname, "../../../cache");
 const cacheFile = path.join(cacheFolder, "pics.json");
 
-// Global Variables
-let index, imageData, userid, _pid, _vidsPack;
-
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("pics")
@@ -72,8 +69,6 @@ module.exports = {
         return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
       }
 
-      userid = interaction.user.id;
-
       const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&&api_key=anonymous&user_id=9455&tags=${tag}&pid=${pid}&json=1`);
 
       if (!response.data.post || !response.data) {
@@ -88,8 +83,6 @@ module.exports = {
       let total = Number(attrib.count);
       let count = 0;
 
-      _pid = pid;
-
       if (total - offset < limit) {
         limit = total - offset;
       }
@@ -99,7 +92,7 @@ module.exports = {
       }
 
       if (pack) {
-        imageData = [];
+        let imageData = [];
         const prevButton = new ButtonBuilder()
           .setCustomId("prev-pics")
           .setLabel("Prev")
@@ -113,7 +106,7 @@ module.exports = {
         const row = new ActionRowBuilder().addComponents(prevButton, nextButton);
 
         let datas;
-        index = 0;
+        let index = 0;
 
         for (let i = 0; i < limit; i++) {
           if (response.data.post[i].rating === cat) {
@@ -125,7 +118,7 @@ module.exports = {
           }
         }
 
-        _vidsPack = imageData[index].tags.includes("video");
+        let _vidsPack = imageData[index].tags.includes("video");
 
         if (_vidsPack) {
           return interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
@@ -204,45 +197,5 @@ module.exports = {
     } catch (err) {
       console.error(err);
     }
-  },
-
-  getIndex: () => {
-    return index;
-  },
-
-  setIndex: (a) => {
-    return index = a;
-  },
-
-  getID: () => {
-    return userid;
-  },
-
-  getData: () => {
-    return imageData;
-  },
-
-  getPID: () => {
-    return _pid;
-  },
-
-  getVidsPack: () => {
-    return imageData[index].tags.includes("video");
   }
 }
-
-/**
- * Notes!
- * If you have error when running this, it's because axios can't get ssl certificate
- * To fix it, you need to use VPN or DNS!
- * 
- * max limit in gelbooru is 100
- * pid is set the offset of page count per limit
- */
-
-/** 
- * BUGS!!
- * 
- * There's something problem when requesting data and data changed after another user
- * and some user click the button but the same data as the new request before!
- */

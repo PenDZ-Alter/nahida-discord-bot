@@ -50,15 +50,28 @@ module.exports = {
 
     let result;
     if (type) {
-      result = await client.player.search(query, {
-        requestedBy : interaction.user,
-        searchEngine : type
-      });
+      try {
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : type
+        });
+      } catch (err) {
+        console.log("INFO :: Error Founded!");
+        console.log(`ERR :: ${err}`);
+        return interaction.reply({ content: "❌  |  Something went wrong, please wait for developer to fix it!", ephemeral: true });
+      }
     } else {
-      result = await client.player.search(query, {
-        requestedBy : interaction.user,
-        searchEngine : QueryType.YOUTUBE_SEARCH
-      });
+      try {
+        result = await client.player.search(query, {
+          requestedBy : interaction.user,
+          searchEngine : QueryType.YOUTUBE_SEARCH
+        });
+      }
+      catch (err) {
+        console.log("INFO :: Error Founded!");
+        console.log(`ERR :: ${err}`);
+        return interaction.reply({ content: "❌  |  Something went wrong, please wait for developer to fix it!", ephemeral: true });
+      }
     }
 
     await interaction.deferReply({ ephemeral : true });

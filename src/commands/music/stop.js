@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
   data : new SlashCommandBuilder()
@@ -23,6 +23,11 @@ module.exports = {
 
     queue.delete();
 
-    await interaction.reply({ content : "✅  |  Stopped the player!", ephemeral : false });
+    let embed = new EmbedBuilder()
+      .setTitle("Playback Information")
+      .setColor("Blue")
+      .setDescription("✅  |  Player has been stopped!");
+
+    await interaction.reply({ embed: [embed], ephemeral : false });
   }
 }
