@@ -28,6 +28,6 @@ module.exports = {
       .setColor("Blue")
       .setDescription("✅  |  Player has been stopped!");
 
-    await interaction.reply({ embed: [embed], ephemeral : false });
+    await interaction.reply({ embeds: [embed], ephemeral : false });
   }
 }
