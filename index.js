@@ -1,5 +1,6 @@
 const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
-const { Player } = require("discord-player");
+const { Connectors } = require("shoukaku");
+const { Kazagumo } = require("kazagumo");
 const fs = require("fs");
 require("dotenv").config({ path: "./config/.env" });
 
@@ -14,7 +15,24 @@ client.selectMenus = new Collection();
 
 client.commandsData = [];
 
-client.player = new Player(client);
+const lavalink_name = process.env.LAVALINK_NAME ?? "local"
+const lavalink_url = process.env.LAVALINK_URL ?? "localhost"
+const lavalink_port = process.env.LAVALINK_PORT ?? 2333
+const lavalink_pass = process.env.LAVALINK_PASS
+
+const nodes = [
+  {
+    name: lavalink_name,
+    url: `${lavalink_url}:${lavalink_port}`,
+    auth: lavalink_pass,
+  }
+]
+
+client.kazagumo = new Kazagumo(
+  kazagumoSettings(),
+  new Connectors.DiscordJS(client),
+  nodes
+);
 
 if (client.config.debug) {
   console.log(`BOT :: Debug level = ${["player", "client", "all"].includes(client.config.debug) ? client.config.debug : "N/A"}`);
@@ -53,6 +71,16 @@ function clientSettings() {
     allowedMentions: {
       parse: [ "roles", "users" ],
       repliedUser: false
+    }
+  }
+}
+
+function kazagumoSettings() {
+  return {
+    defaultSearchEngine: "youtube",
+    send: (guildId, payload) => {
+      const guild = client.guilds.cache.get(guildId);
+      if (guild) guild.shard.send(payload);
     }
   }
 }

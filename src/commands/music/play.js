@@ -1,126 +1,42 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { QueryType } = require("discord-player");
+const { SlashCommandBuilder } = require("discord.js");
+const { joinVoiceChannel } = require("@discordjs/voice");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("play")
-    .setDescription("Playing a song")
-    .addStringOption(opt =>
-      opt.setName("query")
-        .setDescription("Title or url of the song")
-        .setRequired(true)
-    )
-    .addStringOption(opt => opt
-      .setName("type")
-      .setDescription("Select platform of stream")
-      .setRequired(false)
-      .addChoices(
-        {name : "youtube", value : QueryType.YOUTUBE_SEARCH},
-        {name : "spotify", value : QueryType.SPOTIFY_SEARCH},
-        {name : "soundcloud", value : QueryType.SOUNDCLOUD_SEARCH},
-        {name : "apple", value : QueryType.APPLE_MUSIC_SEARCH},
-        {name : "playlist", value : QueryType.AUTO},
-        {name : "soundcloud_playlist", value : QueryType.SOUNDCLOUD_PLAYLIST},
-        {name : "auto", value : QueryType.AUTO_SEARCH}
-      )
-    ),
+    .setDescription("Mainin lagu dari YouTube")
+    .addStringOption(option =>
+      option.setName("query")
+        .setDescription("Judul atau URL lagu")
+        .setRequired(true)),
 
   async execute(client, interaction) {
-    if (client.config.commands.music.play === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
-    }
+    const query = interaction.options.getString("query");
+    const member = interaction.member;
 
-    const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
-    
-    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
-    }
+    const voiceChannel = member.voice.channel;
+    if (!voiceChannel) return interaction.reply({ content: "❌ Lo harus join voice channel dulu!", ephemeral: true });
 
-    const query = interaction.options.getString('query', true);
-    const type = interaction.options.getString('type');
+    await interaction.deferReply();
 
-    const queue = client.player.nodes.create(interaction.guild, {
-      volume : 90,
-      metadata : {
-        channel : interaction.channel,
-        client : interaction.guild.members.me
-      }
+    const player = await client.kazagumo.createPlayer({
+      guildId: interaction.guild.id,
+      textId: interaction.channel.id,
+      voiceId: voiceChannel.id,
+      deaf: true,
     });
 
-    let result;
-    if (type) {
-      try {
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : type
-        });
-      } catch (err) {
-        console.log("INFO :: Error Founded!");
-        console.log(`ERR :: ${err}`);
-        return interaction.reply({ content: "❌  |  Something went wrong, please wait for developer to fix it!", ephemeral: true });
-      }
+    const result = await client.kazagumo.search(query, { requester: interaction.user });
+    if (!result.tracks.length) return interaction.editReply("⚠️ Gagal cari lagu.");
+
+    if (result.type === "PLAYLIST") {
+      for (const track of result.tracks) player.queue.add(track);
+      if (!player.playing) player.play();
+      return interaction.editReply(`📜 Playlist ditambahin: **${result.playlistName}**`);
     } else {
-      try {
-        result = await client.player.search(query, {
-          requestedBy : interaction.user,
-          searchEngine : QueryType.YOUTUBE_SEARCH
-        });
-      }
-      catch (err) {
-        console.log("INFO :: Error Founded!");
-        console.log(`ERR :: ${err}`);
-        return interaction.reply({ content: "❌  |  Something went wrong, please wait for developer to fix it!", ephemeral: true });
-      }
+      player.queue.add(result.tracks[0]);
+      if (!player.playing) player.play();
+      return interaction.editReply(`🎧 Lagu ditambahin: **${result.tracks[0].title}**`);
     }
-
-    await interaction.deferReply({ ephemeral : true });
-
-    try {
-      if (!queue.connection) await queue.connect(channel);
-    } catch (e) {
-      return interaction.followUp(`❌  |  Something went wrong: ${e}`);
-    }    
-
-    if (!result.hasTracks()) {
-      return interaction.followUp("❌  |  Can't find the song! Try more specificly");
-    };
-
-    let title, track, isPlaylist, sizePlaylist;
-    if (result.playlist) {
-      queue.addTrack(result.tracks);
-      title = result.playlist.title;
-      
-      isPlaylist = true;
-      sizePlaylist = result.tracks.length;
-    } else {
-      track = result.tracks[0];
-
-      queue.addTrack(track);
-      title = track.title;
-      isPlaylist = false;
-    }
-
-    try {
-      if (!queue.node.isPlaying()) {
-        await queue.node.play();
-      }
-    } catch (err) {
-      console.error('BOT :: Failed to start playback:', err);
-    }
-
-    let songIndex = queue.getSize();
-
-    let embed = new EmbedBuilder()
-      .setTitle("Playback Information")
-      .setColor("Blue")
-      .setDescription(
-        `📝  |  **${title}** has been enqueued!
-        ℹ️  |  Source : ${!result.playlist ? track.source : "Playlist"}
-        ℹ️  |  ${!result.playlist ? `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}` : `Total song indexed : ${sizePlaylist}`}`);
-
-
-    await interaction.editReply({ embeds : [embed] });
-    
-  }
-}
+  },
+};
