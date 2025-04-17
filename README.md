@@ -1,7 +1,7 @@
 # Nahida Discord Bot
 A basic Discord bot with music and AI capabilities.
 
-> ![NOTE]
+> [!NOTE]
 > Since, `discord-player` and `discord-player-youtubei` have many problems, i decided to change into `lavalink`, `shoukaku`, and `kazagumo`. But don't worry, i'm still updating the `discord-player` version in dev v6.x.
 
 ## Getting Started
@@ -68,7 +68,7 @@ Ensure you are in the bot's directory before executing the command.
 ---
 
 ## Branch Information
-> ![WARNING]
+> [!WARNING]
 > This branch contains explicit content. Use it responsibly.
 
 For a safer version, switch to the dev-safe branch:
