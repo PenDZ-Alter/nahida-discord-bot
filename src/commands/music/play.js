@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { joinVoiceChannel } = require("@discordjs/voice");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -36,12 +35,10 @@ module.exports = {
         totalSong += 1;
       }
       if (!player.playing) player.play();
-      // return interaction.editReply(`📜 Playlist added: **${result.playlistName}**`);
     } else {
       player.queue.add(result.tracks[0]);
       if (!player.playing) player.play();
       title = result.tracks[0].title;
-      // return interaction.editReply(`🎧 Song Added: **${result.tracks[0].title}**`);
     }
 
     let songIndex = player.queue.size;

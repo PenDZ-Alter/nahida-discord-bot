@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { joinVoiceChannel } = require("@discordjs/voice");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,19 +11,27 @@ module.exports = {
 
     let queue = player.queue;
     let currentSong = queue.current.title;
-    let nextSong = queue[0].title ?? null;
+    let nextSong = queue[0]?.title;
 
+    // Kalau gak ada lagu selanjutnya
     if (!nextSong) {
-      await player.destroy();
-    } else {
-      await player.skip();
+      player.skip();
+      player.destroy(); // stop player
+      const embed = new EmbedBuilder()
+        .setTitle("Playback Information")
+        .setColor("Red")
+        .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n📭 No more songs in queue. Player has stopped.`);
+
+      return interaction.reply({ embeds: [embed] });
     }
 
-    let embed = new EmbedBuilder()
+    // Kalau ada lagu selanjutnya
+    player.skip();
+    const embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
-      .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n🎵 ${nextSong ? `Now Playing **${nextSong}**` : "The Player Has Stopped!"}`);
+      .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n🎵 Now Playing **${nextSong}**`);
 
-    await interaction.reply({ embeds : [embed] });
+    await interaction.reply({ embeds: [embed] });
   },
 };
