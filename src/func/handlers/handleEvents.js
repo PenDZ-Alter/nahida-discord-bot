@@ -23,6 +23,10 @@ module.exports = (client) => {
             client.kazagumo.on(event.name, (...args) => event.execute(client, ...args));
             break;
 
+          case "shoukaku" : 
+            client.kazagumo.shoukaku.on(event.name, (...args) => event.execute(client, ...args));
+            break;
+
           case "process" : 
             process.on(event.name, (...args) => event.execute(...args));
             break;

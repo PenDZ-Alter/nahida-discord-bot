@@ -12,9 +12,13 @@ module.exports = {
 
     let queue = player.queue;
     let currentSong = queue.current.title;
-    let nextSong = queue[0].title;
+    let nextSong = queue[0].title ?? null;
 
-    player.skip();
+    if (!nextSong) {
+      await player.destroy();
+    } else {
+      await player.skip();
+    }
 
     let embed = new EmbedBuilder()
       .setTitle("Playback Information")

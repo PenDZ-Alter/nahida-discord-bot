@@ -12,7 +12,7 @@ plugins:
     allowDirectPlaylistIds: true
     
     oauth:
-      enabled: true
+      enabled: false
 
     clients: 
       - MUSIC
