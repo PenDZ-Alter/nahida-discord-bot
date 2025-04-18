@@ -28,6 +28,7 @@
     "genius-lyrics": "^4.4.6",
     "jsdom": "^25.0.1",
     "kazagumo": "^3.2.2",
+    "nahida-js": "file:",
     "nhentai-api": "^3.4.3",
     "node-opus": "^0.3.3",
     "openai": "^4.76.3",
@@ -36,6 +37,8 @@
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "patch-packages": "1.0.0",
+    "postinstall-postinstall": "^2.1.0"
   }
 }
