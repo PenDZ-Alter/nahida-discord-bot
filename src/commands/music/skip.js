@@ -7,9 +7,15 @@ module.exports = {
 
   async execute(client, interaction) {
     const player = client.kazagumo.players.get(interaction.guild.id);
+    let queue = player.queue;
+
+    if (client.config.debug === "player" || client.config.debug === "all") {
+      console.log("INFO (Player) :: Queue Info");
+      console.dir(queue, { depth : 1 });
+    }
+
     if (!player || !player.playing) return interaction.reply("❌ No song are playing.");
 
-    let queue = player.queue;
     let currentSong = queue.current.title;
     let nextSong = queue[0]?.title;
 

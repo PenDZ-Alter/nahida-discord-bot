@@ -26,7 +26,7 @@ module.exports = {
       }
     } else if (interaction.isStringSelectMenu()) {
       const selection = client.selectMenus.get(interaction.customId);
-      if (!selection) return new Error("ERR :: There's no action to this selection!");
+      if (!selection) return new Error("ERR (Clients) :: There's no action to this selection!");
 
       try {
         await selection.execute(client, interaction);
