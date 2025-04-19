@@ -11,22 +11,25 @@ module.exports = {
 
   async execute(client, interaction) {
     const query = interaction.options.getString("query");
-    const member = interaction.member;
 
-    const voiceChannel = member.voice.channel;
-    if (!voiceChannel) return interaction.reply({ content: "❌ Join voice channel first!", ephemeral: true });
+    const channel = interaction.member.voice.channel;
+    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
+    
+    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
+    }
 
     await interaction.deferReply({ ephemeral: true });
 
     const player = await client.kazagumo.createPlayer({
       guildId: interaction.guild.id,
       textId: interaction.channel.id,
-      voiceId: voiceChannel.id,
+      voiceId: channel.id,
       deaf: true,
     });
 
     const result = await client.kazagumo.search(query, { requester: interaction.user });
-    if (!result.tracks.length) return interaction.editReply("⚠️ Failed to get song. Try more specific!");
+    if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let totalSong, title, song;
     if (result.type == "PLAYLIST") {

@@ -12,7 +12,7 @@ module.exports = {
         await command.execute(client, interaction);
       } catch (err) {
         console.log("INFO :: Error Founded!");
-        if (client.config.debug === "client" || client.config.debug === "all")
+        if (client.config.debug === "client" || client.config.debug === "player" || client.config.debug === "all")
           console.error(err);
       }
     } else if (interaction.isButton()) {

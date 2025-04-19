@@ -14,15 +14,21 @@ module.exports = {
       console.dir(queue, { depth : 1 });
     }
 
-    if (!player || !player.playing) return interaction.reply("❌ No song are playing.");
+    const channel = interaction.member.voice.channel;
+    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
+    
+    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
+    }
+
+    if (!player || !player.playing) return interaction.reply("❌  |  No song are playing.");
 
     let currentSong = queue.current.title;
     let nextSong = queue[0]?.title;
 
-    // Kalau gak ada lagu selanjutnya
     if (!nextSong) {
       player.skip();
-      player.destroy(); // stop player
+      player.destroy();
       const embed = new EmbedBuilder()
         .setTitle("Playback Information")
         .setColor("Red")
@@ -31,7 +37,6 @@ module.exports = {
       return interaction.reply({ embeds: [embed] });
     }
 
-    // Kalau ada lagu selanjutnya
     player.skip();
     const embed = new EmbedBuilder()
       .setTitle("Playback Information")
