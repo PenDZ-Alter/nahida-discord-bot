@@ -31,11 +31,10 @@ module.exports = {
     const result = await client.kazagumo.search(query, { requester: interaction.user });
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
-    let totalSong, title, song;
+    let title, song;
     if (result.type == "PLAYLIST") {
       for (const track of result.tracks) {
         player.queue.add(track);
-        totalSong += 1;
       }
       if (!player.playing) player.play();
       song = result.tracks[0];
@@ -57,9 +56,9 @@ module.exports = {
       .setTitle("Playback Information")
       .setColor("Blue")
       .setDescription(
-        `📝  |  **${title}** has been enqueued!
+        `📝  |  **${result.type == "PLAYLIST" ? result.playlistName : title}** has been enqueued!
         ℹ️  |  Source : ${song.sourceName}
-        ℹ️  |  ${result.type == "PLAYLIST" ? `Total song indexed : ${totalSong}` : `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}`}`
+        ℹ️  |  ${result.type == "PLAYLIST" ? `Total song indexed : ${result.tracks.length}` : `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}`}`
       );
     await interaction.editReply({ embeds: [embed] });
   },
