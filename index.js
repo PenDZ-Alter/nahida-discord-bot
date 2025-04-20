@@ -38,15 +38,22 @@ if (client.config.debug) {
   console.log(`BOT :: Debug level = ${["player", "client", "all"].includes(client.config.debug) ? client.config.debug : "N/A"}`);
 }
 
-// File Listeners
+// File Listeners (For Handlers only)
 const funcFold = fs.readdirSync('./src/func');
 for (const folders of funcFold) {
   const funcFiles = fs.readdirSync(`./src/func/${folders}`)
     .filter((file) => file.endsWith('.js'));
 
-  for (const files of funcFiles) {
-    require(`./src/func/${folders}/${files}`)(client);
+  switch (folders) {
+    case "handlers" :
+      for (const files of funcFiles) {
+        require(`./src/func/${folders}/${files}`)(client);
+      }
+      break;
+    default : 
+      break;
   }
+  
 }
 
 client.login(process.env.TOKEN);

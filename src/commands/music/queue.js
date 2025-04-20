@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { formatDuration } = require("../../func/util/format");
 
 let index;
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
     let totalPage = Math.ceil(songSize / 10);
 
     const queueStr = queue.slice(firstNumIndex, endNumIndex).map((song, i) => {
-      return `${(i+1) + (index * 10)}) \`[${this.formatDuration(song.length)}]\` ${song.title} - <@${song.requester.id}>`
+      return `${(i+1) + (index * 10)}) \`[${formatDuration(song.length)}]\` ${song.title} - <@${song.requester.id}>`
     }).join('\n');
 
     const currentSong = queue.current;
@@ -39,7 +40,7 @@ module.exports = {
     let embed = new EmbedBuilder()
       .setTitle("Query Results")
       .setDescription(`**Currently Playing**\n` + 
-      (currentSong ? `\`[${this.formatDuration(currentSong.length)}]\` ${currentSong.title} - <@${currentSong.requester.id}>` : "None") + `\n\n**Queue**\n${!player.queue.length ? "There's no song in queue" : queueStr} `)
+      (currentSong ? `\`[${formatDuration(currentSong.length)}]\` ${currentSong.title} - <@${currentSong.requester.id}>` : "None") + `\n\n**Queue**\n${!player.queue.length ? "There's no song in queue" : queueStr} `)
       .setThumbnail(currentSong.thumbnail)
       .setColor("Blue")
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
@@ -48,13 +49,5 @@ module.exports = {
     await interaction.reply({
       embeds : [embed]
     });
-  },
-  formatDuration: (ms) => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const totalMinutes = Math.floor(totalSeconds / 60);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    const seconds = totalSeconds % 60;
-    return `${!hours ? "" : hours}${!hours ? "" : ":"}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 };
