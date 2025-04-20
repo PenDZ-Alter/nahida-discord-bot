@@ -16,7 +16,7 @@ module.exports = {
       return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
     }
 
-    if (!player || !player.playing) {
+    if (!player) {
       return interaction.reply({ content: "❌  |  There's no song are playing!", ephemeral: true });
     }
 
