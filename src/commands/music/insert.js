@@ -2,8 +2,8 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("Playing song from youtube")
+    .setName("insert")
+    .setDescription("Playing song from youtube with set position")
     .addStringOption(option =>
       option.setName("query")
         .setDescription("Query of song")
