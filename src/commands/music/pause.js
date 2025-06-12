@@ -6,6 +6,10 @@ module.exports = {
     .setDescription("Pause or resume the song"),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.pause === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const player = client.kazagumo.players.get(interaction.guild.id);
 
     const channel = interaction.member.voice.channel;

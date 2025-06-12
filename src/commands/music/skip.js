@@ -6,6 +6,10 @@ module.exports = {
     .setDescription("Go to the next song."),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.skip === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const player = client.kazagumo.players.get(interaction.guild.id);
     let queue = player.queue;
 

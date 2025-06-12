@@ -10,6 +10,10 @@ module.exports = {
         .setRequired(true)),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.play === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const query = interaction.options.getString("query");
 
     const channel = interaction.member.voice.channel;
@@ -36,13 +40,15 @@ module.exports = {
       for (const track of result.tracks) {
         player.queue.add(track);
       }
-      if (!player.playing) player.play();
       song = result.tracks[0];
+      if (!player.playing) {player.play()}
+      else if (player.paused) {player.pause(false)}
     } else {
       player.queue.add(result.tracks[0]);
-      if (!player.playing) player.play();
       title = result.tracks[0].title;
       song = result.tracks[0];
+      if (!player.playing) {player.play()}
+      else if (player.paused) {player.pause(false)}
     }
 
     let songIndex = player.queue.size;

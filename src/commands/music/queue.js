@@ -13,6 +13,10 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.queue === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const player = client.kazagumo.players.get(interaction.guild.id);
     const queue = player.queue;
     const page = interaction.options.getInteger("page");

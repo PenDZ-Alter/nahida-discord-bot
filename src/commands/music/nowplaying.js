@@ -7,6 +7,10 @@ module.exports = {
     .setDescription("Shown the playing song info."),
 
   async execute(client, interaction) {
+    if (client.config.commands.music.info === 0) {
+      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+    }
+
     const player = client.kazagumo.players.get(interaction.guild.id);
 
     const channel = interaction.member.voice.channel;
@@ -58,7 +62,7 @@ module.exports = {
         },
         {
           name : 'Loop',
-          value : "❌",
+          value : (player.loop === "none" ? "❌" : `✅ ${player.loop}`),
           inline : true
         },
         {
