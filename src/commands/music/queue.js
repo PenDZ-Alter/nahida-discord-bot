@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { formatDuration } = require("../../func/util/format");
+const { formatDuration } = require("../../func/utils/format");
 
 let index;
 module.exports = {

@@ -1,7 +1,9 @@
-const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const { Connectors } = require("shoukaku");
 const { Kazagumo } = require("kazagumo");
 const fs = require("fs");
+
+const { clientSettings, kazagumoSettings } = require("./src/func/utils/settings");
 require("dotenv").config({ path: "./config/.env" });
 
 const client = new Client(clientSettings());
@@ -23,8 +25,9 @@ const lavalink_pass = process.env.LAVALINK_PASS
 const nodes = [
   {
     name: lavalink_name,
-    url: `${lavalink_url}:${lavalink_port}`,
+    url: `${lavalink_url}${lavalink_port ? `:${lavalink_port}` : ""}`,
     auth: lavalink_pass,
+    ssl: false
   }
 ]
 
@@ -39,55 +42,24 @@ if (client.config.debug) {
 }
 
 // File Listeners (For Handlers only)
-const funcFold = fs.readdirSync('./src/func');
-for (const folders of funcFold) {
-  const funcFiles = fs.readdirSync(`./src/func/${folders}`)
-    .filter((file) => file.endsWith('.js'));
-
-  switch (folders) {
-    case "handlers" :
-      for (const files of funcFiles) {
-        require(`./src/func/${folders}/${files}`)(client);
-      }
-      break;
-    default : 
-      break;
-  }
-  
-}
+runHandlers();
 
 client.login(process.env.TOKEN);
 
-function clientSettings() {
-  return {
-    shards: "auto",
-    failIfNotExists: false,
-    intents: [ 
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.GuildPresences,
-      GatewayIntentBits.GuildVoiceStates,
-      GatewayIntentBits.MessageContent,
-    ],
-    partials: [
-      Partials.Message,
-      Partials.Reaction,
-      Partials.User
-    ],
-    allowedMentions: {
-      parse: [ "roles", "users" ],
-      repliedUser: false
-    }
-  }
-}
+function runHandlers() {
+  const funcFold = fs.readdirSync('./src/func');
+  for (const folders of funcFold) {
+    const funcFiles = fs.readdirSync(`./src/func/${folders}`)
+      .filter((file) => file.endsWith('.js'));
 
-function kazagumoSettings() {
-  return {
-    defaultSearchEngine: "youtube",
-    send: (guildId, payload) => {
-      const guild = client.guilds.cache.get(guildId);
-      if (guild) guild.shard.send(payload);
+    switch (folders) {
+      case "handlers":
+        for (const files of funcFiles) {
+          require(`./src/func/${folders}/${files}`)(client);
+        }
+        break;
+      default:
+        break;
     }
   }
 }
