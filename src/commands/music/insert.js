@@ -20,7 +20,7 @@ module.exports = {
     }
 
     const query = interaction.options.getString("query");
-    const pos = interaction.options.getInteger("position");
+    const position = interaction.options.getInteger("position")-1;
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
@@ -43,14 +43,14 @@ module.exports = {
 
     let title, song;
     if (result.type == "PLAYLIST") {
-      player.queue.splice(position, 0, ...result.tracks);
       song = result.tracks[0];
+      player.queue.splice(position, 0, ...result.tracks);
       if (player.paused) {player.pause(false)}
       else if (!player.playing) {player.play()}
     } else {
-      player.queue.splice(position, 0, track);
       title = result.tracks[0].title;
       song = result.tracks[0];
+      player.queue.splice(position, 0, song);
       if (player.paused) {player.pause(false)}
       else if (!player.playing) {player.play()}
     }
@@ -68,7 +68,7 @@ module.exports = {
       .setDescription(
         `📝  |  **${result.type == "PLAYLIST" ? result.playlistName : title}** has been enqueued!
         ℹ️  |  Source : ${song.sourceName}
-        ℹ️  |  ${result.type == "PLAYLIST" ? `Total song indexed : ${result.tracks.length}` : `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}`}`
+        ℹ️  |  ${result.type == "PLAYLIST" ? `Total song indexed : ${result.tracks.length}` : `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${position+1}`}`}`
       );
     await interaction.editReply({ embeds: [embed] });
   },
