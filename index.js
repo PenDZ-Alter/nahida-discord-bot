@@ -32,7 +32,7 @@ const nodes = [
 ]
 
 client.kazagumo = new Kazagumo(
-  kazagumoSettings(),
+  kazagumoSettings(client),
   new Connectors.DiscordJS(client),
   nodes
 );

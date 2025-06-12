@@ -25,7 +25,7 @@ module.exports = {
     }
   },
   
-  kazagumoSettings: () => {
+  kazagumoSettings: (client) => {
     return {
       defaultSearchEngine: "youtube",
       send: (guildId, payload) => {
