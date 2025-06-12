@@ -7,7 +7,12 @@ module.exports = {
     .addStringOption(option =>
       option.setName("query")
         .setDescription("Query of song")
-        .setRequired(true)),
+        .setRequired(true))
+    .addIntegerOption(opt => opt
+      .setName("position")
+      .setDescription("Position to insert based on Queue")
+      .setRequired(true)
+    ),
 
   async execute(client, interaction) {
     if (client.config.commands.music.play === 0) {
@@ -15,6 +20,7 @@ module.exports = {
     }
 
     const query = interaction.options.getString("query");
+    const pos = interaction.options.getInteger("position");
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
@@ -37,14 +43,12 @@ module.exports = {
 
     let title, song;
     if (result.type == "PLAYLIST") {
-      for (const track of result.tracks) {
-        player.queue.add(track);
-      }
+      player.queue.splice(position, 0, ...result.tracks);
       song = result.tracks[0];
       if (player.paused) {player.pause(false)}
       else if (!player.playing) {player.play()}
     } else {
-      player.queue.add(result.tracks[0]);
+      player.queue.splice(position, 0, track);
       title = result.tracks[0].title;
       song = result.tracks[0];
       if (player.paused) {player.pause(false)}
