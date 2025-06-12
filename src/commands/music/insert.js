@@ -15,7 +15,7 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
-    if (client.config.commands.music.play === 0) {
+    if (client.config.commands.music.insert === 0) {
       return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
     }
 
