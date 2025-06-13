@@ -1,16 +1,15 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
-const { repeatStatus } = require("./repeat");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { formatDuration } = require("../../func/utils/format");
 
 let index;
-
 module.exports = {
-  data : new SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName("queue")
-    .setDescription("Show the 10 song in queue")
-    .addIntegerOption(opt =>
-      opt.setName("page")
-        .setDescription("Number of pages")
-        .setRequired(false)  
+    .setDescription("See the queue list")
+    .addIntegerOption(opt => opt
+      .setName("page")
+      .setDescription("Number of pages")
+      .setRequired(false)
     ),
 
   async execute(client, interaction) {
@@ -18,65 +17,41 @@ module.exports = {
       return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
     }
 
-    const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
-    const queue = client.player.nodes.get(interaction.guild);
+    const player = client.kazagumo.players.get(interaction.guild.id);
+    const queue = player.queue;
     const page = interaction.options.getInteger("page");
+
+    if (client.config.debug === "player" || client.config.debug === "all")
+      console.log(queue);
+
+    if (!player)
+      return interaction.reply("📭 No music are playing!");
 
     index = page ? Number(page) - 1 : 0;
 
-    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
-    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
-    }
-
-    if (!queue || !queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
-  
     let firstNumIndex = index * 10;
     let endNumIndex = firstNumIndex + 10;
 
-    let songSize = queue.getSize();
+    let songSize = queue.length;
     let totalPage = Math.ceil(songSize / 10);
 
-    const queueStr = queue.tracks.toArray().slice(firstNumIndex, endNumIndex).map((song, i) => {
-      return `${(i+1) + (index * 10)}) \`[${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
+    const queueStr = queue.slice(firstNumIndex, endNumIndex).map((song, i) => {
+      return `${(i+1) + (index * 10)}) \`[${formatDuration(song.length)}]\` ${song.title} - <@${song.requester.id}>`
     }).join('\n');
 
-    const currentSong = queue.currentTrack;
-
-    const prevButton = new ButtonBuilder()
-      .setCustomId("prev-page")
-      .setLabel("Prev")
-      .setStyle(ButtonStyle.Secondary)
-
-    const nextButton = new ButtonBuilder()
-      .setCustomId("next-page")
-      .setLabel("Next")
-      .setStyle(ButtonStyle.Primary)
-
-    const actionRow = new ActionRowBuilder().addComponents(prevButton, nextButton);
+    const currentSong = queue.current;
 
     let embed = new EmbedBuilder()
       .setTitle("Query Results")
       .setDescription(`**Currently Playing**\n` + 
-      (currentSong ? `\`[${currentSong.duration}]\` ${currentSong.title} - <@${currentSong.requestedBy.id}>` : "None") +
-      `${repeatStatus() === "Track" ? "\n\n**⚠️  |  Loop Track Detected!**\nThe queue may be not used, unless you turning off the track loop!" : ""}\n\n**Queue**\n${queueStr} `)
+      (currentSong ? `\`[${formatDuration(currentSong.length)}]\` ${currentSong.title} - <@${currentSong.requester.id}>` : "None") + `\n\n**Queue**\n${!player.queue.length ? "There's no song in queue" : queueStr} `)
       .setThumbnail(currentSong.thumbnail)
       .setColor("Blue")
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
       .setTimestamp(Date.now());
 
     await interaction.reply({
-      embeds : [embed],
-      components : [actionRow]
+      embeds : [embed]
     });
-  },
-
-  getPage : () => {
-    return index;
-  }, 
-  
-  setPage : (a) => {
-    return index = a;
   }
-}
+};

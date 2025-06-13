@@ -19,8 +19,12 @@ module.exports = (client) => {
             }
             break;
           
-          case "player" : 
-            client.player.events.on(event.name, (...args) => event.execute(client, ...args));
+          case "kazagumo" : 
+            client.kazagumo.on(event.name, (...args) => event.execute(client, ...args));
+            break;
+
+          case "shoukaku" : 
+            client.kazagumo.shoukaku.on(event.name, (...args) => event.execute(client, ...args));
             break;
 
           case "process" : 

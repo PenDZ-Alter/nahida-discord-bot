@@ -120,10 +120,6 @@ module.exports = {
 
         let _vidsPack = imageData[index].tags.includes("video");
 
-        if (_vidsPack) {
-          return interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
-        }
-
         const extractedData = {
           user: interaction.user.id,
           data: imageData,
@@ -142,6 +138,11 @@ module.exports = {
         interactionData[interaction.id] = { index: 0, ...extractedData };
         fs.writeFileSync(cacheFile, JSON.stringify(interactionData, null, 2));
 
+        let msg = "";
+        if (_vidsPack) {
+          msg = interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
+        }
+
         let embed = new EmbedBuilder()
           .setTitle("Result Images")
           .setDescription(imageData[index].file_url)
@@ -150,7 +151,7 @@ module.exports = {
           .setFooter({ text: `Page ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}` })
           .setTimestamp(Date.now())
 
-        await interaction.editReply({ embeds: [embed], components: [row] });
+        await interaction.editReply({ embeds: [embed], content: msg, components: [row] });
       } else {
         for (let i = 0; i < limit; i++) {
           if (response.data.post[i].rating === cat && cat !== "all") count++;

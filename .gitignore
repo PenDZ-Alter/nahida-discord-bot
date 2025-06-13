@@ -5,6 +5,10 @@ config/config.test.json
 config/.env
 config/config.def.json
 
+server/logs
+server/plugins
+server/application.yml
+
 cache
 
 TODO.md

@@ -11,8 +11,9 @@ module.exports = {
       try {
         await command.execute(client, interaction);
       } catch (err) {
-        console.log("Error Founded!");
-        console.error(err);
+        console.log("INFO :: Error Founded!");
+        if (client.config.debug === "client" || client.config.debug === "player" || client.config.debug === "all")
+          console.error(err);
       }
     } else if (interaction.isButton()) {
       const button = client.buttons.get(interaction.customId);
@@ -25,7 +26,7 @@ module.exports = {
       }
     } else if (interaction.isStringSelectMenu()) {
       const selection = client.selectMenus.get(interaction.customId);
-      if (!selection) return new Error("There's no action to this selection!");
+      if (!selection) return new Error("ERR (Clients) :: There's no action to this selection!");
 
       try {
         await selection.execute(client, interaction);

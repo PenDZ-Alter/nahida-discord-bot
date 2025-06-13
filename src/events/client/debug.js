@@ -5,7 +5,7 @@ module.exports = {
 
   async execute(client, msg) {
     if (client.config.debug === "client" || client.config.debug === "all") {
-      console.log(msg);
+      console.log(`INFO (Clients) :: ${msg}`);
     }
   }
 }

@@ -1,36 +1,52 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  data : new SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName("skip")
-    .setDescription("Skip to the next song"),
+    .setDescription("Go to the next song."),
 
   async execute(client, interaction) {
     if (client.config.commands.music.skip === 0) {
       return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
     }
 
-    const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
-    const queue = client.player.nodes.get(interaction.guild);
+    const player = client.kazagumo.players.get(interaction.guild.id);
+    let queue = player.queue;
 
-    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
-    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
+    if (client.config.debug === "player" || client.config.debug === "all") {
+      console.log("INFO (Player) :: Queue Info");
+      console.dir(queue, { depth : 1 });
     }
 
-    if (!queue || !queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
-  
-    const currentSong = queue.currentTrack;
-    const nextSong = queue.tracks.data[0];
+    const channel = interaction.member.voice.channel;
+    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
+    
+    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
+    }
 
-    await queue.node.skip();
+    if (!player || !player.playing) return interaction.reply("❌  |  No song are playing.");
 
-    let embed = new EmbedBuilder()
+    let currentSong = queue.current.title;
+    let nextSong = queue[0]?.title;
+
+    if (!nextSong) {
+      player.skip();
+      player.destroy();
+      const embed = new EmbedBuilder()
+        .setTitle("Playback Information")
+        .setColor("Red")
+        .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n📭 No more songs in queue. Player has stopped.`);
+
+      return interaction.reply({ embeds: [embed] });
+    }
+
+    player.skip();
+    const embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
-      .setDescription(`✅ The song **${currentSong}** has been skipped!\n🎵 ${nextSong ? `Now Playing **${nextSong}**` : "The Player Has Stopped!"}`);
+      .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n🎵 Now Playing **${nextSong}**`);
 
-    await interaction.reply({ embeds : [embed], ephemeral : false });
-  }
-}
+    await interaction.reply({ embeds: [embed] });
+  },
+};

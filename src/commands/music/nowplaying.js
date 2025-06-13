@@ -1,52 +1,54 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { repeatStatus } = require("./repeat.js");
+const { formatDuration, generateProgressBar } = require("../../func/utils/format");
 
 module.exports = {
-  data : new SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName("info")
-    .setDescription("Showing the info of track that currently playing"),
+    .setDescription("Shown the playing song info."),
 
   async execute(client, interaction) {
     if (client.config.commands.music.info === 0) {
       return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
     }
 
+    const player = client.kazagumo.players.get(interaction.guild.id);
+
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
-    const queue = client.player.nodes.get(interaction.guild);
-
-    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
+    
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
     }
 
-    if (!queue || !queue.node.isPlaying()) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
+    if (!player) {
+      return interaction.reply({ content: "❌  |  There's no song are playing!", ephemeral: true });
+    }
 
-    let bar = queue.node.createProgressBar({ timecodes : true });
-    let currentSong = queue.currentTrack;
+    const currentTrack = player.queue.current;
+    const currentPosition = player.position;
 
-    let nextSong = queue.tracks.data[0];
+    const positionFormatted = formatDuration(currentPosition);
+    const durationFormatted = formatDuration(currentTrack.length);
+    const progressBar = generateProgressBar(currentPosition, currentTrack.length);
 
-    let isRepeat = queue.repeatMode;
-
-    let embed = new EmbedBuilder()
-      .setTitle("Playback Information")
+    const embed = new EmbedBuilder()
       .setColor("Blue")
-      .setThumbnail(currentSong.thumbnail)
-      .setFooter({ text : `Requested by ${currentSong.requestedBy.tag}` })
+      .setTitle("Playback Information")
+      .setFooter({ text: `Requested by ${currentTrack.requester.username}`, iconURL: currentTrack.requester.displayAvatarURL() })
       .setTimestamp(Date.now())
+      .setThumbnail(currentTrack.thumbnail)
       .setDescription(
-        `**Currently Playing**\n` + (currentSong ? `**[${currentSong.title}](${currentSong.url})**` : "None") + (nextSong ? `\n\n**Next Song**\n ${nextSong}\n` : "\n")
+        `**Currently Playing**\n**[${currentTrack.title}](${currentTrack.uri})**`
       )
       .addFields([
         {
           name : "Source",
-          value : currentSong.source,
+          value : currentTrack.sourceName,
           inline : true
         },
         {
           name : "Artist/Channel",
-          value : currentSong.author,
+          value : currentTrack.author,
           inline : true
         },
         {
@@ -55,21 +57,21 @@ module.exports = {
         },
         {
           name : 'Pause',
-          value : (queue.node.isPaused() ? "✅" : "❌"),
+          value : (player.paused ? "✅" : "❌"),
           inline : true
         },
         {
           name : 'Loop',
-          value : `${(isRepeat ? "✅" : "❌")}${(!repeatStatus() ? "" : repeatStatus())}`,
+          value : (player.loop === "none" ? "❌" : `✅ ${player.loop}`),
           inline : true
         },
         {
           name : 'Duration',
-          value : bar,
+          value : `\`${positionFormatted}\` ${progressBar} \`${durationFormatted}\``,
           inline : false
         }
       ]);
 
-    await interaction.reply({ embeds : [embed] });
-  }
-}
+    await interaction.reply({ embeds: [embed] });
+  },
+};
