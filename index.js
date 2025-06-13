@@ -19,7 +19,7 @@ client.commandsData = [];
 
 const lavalink_name = process.env.LAVALINK_NAME ?? "local"
 const lavalink_url = process.env.LAVALINK_URL ?? "localhost"
-const lavalink_port = process.env.LAVALINK_PORT ?? 2333
+const lavalink_port = process.env.LAVALINK_PORT
 const lavalink_pass = process.env.LAVALINK_PASS
 
 const nodes = [
