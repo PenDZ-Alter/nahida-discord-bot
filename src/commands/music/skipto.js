@@ -35,7 +35,7 @@ module.exports = {
     if (!player || !player.playing) return interaction.reply("❌  |  No song are playing.");
 
     let currentSong = queue.current.title;
-    let nextSong = queue[0]?.title;
+    let nextSong = queue[targetIndex]?.title;
 
     if (!nextSong) {
       player.skip();
