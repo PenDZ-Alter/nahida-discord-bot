@@ -4,8 +4,10 @@
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
-    "test": "nodemon ."
+    "def": "node .",
+    "test": "nodemon .",
+    "fast": "bun .",
+    "postinstall": "patch-package"
   },
   "keywords": [
     "music",
@@ -37,6 +39,7 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
+    "patch-package": "^8.0.0",
     "patch-packages": "1.0.0",
     "postinstall-postinstall": "^2.1.0"
   }
