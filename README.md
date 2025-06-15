@@ -52,7 +52,7 @@ Nahida is built using `discord.js`, `lavalink`, `shoukaku`, `kazagumo` and `open
 ## Installation & Setup
 
 ### 1. Install Dependencies
-Run the following command to install required packages:
+Run the following command to install required packages: <br>
 If you are using bun, use this commands : 
 ```bash
 bun install
@@ -66,11 +66,11 @@ If you encounter warnings, you can safely ignore them.
 ### 2. Run the bot
 To start the bot, run : 
 ```bash
-bun .
+npm run def
 ```
-or, if you're using node, use this instead :
+or, if you're using bun, use this instead :
 ```bash
-node .
+npm run fast
 ```
 Ensure you are in the bot's directory before executing the command.
 
