@@ -53,7 +53,7 @@ module.exports = {
 
     let songIndex = player.queue.size;
 
-    if (client.config.debug === "player" || client.config.debug === "all") {
+    if (client.debug === "player" || client.debug === "all") {
       console.log(`INFO (Player) :: Result tracks`);
       console.dir(result, { depth : 1 });
     }

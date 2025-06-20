@@ -20,5 +20,21 @@ module.exports = {
       return text.substring(index);
     }
     return text;
+  },
+
+  parseDebugArg() {
+    const args = process.argv.slice(2);
+    const debugArg = args.find(arg => arg.startsWith('--debug='));
+
+    if (debugArg) {
+      const debugValue = debugArg.split('=')[1];
+      if (["player", "client", "all"].includes(debugValue)) {
+        return debugValue;
+      } else {
+        console.warn(`⚠️  Unknown debug value: ${debugValue}`);
+      }
+    }
+
+    return null; // Default jika tidak ada argumen
   }
 }

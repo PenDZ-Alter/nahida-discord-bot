@@ -4,6 +4,7 @@ const { Kazagumo } = require("kazagumo");
 const fs = require("fs");
 
 const { clientSettings, kazagumoSettings } = require("./src/func/utils/settings");
+const { parseDebugArg } = require("./src/func/utils/format");
 require("dotenv").config({ path: "./config/.env" });
 
 const client = new Client(clientSettings());
@@ -37,8 +38,11 @@ client.kazagumo = new Kazagumo(
   nodes
 );
 
-if (client.config.debug) {
-  console.log(`BOT :: Debug level = ${["player", "client", "all"].includes(client.config.debug) ? client.config.debug : "N/A"}`);
+// === CLI Debug Option Handling ===
+client.debug = parseDebugArg();
+
+if (client.debug) {
+  console.log(`BOT :: Debug level = ${client.debug}`);
 }
 
 // File Listeners (For Handlers only)

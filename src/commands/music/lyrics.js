@@ -46,7 +46,7 @@ module.exports = {
       return interaction.reply({ content : msg, ephemeral : true });
     }
 
-    if (client.config.debug === "player" || client.config.debug === "all") {
+    if (client.debug === "player" || client.debug === "all") {
         console.log(msg);
     }
 

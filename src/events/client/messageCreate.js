@@ -57,7 +57,6 @@ module.exports = {
       messages: log
     });
 
-    // in testing mode
     let messageContent = result.choices[0].message.content;
     let chunkSize = 2000;
 

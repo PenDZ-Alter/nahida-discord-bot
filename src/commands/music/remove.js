@@ -26,7 +26,7 @@ module.exports = {
     const index = interaction.options.getInteger("number");
     const endIndex = interaction.options.getInteger("end");
 
-    if (client.config.debug === "player" || client.config.debug === "all") {
+    if (client.debug === "player" || client.debug === "all") {
       console.log("INFO (Player) :: Queue Info");
       console.dir(queue, { depth : 1 });
     }
