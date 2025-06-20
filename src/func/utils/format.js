@@ -12,5 +12,13 @@ module.exports = {
     const progress = Math.floor((position / duration) * size);
     const bar = "▬".repeat(size);
     return bar.substring(0, progress) + "🔘" + bar.substring(progress + 1);
+  },
+  
+  trimLyrics(text) {
+    const index = text.indexOf('[');
+    if (index !== -1) {
+      return text.substring(index);
+    }
+    return text;
   }
 }
