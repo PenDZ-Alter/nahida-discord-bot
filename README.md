@@ -90,6 +90,10 @@ git checkout dev-safe
 ## Troubleshooting
 Having trouble connecting to APIs? Check the [HOSTS.md](docs/HOSTS.md) file for possible solutions.
 
+Having trouble with the bot? Run the bot with the `--debug={debug_list}` flag to see what's the problem with bot. Or, you can do like this : 
+```bash
+bun run debug
+```
 ---
 
 Enjoy using Nahida! 🎵🤖
