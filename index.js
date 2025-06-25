@@ -26,7 +26,7 @@ const nodes = [
     name: lavalink_name,
     url: `${lavalink_url}${lavalink_port ? `:${lavalink_port}` : ""}`,
     auth: lavalink_pass,
-    ssl: false
+    ssl: process.env.LAVALINK_IS_SECURE
   }
 ]
 
