@@ -36,5 +36,23 @@ module.exports = {
     }
 
     return null; // Default jika tidak ada argumen
+  },
+
+  parseEnvArg() {
+    const args = process.argv.slice(2);
+    const envArg = args.find(arg => arg.startsWith('--env='));
+
+    if (envArg) {
+      const envValue = envArg.split('=')[1];
+      if (["dev", "development", "devs", "d"].includes(envValue)) {
+        return require("../../../config/config.test.json");
+      } else if (["prod", "p", "production"].includes(envValue)) {
+        return require("../../../config/config.json");
+      }
+    } else {
+      console.warn(`⚠️  Unknown debug value: ${envValue}`)
+    }
+
+    return require("../../../config/config.json");
   }
 }

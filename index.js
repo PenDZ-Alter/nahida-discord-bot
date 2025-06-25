@@ -4,12 +4,10 @@ const { Kazagumo } = require("kazagumo");
 const fs = require("fs");
 
 const { clientSettings, kazagumoSettings } = require("./src/func/utils/settings");
-const { parseDebugArg } = require("./src/func/utils/format");
+const { parseDebugArg, parseEnvArg } = require("./src/func/utils/format");
 require("dotenv").config({ path: "./config/.env" });
 
 const client = new Client(clientSettings());
-
-client.config = require("./config/config.json");
 
 // Properties of data
 client.commands = new Collection();
@@ -40,6 +38,7 @@ client.kazagumo = new Kazagumo(
 
 // === CLI Debug Option Handling ===
 client.debug = parseDebugArg();
+client.config = parseEnvArg();
 
 if (client.debug) {
   console.log(`BOT :: Debug level = ${client.debug}`);
