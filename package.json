@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "def": "node .",
+    "dev": "bun . --env=dev",
     "test": "nodemon .",
     "fast": "bun .",
     "debug": "bun . --debug=all --env=dev",
