@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("seek")
-    .setDescription("Go to the next song with position based on queue.")
+    .setDescription("Seeking the position of song.")
     .addIntegerOption(opt => opt
       .setName("sec")
       .setDescription("Position in seconds")
@@ -26,11 +26,10 @@ module.exports = {
     }
 
     const player = client.kazagumo.players.get(interaction.guild.id);
-    let queue = player.queue;
 
-    const sec = interaction.options.getInteger("sec");
-    const min = interaction.options.getInteger("min");
-    const hrs = interaction.options.getInteger("hrs");
+    const sec = Number(interaction.options.getInteger("sec"));
+    const min = Number(interaction.options.getInteger("min"));
+    const hrs = Number(interaction.options.getInteger("hrs"));
 
     if (sec > 60) {
       return interaction.reply({ content : "❌  |  Max value of seconds is 60", ephemeral : true });
@@ -53,7 +52,7 @@ module.exports = {
 
     if (!player || !player.playing) return interaction.reply("❌  |  No song are playing.");
 
-    let durationTime = sec + (min * 60) + (hrs * 3600);
+    let durationTime = (sec + (min * 60) + (hrs * 3600)) * 1000;
 
     let fmin;
     if (min < 10) fmin = "0" + min
@@ -62,8 +61,8 @@ module.exports = {
     let fsec;
     if (sec < 10) fsec = "0" + sec
     else fsec = sec;
-
-    player.seek(durationTime);
+    
+    await player.seek(durationTime);
     
     const embed = new EmbedBuilder()
       .setTitle("Playback Information")
