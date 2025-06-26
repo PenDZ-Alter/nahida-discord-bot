@@ -12,8 +12,8 @@ You also need to configure the lavalink.
 - Go to `server` folder.
 - Lavalink server needs file named `application.yml`, there's have 2 templates :
   1. `application.yml.default.example`, default config for lavalink.
-      > [!WARNING]
-      > This config doesn't support youtube, refer to [lavalink issues](https://github.com/lavalink-devs/Lavalink/issues/1091)
+        > [!WARNING]
+        > This config doesn't support youtube, refer to [lavalink issues](https://github.com/lavalink-devs/Lavalink/issues/1091)
 
   2. `application.yml.example`, editted config for support many plugins.
 
