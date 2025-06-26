@@ -6,13 +6,17 @@ A basic Discord bot with music and AI capabilities.
 
 ## Getting Started
 
-### 1. Configure lavalink
+### 1. Configure lavalink server
 You also need to configure the lavalink.
 
 - Go to `server` folder.
-- Copy the `application.yml.default.example` and rename it into `application.yml`.
-  - if you want to make youtube support, copy the `application.yml.example` and rename it into `application.yml`.
-  - You can also configure the server, such as password, url, and port as you want.
+- Lavalink server needs file named `application.yml`, there's have 2 templates :
+  1. `application.yml.default.example`, default config for lavalink.
+    > [!WARNING]
+    > This config doesn't support youtube, refer to [lavalink issues](https://github.com/lavalink-devs/Lavalink/issues/1091)
+
+  2. `application.yml.example`, editted config for support many plugins.
+
 - Run the lavalink, use this command : 
 
 ```bash
@@ -90,7 +94,7 @@ git checkout dev-safe
 ## Troubleshooting
 Having trouble connecting to APIs? Check the [HOSTS.md](docs/HOSTS.md) file for possible solutions.
 
-Having trouble with the bot? Run the bot with the `--debug={debug_list}` flag to see what's the problem with bot. Or, you can do like this : 
+Having trouble with the bot? Run the bot with the `--debug={debug_level}` flag to see what's the problem with bot. Or, you can do like this : 
 ```bash
 bun run debug
 ```

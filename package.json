@@ -7,7 +7,7 @@
     "def": "node .",
     "test": "nodemon .",
     "fast": "bun .",
-    "debug": "bun . --debug=all",
+    "debug": "bun . --debug=all --env=dev",
     "postinstall": "patch-package"
   },
   "keywords": [
