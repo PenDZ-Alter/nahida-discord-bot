@@ -4,11 +4,10 @@ const { Kazagumo } = require("kazagumo");
 const fs = require("fs");
 
 const { clientSettings, kazagumoSettings } = require("./src/func/utils/settings");
+const { parseDebugArg, parseEnvArg } = require("./src/func/utils/format");
 require("dotenv").config({ path: "./config/.env" });
 
 const client = new Client(clientSettings());
-
-client.config = require("./config/config.json");
 
 // Properties of data
 client.commands = new Collection();
@@ -27,7 +26,7 @@ const nodes = [
     name: lavalink_name,
     url: `${lavalink_url}${lavalink_port ? `:${lavalink_port}` : ""}`,
     auth: lavalink_pass,
-    ssl: false
+    secure: process.env.LAVALINK_IS_SECURE
   }
 ]
 
@@ -37,8 +36,12 @@ client.kazagumo = new Kazagumo(
   nodes
 );
 
-if (client.config.debug) {
-  console.log(`BOT :: Debug level = ${["player", "client", "all"].includes(client.config.debug) ? client.config.debug : "N/A"}`);
+// === CLI Debug Option Handling ===
+client.debug = parseDebugArg();
+client.config = parseEnvArg();
+
+if (client.debug) {
+  console.log(`BOT :: Debug level = ${client.debug}`);
 }
 
 // File Listeners (For Handlers only)

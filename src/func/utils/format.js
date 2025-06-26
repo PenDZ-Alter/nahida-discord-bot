@@ -12,5 +12,47 @@ module.exports = {
     const progress = Math.floor((position / duration) * size);
     const bar = "▬".repeat(size);
     return bar.substring(0, progress) + "🔘" + bar.substring(progress + 1);
+  },
+  
+  trimLyrics(text) {
+    const index = text.indexOf('[');
+    if (index !== -1) {
+      return text.substring(index);
+    }
+    return text;
+  },
+
+  parseDebugArg() {
+    const args = process.argv.slice(2);
+    const debugArg = args.find(arg => arg.startsWith('--debug='));
+
+    if (debugArg) {
+      const debugValue = debugArg.split('=')[1];
+      if (["player", "client", "all"].includes(debugValue)) {
+        return debugValue;
+      } else {
+        console.warn(`⚠️  Unknown debug value: ${debugValue}`);
+      }
+    }
+
+    return null; // Default jika tidak ada argumen
+  },
+
+  parseEnvArg() {
+    const args = process.argv.slice(2);
+    const envArg = args.find(arg => arg.startsWith('--env='));
+
+    if (envArg) {
+      const envValue = envArg.split('=')[1];
+      if (["dev", "development", "devs", "d"].includes(envValue)) {
+        return require("../../../config/config.test.json");
+      } else if (["prod", "p", "production"].includes(envValue)) {
+        return require("../../../config/config.json");
+      }
+    } else {
+      console.warn(`⚠️  Unknown debug value: ${envValue}`)
+    }
+
+    return require("../../../config/config.json");
   }
 }

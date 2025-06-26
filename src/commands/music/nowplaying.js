@@ -52,6 +52,10 @@ module.exports = {
           inline : true
         },
         {
+          name: "Total Queue",
+          value: player.queue.length.toString()
+        },
+        {
           name : "\n",
           value : "\n"
         },

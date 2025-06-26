@@ -21,7 +21,7 @@ module.exports = {
     const queue = player.queue;
     const page = interaction.options.getInteger("page");
 
-    if (client.config.debug === "player" || client.config.debug === "all")
+    if (client.debug === "player" || client.debug === "all")
       console.log(queue);
 
     if (!player)

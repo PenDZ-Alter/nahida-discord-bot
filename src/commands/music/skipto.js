@@ -20,7 +20,7 @@ module.exports = {
 
     const targetIndex = interaction.options.getInteger("target")-1;
 
-    if (client.config.debug === "player" || client.config.debug === "all") {
+    if (client.debug === "player" || client.debug === "all") {
       console.log("INFO (Player) :: Queue Info");
       console.dir(queue, { depth: 1 });
     }
@@ -35,7 +35,7 @@ module.exports = {
     if (!player || !player.playing) return interaction.reply("❌  |  No song are playing.");
 
     let currentSong = queue.current.title;
-    let nextSong = queue[0]?.title;
+    let nextSong = queue[targetIndex]?.title;
 
     if (!nextSong) {
       player.skip();

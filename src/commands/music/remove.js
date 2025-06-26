@@ -2,21 +2,37 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("skip")
-    .setDescription("Go to the next song."),
+    .setName("remove")
+    .setDescription("Remove song from queue.")
+    .addIntegerOption(opt => opt
+      .setName("number")
+      .setDescription("Number of song, also, it can be the start song to remove")
+      .setRequired(true)
+    )
+    .addIntegerOption(opt => opt
+      .setName("end")
+      .setDescription("End song number to remove")
+      .setRequired(false)
+    ),
 
   async execute(client, interaction) {
-    if (client.config.commands.music.skip === 0) {
+    if (client.config.commands.music.remove === 0) {
       return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
     }
 
     const player = client.kazagumo.players.get(interaction.guild.id);
     let queue = player.queue;
 
+    const index = interaction.options.getInteger("number");
+    const endIndex = interaction.options.getInteger("end");
+
     if (client.debug === "player" || client.debug === "all") {
       console.log("INFO (Player) :: Queue Info");
       console.dir(queue, { depth : 1 });
     }
+
+    if (index > endIndex) 
+      return interaction.reply({ content: '❌  |  Invalid number of start and end, end number must be higher dan start', ephemeral: true });
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
@@ -27,25 +43,27 @@ module.exports = {
 
     if (!player || !player.playing) return interaction.reply("❌  |  No song are playing.");
 
-    let currentSong = queue.current.title;
-    let nextSong = queue[0]?.title;
+    let ctx;
 
-    if (!nextSong) {
-      player.skip();
-      player.destroy();
-      const embed = new EmbedBuilder()
-        .setTitle("Playback Information")
-        .setColor("Red")
-        .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n📭 No more songs in queue. Player has stopped.`);
+    if (endIndex) {
+      let i = endIndex - 1;
+      while (i >= index - 1) {
+        await queue.remove(i);
+        i--; // Decrement end because the queue shrinks after each removal
+      }
 
-      return interaction.reply({ embeds: [embed] });
+      ctx = `✅  |  Removed ${index}-${endIndex} tracks from queue!`
+    } else {
+      let songTitleRemoval = queue[index-1]?.title;
+
+      await queue.remove(index-1);
+      ctx = `✅  |  Removed track **${songTitleRemoval}** from queue!`;
     }
 
-    player.skip();
     const embed = new EmbedBuilder()
       .setTitle("Playback Information")
       .setColor("Blue")
-      .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n🎵 Now Playing **${nextSong}**`);
+      .setDescription(ctx);
 
     await interaction.reply({ embeds: [embed] });
   },

@@ -4,8 +4,8 @@ module.exports = {
   name : Events.Debug,
 
   async execute(client, msg) {
-    if (client.config.debug === "client" || client.config.debug === "all") {
-      console.log(`INFO (Clients) :: ${msg}`);
+    if (client.debug === "client" || client.debug === "all") {
+      console.log(`INFO (Client) :: ${msg}`);
     }
   }
 }
