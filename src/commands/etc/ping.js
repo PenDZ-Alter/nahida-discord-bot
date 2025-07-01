@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
   data : new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.etc.ping === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     const message_init = await interaction.deferReply({ fetchReply : true, ephemeral : true });

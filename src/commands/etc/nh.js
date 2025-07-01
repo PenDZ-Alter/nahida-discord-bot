@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require("discord.js");
 const { API } = require("nhentai-api");
 const fs = require("fs");
 const path = require("path");
@@ -23,14 +23,14 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.etc.nh === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     const memberRoles = interaction.member.roles;
     const roles = client.config.explicit.roles.id;
     const private = interaction.options.getBoolean("private");
 
-    await interaction.deferReply({ ephemeral: private });
+    await interaction.deferReply({ flags: private ? MessageFlags.Ephemeral : undefined });
 
     const query = interaction.options.getString("query");
 
@@ -59,7 +59,7 @@ module.exports = {
     }
 
     if (!access) {
-      return interaction.reply({ content: "❌  |  You dont have permissions to run this commands", ephemeral: true });
+      return interaction.reply({ content: "❌  |  You dont have permissions to run this commands", flags: MessageFlags.Ephemeral });
     }
 
     userid = interaction.user.id;
@@ -75,7 +75,7 @@ module.exports = {
     } else {
       try {
         await api.search(updateQuery).then(async search => {
-          bookData = search.books[0]
+          bookData = search.books[0];
         });
       } catch {
         return interaction.editReply({ content: "❌  |  Books not found!" });

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
@@ -47,7 +47,7 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.etc.pics === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     try {
@@ -59,14 +59,14 @@ module.exports = {
       const memberRoles = interaction.member.roles;
       const roles = client.config.explicit.roles.id;
 
-      await interaction.deferReply({ ephemeral: private });
+      await interaction.deferReply({ flags: private ? MessageFlags.Ephemeral : undefined });
 
       const tag = tags.replace(/ /g, "_");
 
       const access = roles.some(role => memberRoles.cache.has(role));
 
       if (!access) {
-        return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
+        return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", flags: MessageFlags.Ephemeral });
       }
 
       const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=anonymous&user_id=9455&tags=${tag}&pid=${pid}&json=1`);

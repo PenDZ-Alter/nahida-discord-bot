@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 const { formatDuration } = require("../../func/utils/format");
 
 let index;
@@ -14,7 +14,7 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.music.queue === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     const player = client.kazagumo.players.get(interaction.guild.id);
