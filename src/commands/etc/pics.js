@@ -58,6 +58,8 @@ module.exports = {
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
       const roles = client.config.explicit.roles.id;
+      const api_key = process.env.GELBOORU_API_KEY;
+      const user_id = process.env.GELBOORU_USER_ID;
 
       await interaction.deferReply({ flags: private ? MessageFlags.Ephemeral : undefined });
 
@@ -69,7 +71,7 @@ module.exports = {
         return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", flags: MessageFlags.Ephemeral });
       }
 
-      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=anonymous&user_id=9455&tags=${tag}&pid=${pid}&json=1`);
+      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=${api_key}&user_id=${user_id}&tags=${tag}&pid=${pid}&json=1`);
 
       if (!response.data.post || !response.data) {
         return interaction.editReply({ content: "❌  |  Failed when fetching data! Try another tags and make sure you dont add some spesial characters except '+'!" });
