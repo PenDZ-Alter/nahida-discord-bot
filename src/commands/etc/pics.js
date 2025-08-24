@@ -120,7 +120,16 @@ module.exports = {
           }
         }
 
-        let _vidsPack = imageData[index].tags.includes("video");
+        // console.log(`DEBUG :: Check State : 'image data length' = ${imageData.length} = 'limit'? ${limit} `)
+
+        let _vidsPack;
+        if (index >= 0 && index < imageData.length) {
+          _vidsPack = imageData[index].tags?.includes("video") || false;
+        } else {
+          // console.error("ERR :: Index Out of Bound");
+          return interaction.editReply({ content: "❌  |  There's no category for this search! Try another category, or don't specify to check if the data is actually shown up!" });
+        }
+        // let _vidsPack = imageData[index].tags.includes("video");
 
         const extractedData = {
           user: interaction.user.id,
