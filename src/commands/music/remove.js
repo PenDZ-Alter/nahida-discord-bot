@@ -31,7 +31,7 @@ module.exports = {
       console.dir(queue, { depth : 1 });
     }
 
-    if (index > endIndex) 
+    if (endIndex && index > endIndex) 
       return interaction.reply({ content: '❌  |  Invalid number of start and end, end number must be higher dan start', flags: MessageFlags.Ephemeral });
 
     const channel = interaction.member.voice.channel;
