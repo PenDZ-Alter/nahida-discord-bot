@@ -1,4 +1,11 @@
 {
+  "events": {
+    "ready": {
+      "status": "online",
+      "activity": "Listening",
+      "activityText": "Every Music"
+    }
+  },
   "ids": {
     "ai_config": {
       "channel": [],

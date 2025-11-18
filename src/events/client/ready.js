@@ -2,11 +2,15 @@ const { ActivityType, Events } = require('discord.js');
 
 module.exports = {
   name : Events.ClientReady,
-  once : true,
+  once : false,
 
   async execute(client) {
-    client.user.setStatus('idle');
-    client.user.setActivity('and singing', { type : ActivityType.Watching });
+    const activityType = client.config.events.ready.activity;
+    const activity = client.config.events.ready.activityText;
+    const status = client.config.events.ready.status;
+
+    client.user.setStatus(status);
+    client.user.setActivity(activity, { type : ActivityType[activityType] });
     console.log("BOT :: The bot is ready!");
   }
 }
