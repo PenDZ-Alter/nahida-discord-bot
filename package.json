@@ -9,6 +9,8 @@
     "test": "nodemon .",
     "fast": "bun .",
     "debug": "bun . --debug=all --env=dev",
+    "debug:player": "bun . --debug=player --env=dev",
+    "debug:client": "bun . --debug=client --env=dev",
     "postinstall": "patch-package"
   },
   "keywords": [

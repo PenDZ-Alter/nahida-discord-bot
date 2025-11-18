@@ -22,7 +22,7 @@ plugins:
 
 lavalink:
   plugins:
-   - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.2" # required, the coordinates of your plugin
+   - dependency: "dev.lavalink.youtube:youtube-plugin:1.16.0" # required, the coordinates of your plugin
      snapshot: false # optional, defaults to false, used to tell Lavalink to use the snapshot repository instead of the release repository
 
   server:
