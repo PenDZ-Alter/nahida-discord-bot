@@ -27,7 +27,7 @@ module.exports = {
     }
 
     const memberRoles = interaction.member.roles;
-    const roles = client.config.explicit.roles.id;
+    const roles = client.config.ids.explicit.roles;
     const private = interaction.options.getBoolean("private");
 
     await interaction.deferReply({ flags: private ? MessageFlags.Ephemeral : undefined });

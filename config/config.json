@@ -6,15 +6,20 @@
       "activityText": "Every Music"
     }
   },
+  "nodes": [
+    {
+      "name": "Local Lavalink",
+      "url": "localhost:2333",
+      "auth": "youshallnotpass"
+    }
+  ],
   "ids": {
     "ai_config": {
-      "channel": [],
+      "channels": [],
       "roles": []
-    }
-  },
-  "explicit": {
-    "roles": {
-      "id": []
+    },
+    "explicit": {
+      "roles": []
     }
   },
   "commands": {

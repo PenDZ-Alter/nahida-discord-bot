@@ -14,7 +14,7 @@ module.exports = {
     if (message.content.startsWith('!')) return;
 
     const roles = client.config.ids.ai_config.roles;
-    const channels = client.config.ids.ai_config.channel;
+    const channels = client.config.ids.ai_config.channels;
     const getRolesMember = message.member.roles.cache;
     let access = false, getChannel = false;
 

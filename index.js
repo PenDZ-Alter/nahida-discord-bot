@@ -16,29 +16,17 @@ client.selectMenus = new Collection();
 
 client.commandsData = [];
 
-const lavalink_name = process.env.LAVALINK_NAME ?? "local"
-const lavalink_url = process.env.LAVALINK_URL ?? "localhost"
-const lavalink_port = process.env.LAVALINK_PORT
-const lavalink_pass = process.env.LAVALINK_PASS
+// === CLI Debug Option Handling ===
+client.debug = parseDebugArg();
+client.config = parseEnvArg();
 
-const nodes = [
-  {
-    name: lavalink_name,
-    url: `${lavalink_url}${lavalink_port ? `:${lavalink_port}` : ""}`,
-    auth: lavalink_pass,
-    // secure: process.env.LAVALINK_IS_SECURE
-  }
-]
+const nodes = client.config.nodes;
 
 client.kazagumo = new Kazagumo(
   kazagumoSettings(client),
   new Connectors.DiscordJS(client),
   nodes
 );
-
-// === CLI Debug Option Handling ===
-client.debug = parseDebugArg();
-client.config = parseEnvArg();
 
 if (client.debug) {
   console.log(`BOT :: Debug level = ${client.debug}`);

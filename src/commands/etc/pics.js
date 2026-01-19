@@ -57,7 +57,7 @@ module.exports = {
       const pid = interaction.options.getInteger("pid") || 0;
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
-      const roles = client.config.explicit.roles.id;
+      const roles = client.config.ids.explicit.roles;
       const api_key = process.env.GELBOORU_API_KEY;
       const user_id = process.env.GELBOORU_USER_ID;
 
