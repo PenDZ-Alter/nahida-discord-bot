@@ -74,6 +74,10 @@ module.exports = {
       const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=${api_key}&user_id=${user_id}&tags=${tag}&pid=${pid}&json=1`);
 
       if (!response.data.post || !response.data) {
+        if (client.debug == "player" || client.debug == "all") {
+          console.error("BOT :: Can't fetching data from gelbooru!");
+          console.log(response.data);
+        }
         return interaction.editReply({ content: "❌  |  Failed when fetching data! Try another tags and make sure you dont add some spesial characters except '+'!" });
       }
 
