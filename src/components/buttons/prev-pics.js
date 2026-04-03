@@ -34,7 +34,7 @@ module.exports = {
       let embed = new EmbedBuilder()
         .setTitle("Result Images")
         .setDescription(data[index].file_url)
-        .setImage(data[index].file_url)
+        .setImage(data[index].preview_url)
         .setColor("Blue")
         .setFooter({ text : `Page ${index + 1} of ${data.length}${PID != 0 ? ` • PID : ${PID}` : ``}` })
         .setTimestamp(Date.now())

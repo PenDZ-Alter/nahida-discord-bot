@@ -26,6 +26,8 @@ module.exports = {
       return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
+    if (client.debug == 'client' || client.debug == 'all') console.debug('BOT :: Commands : Executing /nh ...');
+
     const memberRoles = interaction.member.roles;
     const roles = client.config.ids.explicit.roles;
     const private = interaction.options.getBoolean("private");

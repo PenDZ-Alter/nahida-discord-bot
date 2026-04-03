@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags, AttachmentBuilder } = require('discord.js');
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { downloadGambar } = require('../../func/utils/format');
 
 const cacheFolder = path.join(__dirname, "../../../cache");
 const cacheFile = path.join(cacheFolder, "pics.json");
@@ -158,10 +159,12 @@ module.exports = {
           msg = interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
         }
 
+        // console.log(`Image URL : ${imageData[index].file_url}`);
+
         let embed = new EmbedBuilder()
           .setTitle("Result Images")
           .setDescription(imageData[index].file_url)
-          .setImage(imageData[index].file_url)
+          .setImage(imageData[index].preview_url)
           .setColor("Blue")
           .setFooter({ text: `Page ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}` })
           .setTimestamp(Date.now())
