@@ -14,6 +14,7 @@ If the VPN and DNS doesn't work for you, Add this into your hosts file.
 185.23.214.98   i.nhentai.net
 77.247.178.1    i1.nhentai.net
 104.18.23.208   genius.com
+172.67.73.83    img2.gelbooru.com
 ```
 
 Or, if this doesn't work for you or extra laggy, check the [IP Tracker](https://www.ip-tracker.org/), replace the address based from your ip tracker. Remember before you do this, backup your hosts file.

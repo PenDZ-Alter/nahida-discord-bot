@@ -71,7 +71,11 @@ module.exports = {
     if (q != null) {
       try {
         bookData = await api.getBook(query);
-      } catch {
+      } catch (err) {
+        if (client.debug == 'all' || client.debug == 'client') {
+          console.log("ERR :: /nh commands didn't work properly!!");
+          console.error(err);
+        }
         return interaction.editReply({ content: "❌  |  Book not found!" });
       }
     } else {
@@ -79,8 +83,12 @@ module.exports = {
         await api.search(updateQuery).then(async search => {
           bookData = search.books[0];
         });
-      } catch {
-        return interaction.editReply({ content: "❌  |  Books not found!" });
+      } catch (err) {
+        if (client.debug == 'all' || client.debug == 'client') {
+          console.log("ERR :: /nh commands didn't work properly!!");
+          console.error(err);
+        }
+        return interaction.editReply({ content: "❌  |  Something went wrong! Please wait 'till developer fix this :)" });
       }
     }
 
