@@ -1,7 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require("discord.js");
-const { API } = require("nhentai-api");
+// const { API } = require('nhentai-api');
 const fs = require("fs");
 const path = require("path");
+const axios = require("axios");
 
 const cacheFolder = path.join(__dirname, "../../../cache");
 const cacheFile = path.join(cacheFolder, "nh.json");
@@ -49,7 +50,7 @@ module.exports = {
       // updateQuery = query;
     }
 
-    const api = new API();
+    const response = await axios.get(`https://nhentai.net/api/v2/galleries/${q}`);
 
     let access = false, i = 0;
     while (i < roles.length) {
@@ -66,37 +67,47 @@ module.exports = {
 
     userid = interaction.user.id;
 
-    index = 0;
+    let index = 0;
 
-    if (q != null) {
-      try {
-        bookData = await api.getBook(query);
-      } catch (err) {
-        if (client.debug == 'all' || client.debug == 'client') {
-          console.log("ERR :: /nh commands didn't work properly!!");
-          console.error(err);
-        }
-        return interaction.editReply({ content: "❌  |  Book not found!" });
+    // if (q != null) {
+    //   try {
+    //     bookData = await api.getBook(query);
+    //   } catch (err) {
+    //     if (client.debug == 'all' || client.debug == 'client') {
+    //       console.log("ERR :: /nh commands didn't work properly!!");
+    //       console.error(err);
+    //     }
+    //     return interaction.editReply({ content: "❌  |  Book not found!" });
+    //   }
+    // } else {
+    //   try {
+    //     await api.search(updateQuery).then(async search => {
+    //       bookData = search.books[0];
+    //     });
+    //   } catch (err) {
+    //     if (client.debug == 'all' || client.debug == 'client') {
+    //       console.log("ERR :: /nh commands didn't work properly!!");
+    //       console.error(err);
+    //     }
+    //     return interaction.editReply({ content: "❌  |  Something went wrong! Please wait 'till developer fix this :)" });
+    //   }
+    // }
+
+    try {
+      bookData = response.data;
+    } catch (err) {
+      if (client.debug == 'all' || client.debug == 'client') {
+        console.log("ERR :: /nh commands didn't work properly!!");
+        console.error(err);
       }
-    } else {
-      try {
-        await api.search(updateQuery).then(async search => {
-          bookData = search.books[0];
-        });
-      } catch (err) {
-        if (client.debug == 'all' || client.debug == 'client') {
-          console.log("ERR :: /nh commands didn't work properly!!");
-          console.error(err);
-        }
-        return interaction.editReply({ content: "❌  |  Something went wrong! Please wait 'till developer fix this :)" });
-      }
+      return interaction.editReply({ content: "❌  |  Book not found!" });
     }
 
     const extractedData = {
       id: bookData.id,
       title: bookData.title,
-      tags: bookData.tags.map(tag => tag.name).toString(),
-      pages: bookData.pages.map(page => api.getImageURL(page)),
+      tags: bookData.tags.map(tag => tag.name).join(', '),
+      pages: bookData.pages,
       userid: interaction.user.id,
       timestamp: Date.now()
     };
@@ -126,8 +137,8 @@ module.exports = {
 
     let embed = new EmbedBuilder()
       .setTitle("Book Results")
-      .setDescription(`${extractedData.title.english}\n` + `${extractedData.tags}\n` + extractedData.pages[0])
-      .setImage(extractedData.pages[0])
+      .setDescription(`${extractedData.title.english}\n` + `Tags: ${extractedData.tags}\n`)
+      .setImage(`https://i1.nhentai.net/${extractedData.pages[index].path}`)
       .setColor("Blue")
       .setFooter({ text: `Page ${index + 1} of ${extractedData.pages.length} • ID : ${extractedData.id}` })
       .setTimestamp(Date.now())

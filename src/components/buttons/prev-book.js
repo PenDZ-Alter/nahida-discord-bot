@@ -31,8 +31,8 @@ module.exports = {
 
     let embed = new EmbedBuilder()
       .setTitle("Book Results")
-      .setDescription(`${title.english}\n` + `${tags}\n` + pages[index])
-      .setImage(pages[index])
+      .setDescription(`${title.english}\n` + `Tags: ${tags}\n`)
+      .setImage(`https://i1.nhentai.net/${pages[index].path}`)
       .setColor("Blue")
       .setFooter({ text: `Page ${index + 1} of ${pages.length} • ID : ${id}` })
       .setTimestamp(Date.now())
