@@ -36,7 +36,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle("Playback Information")
         .setColor("Red")
-        .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n📭 No more songs in queue. Player has stopped.`);
+        .setDescription(`⏭️ The song **${currentSong}** has been skipped!\n📭 No more songs in queue. Player has been stopped!`);
 
       return interaction.reply({ embeds: [embed] });
     }

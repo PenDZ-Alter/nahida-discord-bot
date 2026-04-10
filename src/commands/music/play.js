@@ -7,7 +7,17 @@ module.exports = {
     .addStringOption(option =>
       option.setName("query")
         .setDescription("Query of song")
-        .setRequired(true)),
+        .setRequired(true))
+    .addStringOption(opt => 
+      opt.setName("platform")
+        .setDescription("Select Search Engine to search any music based on these platform")
+        .setRequired(false)
+        .addChoices(
+          { name: "Youtube", value: "youtube" },
+          { name: "Spotify", value: "spotify" },
+          { name: "Soundcloud", value: "soundcloud" }
+        )
+    ),
 
   async execute(client, interaction) {
     if (client.config.commands.music.play === 0) {
@@ -32,7 +42,12 @@ module.exports = {
       deaf: true,
     });
 
-    const result = await client.kazagumo.search(query, { requester: interaction.user });
+    const platform = interaction.options.getString("platform") || "youtube";
+
+    const result = await client.kazagumo.search(query, { 
+      engine: platform,
+      requester: interaction.user 
+    });
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let title, song;
