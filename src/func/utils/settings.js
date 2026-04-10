@@ -1,4 +1,5 @@
 const { GatewayIntentBits, Partials } = require("discord.js");
+const { Plugins } = require("kazagumo");
 
 module.exports = {
   clientSettings: () => {
@@ -31,7 +32,10 @@ module.exports = {
       send: (guildId, payload) => {
         const guild = client.guilds.cache.get(guildId);
         if (guild) guild.shard.send(payload);
-      }
+      },
+      plugins: [
+        new Plugins.PlayerMoved(client)
+      ]
     }
   }
 }
