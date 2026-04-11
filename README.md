@@ -12,6 +12,9 @@ You also need to configure the lavalink.
 > [!TIP]
 > If there's any problem in youtube plugin, try to change youtube source version on this [repo](https://github.com/lavalink-devs/youtube-source) based on release tags
 
+> [!NOTE]
+> If you want to use spotify, you need to add the client id and client secret in `application.yml`
+
 - Go to `server` folder.
 - Lavalink server needs config file named `application.yml`, rename config file named :
     ```bash
@@ -30,7 +33,7 @@ Before running the bot, you need to set up your environment variables.
   - **Bot Token:** Obtain it from the [Discord Developer Portal](https://discord.com/developers/docs/intro). Go to "Applications," select your bot, and copy the token.
   - **Client ID:** Get it from your bot's Discord profile.
   - **Guild ID (Optional):** This is your server ID. If you want the bot to be available globally, leave it empty.
-  - **Lavalink Credentials:** This is your lavalink credentials and it's important to fill it
+  - **Spotify Credentials:** Variable named `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` is your spotify credentials, if you want to use spotify
 - Rename `.env.example` to `.env`.
 
 ### 3. (Optional) Configure OpenAI API
