@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,23 +7,33 @@ module.exports = {
     .addStringOption(option =>
       option.setName("query")
         .setDescription("Query of song")
-        .setRequired(true)),
+        .setRequired(true))
+    .addStringOption(opt => 
+      opt.setName("platform")
+        .setDescription("Select Search Engine to search any music based on these platform")
+        .setRequired(false)
+        .addChoices(
+          { name: "Youtube", value: "youtube" },
+          { name: "Spotify", value: "spotify" },
+          { name: "Soundcloud", value: "soundcloud" }
+        )
+    ),
 
   async execute(client, interaction) {
     if (client.config.commands.music.play === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     const query = interaction.options.getString("query");
 
     const channel = interaction.member.voice.channel;
-    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
+    if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', flags: MessageFlags.Ephemeral});
     
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true });
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", flags: MessageFlags.Ephemeral });
     }
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const player = await client.kazagumo.createPlayer({
       guildId: interaction.guild.id,
@@ -32,7 +42,12 @@ module.exports = {
       deaf: true,
     });
 
-    const result = await client.kazagumo.search(query, { requester: interaction.user });
+    const platform = interaction.options.getString("platform") || "youtube";
+
+    const result = await client.kazagumo.search(query, { 
+      engine: platform,
+      requester: interaction.user 
+    });
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let title, song;

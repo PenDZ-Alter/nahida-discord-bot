@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.music.pause === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     const player = client.kazagumo.players.get(interaction.guild.id);
@@ -15,12 +15,12 @@ module.exports = {
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', ephemeral : true});
 
-    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
+    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", flags: MessageFlags.Ephemeral });
     if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
-      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", flags: MessageFlags.Ephemeral })
     }
 
-    if (!player) return interaction.reply({ content : "❌  |  You're not playing music rn!", ephemeral : true });
+    if (!player) return interaction.reply({ content : "❌  |  You're not playing music rn!", flags: MessageFlags.Ephemeral });
 
     if (player.paused) {
       await player.pause(false);

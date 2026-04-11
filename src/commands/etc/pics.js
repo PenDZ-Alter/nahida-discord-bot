@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags, AttachmentBuilder } = require('discord.js');
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { downloadGambar } = require('../../func/utils/format');
 
 const cacheFolder = path.join(__dirname, "../../../cache");
 const cacheFile = path.join(cacheFolder, "pics.json");
@@ -47,7 +48,7 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.etc.pics === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     try {
@@ -57,21 +58,27 @@ module.exports = {
       const pid = interaction.options.getInteger("pid") || 0;
       const pack = interaction.options.getBoolean("pack");
       const memberRoles = interaction.member.roles;
-      const roles = client.config.explicit.roles.id;
+      const roles = client.config.ids.explicit.roles;
+      const api_key = process.env.GELBOORU_API_KEY;
+      const user_id = process.env.GELBOORU_USER_ID;
 
-      await interaction.deferReply({ ephemeral: private });
+      await interaction.deferReply({ flags: private ? MessageFlags.Ephemeral : undefined });
 
       const tag = tags.replace(/ /g, "_");
 
       const access = roles.some(role => memberRoles.cache.has(role));
 
       if (!access) {
-        return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", ephemeral: true });
+        return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", flags: MessageFlags.Ephemeral });
       }
 
-      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=anonymous&user_id=9455&tags=${tag}&pid=${pid}&json=1`);
+      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=${api_key}&user_id=${user_id}&tags=${tag}&pid=${pid}&json=1`);
 
       if (!response.data.post || !response.data) {
+        if (client.debug == "player" || client.debug == "all") {
+          console.error("BOT :: Can't fetching data from gelbooru!");
+          console.log(response.data);
+        }
         return interaction.editReply({ content: "❌  |  Failed when fetching data! Try another tags and make sure you dont add some spesial characters except '+'!" });
       }
 
@@ -118,7 +125,16 @@ module.exports = {
           }
         }
 
-        let _vidsPack = imageData[index].tags.includes("video");
+        // console.log(`DEBUG :: Check State : 'image data length' = ${imageData.length} = 'limit'? ${limit} `)
+
+        let _vidsPack;
+        if (index >= 0 && index < imageData.length) {
+          _vidsPack = imageData[index].tags?.includes("video") || false;
+        } else {
+          // console.error("ERR :: Index Out of Bound");
+          return interaction.editReply({ content: "❌  |  There's no category for this search! Try another category, or don't specify to check if the data is actually shown up!" });
+        }
+        // let _vidsPack = imageData[index].tags.includes("video");
 
         const extractedData = {
           user: interaction.user.id,
@@ -143,10 +159,12 @@ module.exports = {
           msg = interaction.editReply({ content: `Result Videos\n${imageData[index].file_url}\nPage ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}`, components: [row] });
         }
 
+        // console.log(`Image URL : ${imageData[index].file_url}`);
+
         let embed = new EmbedBuilder()
           .setTitle("Result Images")
           .setDescription(imageData[index].file_url)
-          .setImage(imageData[index].file_url)
+          .setImage(imageData[index].preview_url)
           .setColor("Blue")
           .setFooter({ text: `Page ${index + 1} of ${imageData.length}${pid != 0 ? ` • PID : ${pid}` : ``}` })
           .setTimestamp(Date.now())

@@ -1,17 +1,12 @@
-# What has been updated! (2/23/2025 | dev-7.1)
+# What has been updated! (4/11/2026 | dev-8.0)
+
+## Patches
+- Fixes bugs on server
+- Update all outdated packages
+- Installing a new packages that necessary for new features
 
 ## Minor Updates
-- Changing Metadata
-- Adding Changelog
-- Remove excess code
-- Changing version in `package.json`
+- Remove unnecessary packages and patches
+- Adding Music Platform (including Spotify)
 
 ## Major Updates
-- Fixing some bugs
-  > - Music Player wont play.
-  > - Message wont reply.
-  > - Adding error handler
-
-- Configuring message interaction.
-  > - Making the messages interaction not same as user request
-  > - Prettieng the `README.md` and `HOSTS.md`

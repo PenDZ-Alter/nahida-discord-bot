@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags, Message } = require("discord.js");
 const gen_lyrics = require("genius-lyrics");
 const { trimLyrics } = require("../../func/utils/format");
 
@@ -19,7 +19,7 @@ module.exports = {
 
   async execute(client, interaction) {
     if (client.config.commands.music.lyrics === 0) {
-      return interaction.reply({ content: "❌  |  This command is disabled.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
     const player = client.kazagumo.players.get(interaction.guild.id);
@@ -27,13 +27,13 @@ module.exports = {
     const private = interaction.options.getBoolean("private");
 
     if (!title && !player) {
-      return interaction.reply({ content : "❌  |  No title are specified!", ephemeral : true });
+      return interaction.reply({ content : "❌  |  No title are specified!", flags: MessageFlags.Ephemeral });
     }
 
     const lyricsFinder = new gen_lyrics.Client();
     const search = await lyricsFinder.songs.search((title ? title : player.queue.current.title)).catch(() => {});
     if (search.length === 0) {
-      return interaction.reply({ content: "❌  |  Can't find lyrics! Try a more specific search term.", ephemeral: true });
+      return interaction.reply({ content: "❌  |  Can't find lyrics! Try a more specific search term.", flags: MessageFlags.Ephemeral });
     }
     const song = search[0];
 
@@ -57,6 +57,6 @@ module.exports = {
       .setTimestamp(Date.now())
       .setFooter({ text : `Artist by ${song.artist.name}` });
 
-    await interaction.reply({ embeds : [embed], ephemeral : private });
+    await interaction.reply({ embeds : [embed], flags: private ? MessageFlags.Ephemeral : 0 });
   }
 }

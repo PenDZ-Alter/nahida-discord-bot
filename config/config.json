@@ -1,13 +1,25 @@
 {
-  "ids": {
-    "ai_config": {
-      "channel": [],
-      "roles": []
+  "events": {
+    "ready": {
+      "status": "online",
+      "activity": "Listening",
+      "activityText": "Every Music"
     }
   },
-  "explicit": {
-    "roles": {
-      "id": []
+  "nodes": [
+    {
+      "name": "Local Lavalink",
+      "url": "localhost:2333",
+      "auth": "youshallnotpass"
+    }
+  ],
+  "ids": {
+    "ai_config": {
+      "channels": [],
+      "roles": []
+    },
+    "explicit": {
+      "roles": []
     }
   },
   "commands": {
