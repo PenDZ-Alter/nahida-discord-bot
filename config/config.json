@@ -37,6 +37,7 @@
       "skip": 1,
       "skipto": 1,
       "seek": 1,
+      "filter": 1,
       "search": 1
     },
     "etc": {
