@@ -49,8 +49,15 @@ module.exports = {
       updateQuery = query.replace(/ /g, "_");
       // updateQuery = query;
     }
-
-    const response = await axios.get(`https://nhentai.net/api/v2/galleries/${q}`);
+    
+    let response;
+    try {
+      response = await axios.get(`https://nhentai.net/api/v2/galleries/${q}`);
+      if (client.debug = 'all' || client.debug == 'client') console.log(response);
+    } catch (err) {
+      console.log("ERR :: Error Founded!");
+      if (client.debug == 'all' || client.debug == 'client') console.error(err);
+    }
 
     let access = false, i = 0;
     while (i < roles.length) {
