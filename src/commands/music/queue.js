@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require("discord.js");
 const { formatDuration } = require("../../func/utils/format");
 
 let index;
@@ -41,6 +41,18 @@ module.exports = {
 
     const currentSong = queue.current;
 
+    const prevButton = new ButtonBuilder()
+      .setCustomId("prev-queue")
+      .setLabel("⏮️")
+      .setStyle(ButtonStyle.Secondary)
+
+    const nextButton = new ButtonBuilder()
+      .setCustomId("next-queue")
+      .setLabel("⏭️")
+      .setStyle(ButtonStyle.Primary)
+
+    const actionRow = new ActionRowBuilder().addComponents(prevButton, nextButton);
+
     let embed = new EmbedBuilder()
       .setTitle("Query Results")
       .setDescription(`**Currently Playing**\n` + 
@@ -51,7 +63,16 @@ module.exports = {
       .setTimestamp(Date.now());
 
     await interaction.reply({
-      embeds : [embed]
+      embeds : [embed],
+      components: [actionRow]
     });
+  },
+
+  getPage : () => {
+    return index;
+  },
+
+  setPage : (updateIndex) => {
+    return index = updateIndex;
   }
 };

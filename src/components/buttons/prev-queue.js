@@ -1,0 +1,52 @@
+const { EmbedBuilder } = require("discord.js");
+const { getPage, setPage } = require("../../commands/music/queue.js");
+const { formatDuration } = require("../../func/utils/format.js");
+
+module.exports = {
+  data : { name : "prev-queue" },
+
+  async execute(client, interaction) {
+    const player = client.kazagumo.players.get(interaction.guild.id);
+    const queue = player.queue;
+
+    let indexPage = getPage();
+    let songSize = queue.length;
+    let totalPage = Math.ceil(songSize / 10);
+
+    if (!interaction.user.id) return interaction.reply({ content : "❌  |  You're not allowed to use this button!", ephemeral : true });
+    let index = indexPage - 1;
+    if (index < 0) index = totalPage - 1;
+    setPage(index);
+
+    if (!interaction.member.voice.channel) return interaction.reply({ content: "❌  |  You must join vc first!", ephemeral: true });
+    if (interaction.guild.members.me.voice.channel && interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel.id) {
+      return interaction.reply({ content: "❌  |  You must join in same vc to request song!", ephemeral: true })
+    }
+
+    if (!queue) return interaction.reply({ content : "❌  |  Can't get player from your guild!", ephemeral : true });
+    // if (!player.playing) return interaction.reply({ content : "❌  |  You're not playing the song", ephemeral : true });
+  
+    let firstNumIndex = index * 10;
+    let endNumIndex = firstNumIndex + 10;
+
+    const queueStr = queue.slice(firstNumIndex, endNumIndex).map((song, i) => {
+      return `${(i+1) + (index * 10)}) \`[${formatDuration(song.length)}]\` ${song.title} - <@${song.requester.id}>`
+    }).join('\n');
+
+    const currentSong = queue.current;
+
+    let updatedEmbed = new EmbedBuilder()
+      .setTitle("Query Results")
+      .setDescription(`**Currently Playing**\n` + 
+      (currentSong ? `\`[${formatDuration(currentSong.length)}]\` ${currentSong.title} - <@${currentSong.requester.id}>` : "None") +
+      `\n\n**Queue**\n${queueStr} `)
+      .setThumbnail(currentSong.thumbnail)
+      .setColor("Blue")
+      .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
+      .setTimestamp(Date.now());
+
+    await interaction.update({
+      embeds : [updatedEmbed]
+    });
+  }
+}
