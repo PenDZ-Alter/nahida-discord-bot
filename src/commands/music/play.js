@@ -25,6 +25,7 @@ module.exports = {
     }
 
     const query = interaction.options.getString("query");
+    const platform = interaction.options.getString("platform") || "youtube";
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', flags: MessageFlags.Ephemeral});
@@ -41,8 +42,6 @@ module.exports = {
       voiceId: channel.id,
       deaf: true,
     });
-
-    const platform = interaction.options.getString("platform") || "youtube";
 
     const result = await client.kazagumo.search(query, { 
       engine: platform,
