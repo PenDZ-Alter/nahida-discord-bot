@@ -1,6 +1,6 @@
 {
   "name": "nahida-js",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "music-discord-bot",
     "music-ai"
   ],
-  "author": "ABX-Dev/PenDZ",
+  "author": "PenDZ-Alter",
   "license": "MIT",
   "dependencies": {
     "@discordjs/opus": "^0.10.0",
