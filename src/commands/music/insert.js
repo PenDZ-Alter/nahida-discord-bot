@@ -3,11 +3,16 @@ const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js"
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("insert")
-    .setDescription("Playing song from youtube with set position")
+    .setDescription("Playing song from any supported platform with set position")
     .addStringOption(option =>
       option.setName("query")
         .setDescription("Query of song")
         .setRequired(true))
+    .addIntegerOption(opt => opt
+      .setName("position")
+      .setDescription("Position to insert based on Queue")
+      .setRequired(true)
+    )
     .addStringOption(opt => 
       opt.setName("platform")
         .setDescription("Select Search Engine to search any music based on these platform")
@@ -17,11 +22,6 @@ module.exports = {
           { name: "Spotify", value: "spotify" },
           { name: "Soundcloud", value: "soundcloud" }
         )
-    )
-    .addIntegerOption(opt => opt
-      .setName("position")
-      .setDescription("Position to insert based on Queue")
-      .setRequired(true)
     ),
 
   async execute(client, interaction) {
