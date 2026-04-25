@@ -62,10 +62,14 @@ module.exports = {
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
       .setTimestamp(Date.now());
 
-    await interaction.reply({
-      embeds : [embed],
-      components: [actionRow]
-    });
+    if (totalPage > 1) {
+      await interaction.reply({
+        embeds : [embed],
+        components: [actionRow]
+      });
+    } else {
+      await interaction.reply({ embeds : [embed] });
+    }
   },
 
   getPage : () => {
