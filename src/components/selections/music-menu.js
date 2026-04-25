@@ -12,6 +12,10 @@ module.exports = {
     let value = Number(interaction.values[0]);
 
     let track = result.tracks[value];
+    if (client.debug == 'player' || client.debug == 'all') {
+      console.log(`Selected track: ${track.title} (Source: ${track.sourceName})`);
+      console.log(track);
+    }
 
     queue.add(track);
     let title = track.title;
@@ -31,7 +35,7 @@ module.exports = {
       .setColor("Blue")
       .setDescription(
         `📝  |  **${title}** has been enqueued!
-        ℹ️  |  Source : ${track.source}
+        ℹ️  |  Source : ${track.sourceName}
         ℹ️  |  ${`Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}`}`);
 
     await interaction.update({ content: "", embeds: [embed], components: [] });
