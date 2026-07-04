@@ -17,7 +17,7 @@ module.exports = {
       console.log(track);
     }
 
-    queue.add(track);
+    await queue.add(track);
     let title = track.title;
 
     try {

@@ -47,6 +47,12 @@ module.exports = {
       engine: platform,
       requester: interaction.user 
     });
+
+    if (client.debug === "player" || client.debug === "all") {
+      console.log(`INFO (Player) :: Result tracks`);
+      console.dir(result, { depth : 1 });
+    }
+
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let title, song;
@@ -66,11 +72,6 @@ module.exports = {
     }
 
     let songIndex = player.queue.size;
-
-    if (client.debug === "player" || client.debug === "all") {
-      console.log(`INFO (Player) :: Result tracks`);
-      console.dir(result, { depth : 1 });
-    }
 
     let embed = new EmbedBuilder()      
       .setTitle("Playback Information")

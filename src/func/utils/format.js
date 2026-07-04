@@ -41,7 +41,7 @@ module.exports = {
     return null; // Default jika tidak ada argumen
   },
 
-  parseEnvArg() {
+  parseConfigArg() {
     const args = process.argv.slice(2);
     const envArg = args.find(arg => arg.startsWith('--env='));
 
@@ -57,24 +57,5 @@ module.exports = {
     }
 
     return require("../../../config/config.json");
-  },
-
-  // async downloadGambar(img_url) {
-  //   const httpsAgent = new https.Agent({  
-  //     rejectUnauthorized: false
-  //   });
-
-  //   try {
-  //     const response = await axios.get(img_url, {
-  //       httpsAgent: httpsAgent, // Masukin agent-nya di sini bre
-  //       headers: { 'Referer': 'https://gelbooru.com/' },
-  //       responseType: 'arraybuffer'
-  //     });
-  //     // Lanjutin proses buffer...
-  //     const buffer = Buffer.from(response.data, 'utf-8');
-  //     return buffer;
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
+  }
 }
