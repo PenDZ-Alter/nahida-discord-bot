@@ -51,9 +51,9 @@ module.exports = {
         return require("../../../config/config.test.json");
       } else if (["prod", "p", "production"].includes(envValue)) {
         return require("../../../config/config.json");
+      } else {
+        console.warn(`⚠️  Unknown debug value: ${envValue}`);
       }
-    } else {
-      console.warn(`⚠️  Unknown debug value: ${envValue}`)
     }
 
     return require("../../../config/config.json");
