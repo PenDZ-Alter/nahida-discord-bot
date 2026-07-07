@@ -1,8 +1,8 @@
 # Nahida Discord Bot
 
-![[Node.js](https://img.shields.io/badge/node-18.x%2B-brightgreen)](https://nodejs.org)
-![[Bun](https://img.shields.io/badge/bun-1.3%2B-pink)](https://bun.com)
-![[Discord.js](https://img.shields.io/badge/discord.js-14.x%2B-blue)](https://discord.js.org)
+[![Node.js](https://img.shields.io/badge/node-18.x%2B-brightgreen)](https://nodejs.org)
+[![Bun](https://img.shields.io/badge/bun-1.3%2B-pink)](https://bun.com)
+[![Discord.js](https://img.shields.io/badge/discord.js-14.x%2B-blue)](https://discord.js.org)
 
 
 A basic Discord bot with music and AI capabilities.
