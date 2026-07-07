@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js"
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("insert")
-    .setDescription("Playing song from youtube with set position")
+    .setDescription("Playing song from any supported platform with set position")
     .addStringOption(option =>
       option.setName("query")
         .setDescription("Query of song")
@@ -12,6 +12,16 @@ module.exports = {
       .setName("position")
       .setDescription("Position to insert based on Queue")
       .setRequired(true)
+    )
+    .addStringOption(opt => 
+      opt.setName("platform")
+        .setDescription("Select Search Engine to search any music based on these platform")
+        .setRequired(false)
+        .addChoices(
+          { name: "Youtube", value: "youtube" },
+          { name: "Spotify", value: "spotify" },
+          { name: "Soundcloud", value: "soundcloud" }
+        )
     ),
 
   async execute(client, interaction) {
@@ -21,6 +31,7 @@ module.exports = {
 
     const query = interaction.options.getString("query");
     const position = interaction.options.getInteger("position")-1;
+    const platform = interaction.options.getString("platform") || "youtube";
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', flags: MessageFlags.Ephemeral });
@@ -38,7 +49,10 @@ module.exports = {
       deaf: true,
     });
 
-    const result = await client.kazagumo.search(query, { requester: interaction.user });
+    const result = await client.kazagumo.search(query, { 
+      engine: platform,
+      requester: interaction.user
+    });
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let title, song;

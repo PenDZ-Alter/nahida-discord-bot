@@ -1,12 +1,12 @@
-# What has been updated! (4/11/2026 | dev-8.0)
+# What has been updated! (25/4/2026 | dev-8.2)
 
 ## Patches
-- Fixes bugs on server
-- Update all outdated packages
-- Installing a new packages that necessary for new features
+- Fixes bugs on `required` options
+- Fixes bugs on `queue` with condition of `totalPage`
+- Rename `source` into `sourceName` due undefined variable
 
 ## Minor Updates
-- Remove unnecessary packages and patches
-- Adding Music Platform (including Spotify)
+- Add `search` command
+- Add components in necessary command
 
 ## Major Updates

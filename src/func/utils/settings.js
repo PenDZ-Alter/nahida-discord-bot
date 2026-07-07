@@ -1,6 +1,7 @@
 const { GatewayIntentBits, Partials } = require("discord.js");
 const { Plugins } = require("kazagumo");
 const kazagumoSpotify = require("kazagumo-spotify");
+const kazagumoFilter = require("kazagumo-filter");
 
 module.exports = {
   clientSettings: () => {
@@ -36,6 +37,7 @@ module.exports = {
       },
       plugins: [
         new Plugins.PlayerMoved(client),
+        new kazagumoFilter(),
         new kazagumoSpotify({
           clientId: process.env.SPOTIFY_CLIENT_ID,
           clientSecret: process.env.SPOTIFY_CLIENT_SECRET,

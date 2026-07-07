@@ -49,8 +49,28 @@ module.exports = {
       updateQuery = query.replace(/ /g, "_");
       // updateQuery = query;
     }
+    
+    let response;
+    try {
+      response = await axios.get(`https://nhentai.net/api/v2/galleries/${q}`).catch(async (error) => {
+        if (error.response) {
+          console.error(`ERROR :: Error response from gelbooru API: ${error.response.status} - ${error.response.statusText}`);
+          console.error(`ERROR :: Response headers: ${JSON.stringify(error.response.headers)}`);
+        } else if (error.request) {
+          console.error(`ERROR :: No response received from gelbooru API: ${error.request}`);
+        } else {
+          console.error(`ERROR :: Error setting up request to gelbooru API: ${error.message}`);
+        }
 
-    const response = await axios.get(`https://nhentai.net/api/v2/galleries/${q}`);
+        console.log(`ERROR :: Request config: ${JSON.stringify(error.config)}`);
+
+        return interaction.editReply({ content: "❌  |  Failed when fetching data! something is really wrong with the API 😔!" });
+      });
+      if (client.debug = 'all' || client.debug == 'client') console.log(response);
+    } catch (err) {
+      console.log("ERR :: Error Founded!");
+      if (client.debug == 'all' || client.debug == 'client') console.error(err);
+    }
 
     let access = false, i = 0;
     while (i < roles.length) {

@@ -1,13 +1,16 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags, StringSelectMenuBuilder, ActionRowBuilder } = require("discord.js");
+
+let result;
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("Playing song from any supported platform")
+    .setName("search")
+    .setDescription("Search and select the song")
     .addStringOption(option =>
       option.setName("query")
-        .setDescription("Query of song")
-        .setRequired(true))
+        .setDescription("Title or url of song")
+        .setRequired(true)
+    )
     .addStringOption(opt => 
       opt.setName("platform")
         .setDescription("Select Search Engine to search any music based on these platform")
@@ -20,7 +23,7 @@ module.exports = {
     ),
 
   async execute(client, interaction) {
-    if (client.config.commands.music.play === 0) {
+    if (client.config.commands.music.search === 0) {
       return interaction.reply({ content: "❌  |  This command is disabled.", flags: MessageFlags.Ephemeral });
     }
 
@@ -43,7 +46,7 @@ module.exports = {
       deaf: true,
     });
 
-    const result = await client.kazagumo.search(query, { 
+    result = await client.kazagumo.search(query, { 
       engine: platform,
       requester: interaction.user 
     });
@@ -52,10 +55,10 @@ module.exports = {
       console.log(`INFO (Player) :: Result tracks`);
       console.dir(result, { depth : 1 });
     }
-
+    
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
-    let title, song;
+    let title, song, selectMenu;
     if (result.type == "PLAYLIST") {
       for (const track of result.tracks) {
         player.queue.add(track);
@@ -63,24 +66,49 @@ module.exports = {
       song = result.tracks[0];
       if (player.paused) {player.pause(false)}
       else if (!player.playing) {player.play()}
-    } else {
-      player.queue.add(result.tracks[0]);
-      title = result.tracks[0].title;
-      song = result.tracks[0];
-      if (player.paused) {player.pause(false)}
-      else if (!player.playing) {player.play()}
-    }
 
-    let songIndex = player.queue.size;
-
-    let embed = new EmbedBuilder()      
+      let embed = new EmbedBuilder()      
       .setTitle("Playback Information")
       .setColor("Blue")
       .setDescription(
         `📝  |  **${result.type == "PLAYLIST" ? result.playlistName : title}** has been enqueued!
         ℹ️  |  Source : ${song.sourceName}
         ℹ️  |  ${result.type == "PLAYLIST" ? `Total song indexed : ${result.tracks.length}` : `Track Status : ${songIndex === 0 ? "Playing right now!" : `Added in position ${songIndex}`}`}`
-      );
-    await interaction.editReply({ embeds: [embed] });
+      ); 
+
+      return interaction.editReply({ embeds: [embed] });
+    } else {
+      let data = []
+
+      for (let i = 0; i < (result.tracks.length >= 25 ? 25 : result.tracks.length); i++) {
+        let dict = {
+          label: result.tracks[i].title,
+          description: result.tracks[i].author,
+          value: i.toString()
+        }
+
+        data.push(dict);
+      }
+
+      selectMenu = new StringSelectMenuBuilder()
+        .setCustomId("music-menu")
+        .setPlaceholder("Select the music")
+        .addOptions(data)
+    }
+
+    let songIndex = player.queue.size;
+
+    let component = new ActionRowBuilder().addComponents(selectMenu);
+
+    let embed = new EmbedBuilder()
+      .setTitle("Playback Information")
+      .setColor("Blue")
+      .setDescription("ℹ️  |  Select the song first!\nAfter select the song, the music will automaticly play")
+
+    await interaction.editReply({ embeds: [embed], components: [component] });
   },
+
+  getResultData : () => {
+    return result;
+  }
 };

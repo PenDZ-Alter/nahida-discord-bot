@@ -4,7 +4,7 @@ const { Kazagumo } = require("kazagumo");
 const fs = require("fs");
 
 const { clientSettings, kazagumoSettings } = require("./src/func/utils/settings");
-const { parseDebugArg, parseEnvArg } = require("./src/func/utils/format");
+const { parseDebugArg, parseConfigArg } = require("./src/func/utils/format");
 require("dotenv").config({ path: "./config/.env" });
 
 const client = new Client(clientSettings());
@@ -18,7 +18,7 @@ client.commandsData = [];
 
 // === CLI Debug Option Handling ===
 client.debug = parseDebugArg();
-client.config = parseEnvArg();
+client.config = parseConfigArg();
 
 const nodes = client.config.nodes;
 

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require("discord.js");
 const { formatDuration } = require("../../func/utils/format");
 
 let index;
@@ -41,6 +41,18 @@ module.exports = {
 
     const currentSong = queue.current;
 
+    const prevButton = new ButtonBuilder()
+      .setCustomId("prev-queue")
+      .setLabel("⏮️")
+      .setStyle(ButtonStyle.Secondary)
+
+    const nextButton = new ButtonBuilder()
+      .setCustomId("next-queue")
+      .setLabel("⏭️")
+      .setStyle(ButtonStyle.Primary)
+
+    const actionRow = new ActionRowBuilder().addComponents(prevButton, nextButton);
+
     let embed = new EmbedBuilder()
       .setTitle("Query Results")
       .setDescription(`**Currently Playing**\n` + 
@@ -50,8 +62,21 @@ module.exports = {
       .setFooter({ text : `Page ${index+1} of ${totalPage === 0 ? "1" : totalPage}` })
       .setTimestamp(Date.now());
 
-    await interaction.reply({
-      embeds : [embed]
-    });
+    if (totalPage > 1) {
+      await interaction.reply({
+        embeds : [embed],
+        components: [actionRow]
+      });
+    } else {
+      await interaction.reply({ embeds : [embed] });
+    }
+  },
+
+  getPage : () => {
+    return index;
+  },
+
+  setPage : (updateIndex) => {
+    return index = updateIndex;
   }
 };

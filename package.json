@@ -1,16 +1,16 @@
 {
   "name": "nahida-js",
-  "version": "0.8.0",
+  "version": "0.8.3",
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
-    "def": "node .",
-    "dev": "bun . --env=dev",
-    "test": "nodemon .",
-    "fast": "bun . --env=prod",
-    "debug": "bun . --debug=all --env=dev",
-    "debug:player": "bun . --debug=player --env=dev",
-    "debug:client": "bun . --debug=client --env=dev"
+    "def": "node index.js",
+    "dev": "nodemon index.js --env=dev --debug=all",
+    "test": "nodemon index.js",
+    "fast": "bun index.js --env=prod",
+    "debug": "bun index.js --debug=all --env=dev",
+    "debug:player": "bun index.js --debug=player --env=dev",
+    "debug:client": "bun index.js --debug=client --env=dev"
   },
   "keywords": [
     "music",
@@ -18,12 +18,12 @@
     "music-discord-bot",
     "music-ai"
   ],
-  "author": "ABX-Dev/PenDZ",
+  "author": "PenDZ-Alter",
   "license": "MIT",
   "dependencies": {
+    "@discordjs/opus": "^0.10.0",
     "@discordjs/rest": "^2.6.1",
     "@discordjs/voice": "^0.19.2",
-    "@discordjs/opus": "^0.10.0",
     "axios": "^1.15.0",
     "bgutils-js": "^3.2.0",
     "chalk": "^5.6.2",
@@ -34,9 +34,10 @@
     "genius-lyrics": "4.4.7",
     "jsdom": "^29.0.2",
     "kazagumo": "^3.4.3",
-    "kazagumo-spotify": "^2.1.1",
     "kazagumo-apple": "^2.0.2",
     "kazagumo-deezer": "^2.0.2",
+    "kazagumo-filter": "^2.0.0",
+    "kazagumo-spotify": "^2.1.1",
     "openai": "^6.34.0",
     "shoukaku": "^4.3.0",
     "youtube-sr": "^4.3.12",
