@@ -72,7 +72,24 @@ module.exports = {
         return interaction.editReply({ content: "❌  |  You dont have permissions to run this roles", flags: MessageFlags.Ephemeral });
       }
 
-      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=${api_key}&user_id=${user_id}&tags=${tag}&pid=${pid}&json=1`);
+      const response = await axios.get(`https://gelbooru.com/index.php?page=dapi&s=post&q=index&api_key=${api_key}&user_id=${user_id}&tags=${tag}&pid=${pid}&json=1`).catch(error => {
+        if (error.response) {
+          console.error(`ERROR :: Error response from gelbooru API: ${error.response.status} - ${error.response.statusText}`);
+          console.error(`ERROR :: Response headers: ${JSON.stringify(error.response.headers)}`);
+        } else if (error.request) {
+          console.error(`ERROR :: No response received from gelbooru API: ${error.request}`);
+        } else {
+          console.error(`ERROR :: Error setting up request to gelbooru API: ${error.message}`);
+        }
+
+        console.log(`ERROR :: Request config: ${JSON.stringify(error.config)}`);
+
+        return interaction.editReply({ content: "❌  |  Failed when fetching data! something is really wrong with the API 😔!" });
+      });
+
+      if (client.debug == "client" || client.debug == "all") {
+        console.log(`INFO :: Response status : ${response.status}`);
+      }
 
       if (!response.data.post || !response.data) {
         if (client.debug == "player" || client.debug == "all") {
@@ -81,6 +98,7 @@ module.exports = {
         }
         return interaction.editReply({ content: "❌  |  Failed when fetching data! Try another tags and make sure you dont add some spesial characters except '+'!" });
       }
+
 
       const attrib = response.data['@attributes'];
 
