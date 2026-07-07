@@ -4,13 +4,13 @@
   "description": "Music Bot with AI inside",
   "main": "index.js",
   "scripts": {
-    "def": "node .",
-    "dev": "nodemon . --env=dev --debug=all",
-    "test": "nodemon .",
-    "fast": "bun . --env=prod",
-    "debug": "bun . --debug=all --env=dev",
-    "debug:player": "bun . --debug=player --env=dev",
-    "debug:client": "bun . --debug=client --env=dev"
+    "def": "node index.js",
+    "dev": "nodemon index.js --env=dev --debug=all",
+    "test": "nodemon index.js",
+    "fast": "bun index.js --env=prod",
+    "debug": "bun index.js --debug=all --env=dev",
+    "debug:player": "bun index.js --debug=player --env=dev",
+    "debug:client": "bun index.js --debug=client --env=dev"
   },
   "keywords": [
     "music",
