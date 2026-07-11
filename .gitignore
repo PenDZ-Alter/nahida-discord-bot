@@ -3,8 +3,10 @@ package-lock.json
 bun.lock
 
 config/config.test.json
+config/config.test.jsonc
 config/.env
 config/config.def.json
+config/config.def.jsonc
 
 server/logs
 server/plugins

@@ -48,14 +48,14 @@ module.exports = {
     if (envArg) {
       const envValue = envArg.split('=')[1];
       if (["dev", "development", "devs", "d"].includes(envValue)) {
-        return require("../../../config/config.test.json");
+        return require("../../../config/config.test.jsonc");
       } else if (["prod", "p", "production"].includes(envValue)) {
-        return require("../../../config/config.json");
+        return require("../../../config/config.jsonc");
       } else {
         console.warn(`⚠️  Unknown debug value: ${envValue}`);
       }
     }
 
-    return require("../../../config/config.json");
+    return require("../../../config/config.jsonc");
   }
 }

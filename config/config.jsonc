@@ -22,7 +22,7 @@
       "roles": []
     }
   },
-  "commands": {
+  "commands": { /* 0: disabled, 1: enabled, 2: partially enabled */
     "music": {
       "play": 1,
       "pause": 1,
