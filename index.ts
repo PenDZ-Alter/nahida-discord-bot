@@ -5,9 +5,9 @@ import fs from "fs";
 import dotenv from "dotenv";
 
 import { clientSettings, kazagumoSettings } from "./src/func/utils/settings";
-import { parseDebugArg, parseConfigArg } from "./src/func/utils/format";
+import { debugArgsParser, configArgsParser } from "./src/func/utils/format";
 
-import { BotClient } from "./src/func/utils/type";
+import { BotClient } from "./src/func/utils/types";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -18,8 +18,8 @@ client.buttons = new Collection();
 client.selectMenus = new Collection();
 client.commandsData = [];
 
-client.debug = parseDebugArg();
-client.config = parseConfigArg();
+client.debug = debugArgsParser();
+client.config = configArgsParser();
 
 const nodes = client.config.nodes;
 
