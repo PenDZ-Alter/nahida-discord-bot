@@ -1,6 +1,7 @@
-const fs = require('fs');
+import fs from 'fs';
+import { BotClient } from '../utils/types';
 
-module.exports = (client) => {
+export default (client: BotClient): void => {
   client.handleEvents = async() => {
     const eventFold = fs.readdirSync('./src/events');
     for (const folders of eventFold) {

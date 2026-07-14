@@ -13,4 +13,8 @@ export type BotClient = Client & {
     [key: string]: any;
   };
   kazagumo: Kazagumo;
+
+  handleCommands: () => Promise<void>;
+  handleComponents: () => Promise<void>;
+  handleEvents: () => Promise<void>;
 };

@@ -1,6 +1,7 @@
-const fs = require("fs");
+import fs from "fs";
+import { BotClient } from "../utils/types";
 
-module.exports = (client) => {
+export default (client: BotClient): void => {
   client.handleComponents = async() => {
     const componentFolders = fs.readdirSync('./src/components');
     for (const folder of componentFolders) {
