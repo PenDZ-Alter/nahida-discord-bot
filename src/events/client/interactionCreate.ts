@@ -1,9 +1,11 @@
-const { Events } = require("discord.js");
+import { Events, Interaction } from "discord.js";
+import { BotClient, BotEvent } from "../../func/utils/types";
 
-module.exports = {
+const interactionCreateEvent: BotEvent = {
   name : Events.InteractionCreate,
+  once: false,
 
-  async execute(client, interaction) {
+  async execute(client: BotClient, interaction: Interaction): Promise<void> {
     if (interaction.isChatInputCommand()) {
       const command = client.commands.get(interaction.commandName);
       if (!command) return;
@@ -17,7 +19,7 @@ module.exports = {
       }
     } else if (interaction.isButton()) {
       const button = client.buttons.get(interaction.customId);
-      if (!button) return new Error("There's no action to this button!");
+      if (!button) console.warn("INFO :: There's no action to this button!");
 
       try {
         await button.execute(client, interaction);
@@ -26,7 +28,7 @@ module.exports = {
       }
     } else if (interaction.isStringSelectMenu()) {
       const selection = client.selectMenus.get(interaction.customId);
-      if (!selection) return new Error("ERR (Clients) :: There's no action to this selection!");
+      if (!selection) console.warn("INFO :: There's no action to this selection!");
 
       try {
         await selection.execute(client, interaction);

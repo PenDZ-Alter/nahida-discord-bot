@@ -1,5 +1,4 @@
 import { Client, Collection } from "discord.js";
-import { Connectors } from "shoukaku";
 import { Kazagumo } from "kazagumo";
 
 export type BotClient = Client & {
@@ -18,3 +17,15 @@ export type BotClient = Client & {
   handleComponents: () => Promise<void>;
   handleEvents: () => Promise<void>;
 };
+
+export interface BotEvent {
+  name: string;
+  once: boolean;
+  execute: (client: BotClient, ...args: any[]) => Promise<void> | void;
+}
+
+export interface GeneralEvent {
+  name: string;
+
+  execute: (client: BotClient, ...args: any[]) => Promise<void> | void;
+}
