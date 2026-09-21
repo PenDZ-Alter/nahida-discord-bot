@@ -20,6 +20,11 @@ module.exports = {
           { name: "Spotify", value: "spotify" },
           { name: "Soundcloud", value: "soundcloud" }
         )
+    )
+    .addBooleanOption(option =>
+      option.setName("single")
+        .setDescription("Play only the requested song and stop the queue")
+        .setRequired(false)
     ),
 
   async execute(client, interaction) {
@@ -29,6 +34,14 @@ module.exports = {
 
     const query = interaction.options.getString("query");
     const platform = interaction.options.getString("platform") || "youtube";
+    const isSingle = interaction.options.getBoolean("single") || true;
+
+    if (client.debug === "player" || client.debug === "all") {
+      console.debug('BOT :: Commands : Executing /search ...');
+      console.debug(`BOT [pre] :: Check : Query : ${query}`);
+      console.debug(`BOT [pre] :: Check : Platform : ${platform}`);
+      console.debug(`BOT [pre] :: Check : Single : ${isSingle}`);
+    }
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', flags: MessageFlags.Ephemeral});
@@ -59,7 +72,7 @@ module.exports = {
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let title, song, selectMenu;
-    if (result.type == "PLAYLIST") {
+    if (!isSingle && result.type == "PLAYLIST") {
       for (const track of result.tracks) {
         player.queue.add(track);
       }
@@ -77,7 +90,20 @@ module.exports = {
       ); 
 
       return interaction.editReply({ embeds: [embed] });
-    } else {
+    } else if (isSingle && result.type == "PLAYLIST") {
+      let data = []
+
+      for (let i = 0; i < (result.tracks.length >= 25 ? 25 : result.tracks.length); i++) {
+        let dict = {
+          label: result.tracks[i].title,
+          description: result.tracks[i].author,
+          value: i.toString()
+        }
+
+        data.push(dict);
+      }
+    }
+    else {
       let data = []
 
       for (let i = 0; i < (result.tracks.length >= 25 ? 25 : result.tracks.length); i++) {

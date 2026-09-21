@@ -17,6 +17,11 @@ module.exports = {
           { name: "Spotify", value: "spotify" },
           { name: "Soundcloud", value: "soundcloud" }
         )
+    )
+    .addBooleanOption(option =>
+      option.setName("single")
+        .setDescription("Play only the requested song and stop the queue")
+        .setRequired(false)
     ),
 
   async execute(client, interaction) {
@@ -26,6 +31,14 @@ module.exports = {
 
     const query = interaction.options.getString("query");
     const platform = interaction.options.getString("platform") || "youtube";
+    const isSingle = interaction.options.getBoolean("single") || true;
+
+    if (client.debug === "player" || client.debug === "all") {
+      console.debug('BOT :: Commands : Executing /play ...');
+      console.debug(`BOT [pre] :: Check : Query : ${query}`);
+      console.debug(`BOT [pre] :: Check : Platform : ${platform}`);
+      console.debug(`BOT [pre] :: Check : Single : ${isSingle}`);
+    }
 
     const channel = interaction.member.voice.channel;
     if (!channel) return interaction.reply({ content : '❌  |  You are not connected to a voice channel!', flags: MessageFlags.Ephemeral});
@@ -50,17 +63,33 @@ module.exports = {
 
     if (client.debug === "player" || client.debug === "all") {
       console.log(`INFO (Player) :: Result tracks`);
-      console.dir(result, { depth : 1 });
+      console.dir(result, { depth : 2 });
     }
 
     if (!result.tracks.length) return interaction.editReply("⚠️  |  Failed to get song. Try more specific!");
 
     let title, song;
-    if (result.type == "PLAYLIST") {
+    if (!isSingle && result.type == "PLAYLIST") {
+      if (client.debug === "player" || client.debug === "all") {
+        console.debug(`BOT [load] :: Check : isPlaylist : ${result.type == "PLAYLIST"}`);
+        console.debug(`BOT [load] :: Check : isSingle : ${isSingle} and actual false`);
+      }
+
       for (const track of result.tracks) {
         player.queue.add(track);
       }
       song = result.tracks[0];
+      if (player.paused) {player.pause(false)}
+      else if (!player.playing) {player.play()}
+    } else if (isSingle && result.type == "PLAYLIST") {
+      if (client.debug === "player" || client.debug === "all") {
+        console.debug(`BOT [load] :: Check : isPlaylist : ${result.type == "PLAYLIST"}`);
+        console.debug(`BOT [load] :: Check : isSingle : ${isSingle} and actual false`);
+      }
+      
+      player.queue.add(result.tracks[0]);
+      song = result.tracks[0];
+      title = result.tracks[0].title;
       if (player.paused) {player.pause(false)}
       else if (!player.playing) {player.play()}
     } else {
